@@ -1,0 +1,6 @@
+{
+  "name": "Incremancer PT-BR",
+  "description": "Clone e evolução em português do clássico incremental de necromancia Incremancer com simulação de horda, feitiços, árvore de evolução e GDD completo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
