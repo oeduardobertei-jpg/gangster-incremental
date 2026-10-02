@@ -1,0 +1,29 @@
+{
+  "saveFormatVersion": 2,
+  "runId": "fixture-run-prestige",
+  "runStartedAt": 1790550000000,
+  "playerFaction": "vermelha",
+  "intel": 100,
+  "cash": 60,
+  "ammo": 15,
+  "respect": 0,
+  "runRespectEarned": 0,
+  "contacts": 0,
+  "hegemonyEmblems": 11,
+  "currentTerritoryId": 1,
+  "territoryTakes": 0,
+  "upgrades": {},
+  "talents": {
+    "talent_cartel_cash": 2,
+    "talent_intel_network": 1
+  },
+  "gameSpeed": 1,
+  "soundVolume": 0.25,
+  "soundMuted": true,
+  "stats": {
+    "totalRespectEarned": 920,
+    "highestTerritoryReached": 5,
+    "hegemonyRituals": 3
+  },
+  "lastSaveTimestamp": 1790551000000
+}

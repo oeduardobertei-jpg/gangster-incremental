@@ -1,0 +1,46 @@
+import { GameState } from '../types/game';
+import { SAVE_FORMAT_VERSION, createRunId } from '../persistence/saveGame';
+
+export const createDefaultState = (): GameState => ({
+  playerFaction: 'vermelha',
+  intel: 60,
+  maxIntel: 100,
+  intelRegen: 2.0,
+  cash: 50,
+  ammo: 10,
+  respect: 0,
+  runRespectEarned: 0,
+  contacts: 0,
+  hegemonyEmblems: 0,
+  currentTerritoryId: 1,
+  territoryTakes: 0,
+  runRivalsNeutralized: 0,
+  runHighestTerritoryReached: 1,
+  maxAllies: 15,
+  upgrades: {},
+  talents: {},
+  autoRecruitFallen: false,
+  autoSniperFire: false,
+  autoCollectAmmo: true,
+  gameSpeed: 1,
+  soundVolume: 0.3,
+  soundMuted: false,
+  showDamageNumbers: true,
+  showCombatSplatters: true,
+  saveFormatVersion: SAVE_FORMAT_VERSION,
+  balanceRevision: 1,
+  runId: createRunId(),
+  runStartedAt: Date.now(),
+  stats: {
+    totalRivalsNeutralized: 0,
+    totalAlliesRecruited: 0,
+    totalCashEarned: 0,
+    totalAmmoSeized: 0,
+    totalRespectEarned: 0,
+    totalContactsAcquired: 0,
+    highestTerritoryReached: 1,
+    hegemonyRituals: 0,
+    timePlayedSeconds: 0
+  },
+  lastSaveTimestamp: Date.now()
+});

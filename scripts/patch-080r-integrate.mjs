@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const root='C:/Users/eduardo.bertei/organizacao/IA/prototipos/fac incremental/gangster-incremental-0.8l-full/gangster-incremental';
+const game=`${root}/src/components/GameCanvas.tsx`;
+let s=fs.readFileSync(game,'utf8');
+s=s.replace("import { drawGroundStoryUseZones } from './canvas/groundStoryRenderer';","import { drawGroundStoryUseZones } from './canvas/groundStoryRenderer';\nimport { drawAuthoredStoryClusters } from './canvas/environmentStoryRenderer';");
+s=s.replace("          drawGroundStoryUseZones(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);\n          drawStreetLifeClusters", "          drawGroundStoryUseZones(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);\n          drawAuthoredStoryClusters(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);\n          drawStreetLifeClusters");
+fs.writeFileSync(game,s,'utf8');
+const tokens=`${root}/src/data/visualTokens.ts`;
+let v=fs.readFileSync(tokens,'utf8').replace('0.8q-rooftops-lajes-v1','0.8r-authored-story-clusters-v1');
+fs.writeFileSync(tokens,v,'utf8');
+console.log('0.8R authored story clusters integrated');

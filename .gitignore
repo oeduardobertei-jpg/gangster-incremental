@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+.smoke-*
+.chrome-cdp/
+docs/screenshots/
+*.pre-*

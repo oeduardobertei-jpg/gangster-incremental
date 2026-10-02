@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+const path='src/audio/radioEngine.ts';
+let s=readFileSync(path,'utf8');
+const rep=(a,b,label)=>{if(!s.includes(a))throw new Error('missing '+label);s=s.replace(a,b)};
+rep("  tracks: readonly RadioTrack[];\n}","  tracks: readonly RadioTrack[];\n  source?: 'procedural' | 'youtube';\n  videoId?: string;\n}",'station interface');
+const old=`  {\n    id:'baile', frequency:'103.3', name:'Baile da Cidade',\n    tagline:'Funk brasileiro · grave de baile · tamborzão e 150 BPM',\n    tracks:[\n      T('asfalto-baile','Baile no Asfalto',132,38,'funk',[0,0,3,1],[0,0,3,0,1,0,3,-2]),\n      T('subida','Subida 150',150,36,'funk',[0,1,0,-2],[0,0,1,0,-2,0,1,-2]),\n      T('leste','Tamborzão da Leste',136,40,'funk',[0,3,1,0],[0,3,0,1,0,3,1,-2]),\n      T('passinho','Passinho de Concreto',128,41,'funk',[0,5,3,0],[0,0,5,3,0,3,5,-2]),\n      T('virou-noite','Baile Virou a Noite',145,37,'funk',[0,1,3,-2],[0,1,0,3,-2,0,1,3])\n    ]\n  },`;
+const next=`  {\n    id:'baile', frequency:'103.3', name:'LOFI FUNK BR',\n    tagline:'Mix autorizado · LOFI FUNK BRASILEIRO · 26 faixas/capítulos',\n    source:'youtube', videoId:'2LfG9LlqyWw',\n    tracks:[T('lofi-funk-br','LOFI FUNK BRASIL',0,0,'funk',[0],[0])]\n  },`;
+rep(old,next,'baile station');
+rep("  private scheduler() {\n    if (!this.ctx || !this.state.playing) return;\n    const track = this.getTrack();","  private scheduler() {\n    if (!this.ctx || !this.state.playing) return;\n    if (this.getStation().source === 'youtube') return;\n    const track = this.getTrack();",'scheduler');
+writeFileSync(path,s,'utf8');
+console.log('radio station converted to YouTube source');

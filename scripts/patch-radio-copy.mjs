@@ -1,0 +1,15 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+const root='C:/Users/Eduardo Bertei/Downloads/gangster-incremental-0.5.5-beauty-pass/gangster-incremental';
+const radio=`${root}/src/audio/radioEngine.ts`;
+let s=readFileSync(radio,'utf8');
+s=s.replace("tagline:'Rap brasileiro de rua · instrumentais autorizados · rádio principal'","tagline:'RAP BRASILEIRO DE RUA'");
+s=s.replace("id:'baile', frequency:'103.3', name:'LOFI FUNK BR'","id:'baile', frequency:'103.3', name:'Lofi Funk Brazil'");
+s=s.replace("tagline:'Mix autorizado · LOFI FUNK BRASILEIRO · 26 faixas/capítulos'","tagline:'LOFI FUNK BRASILEIRO'");
+writeFileSync(radio,s,'utf8');
+const player=`${root}/src/components/RadioPlayer.tsx`;
+let p=readFileSync(player,'utf8');
+p=p.replace("const displayTitle = isChapterYouTube\n    ? chapterState.title\n    : isTrackYouTube\n      ? trackState.title\n      : track.title;","const cleanExternalTitle = (title:string) => title.replace(/\\s+[—-]\\s+Instrumental(?: em Vinil)?$/i, '').trim();\n  const displayTitle = isChapterYouTube\n    ? chapterState.title\n    : isTrackYouTube\n      ? cleanExternalTitle(trackState.title)\n      : track.title;");
+p=p.replace("const displayMeta = isChapterYouTube\n    ? `YouTube · ${chapterState.chapterIndex + 1}/${LOFI_FUNK_CHAPTERS.length}`\n    : isTrackYouTube\n      ? `YouTube · ${trackState.trackIndex + 1}/${BRAZILIAN_GANGSTA_TRACKS.length}`\n      : `${track.bpm} BPM`;","const displayMeta = isYouTube ? '' : `${track.bpm} BPM`;");
+p=p.replace("          {displayTitle} · {displayMeta}\n","          {displayTitle}{displayMeta ? ` · ${displayMeta}` : ''}\n");
+writeFileSync(player,p,'utf8');
+console.log('radio UI copy cleaned');

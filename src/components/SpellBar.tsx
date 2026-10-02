@@ -1,6 +1,7 @@
 import React from 'react';
 import { GameState } from '../types/game';
 import { UserPlus, ToggleLeft, ToggleRight, Radio, Lock, Zap, Box } from 'lucide-react';
+import { AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS, getAutoRecruitMilestoneProgress } from '../rules/progression';
 
 interface SpellBarProps {
   gameState: GameState;
@@ -19,19 +20,21 @@ export const SpellBar: React.FC<SpellBarProps> = ({
 }) => {
   const autoRecruitUnlocked = (gameState.upgrades['sindicato_auto_recruit'] || 0) > 0;
   const autoAmmoUnlocked = (gameState.upgrades['boca_auto_ammo_scavenge'] || 0) > 0;
+  const autoRecruitMilestoneProgress = getAutoRecruitMilestoneProgress(gameState);
   
   // Standard recruit cost
   const recruitCost = 10;
   const canAfford = gameState.intel >= recruitCost;
 
   return (
-    <div className="w-full bg-[#0a0c14] border-t border-slate-800/80 px-4 py-2.5 flex items-center justify-between gap-4 select-none">
+    <div className="hud-br-surface relative w-full border-t border-slate-800/80 px-4 py-2.5 flex items-center justify-between gap-4 select-none">
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,rgba(22,163,74,.32),rgba(234,179,8,.28),rgba(37,99,235,.32))]" />
       {/* Primary Action: Direct Recruit Button */}
       <div className="flex items-center gap-3">
         <button
           onClick={onTriggerRecruit}
           disabled={!canAfford}
-          className={`relative group flex items-center gap-3 px-4 py-2 rounded-xl border transition-all cursor-pointer font-semibold shadow-md ${
+          className={`hud-br-card relative group flex items-center gap-3 px-4 py-2 rounded-xl border transition-all cursor-pointer font-semibold shadow-md ${
             canAfford
               ? 'bg-gradient-to-r from-emerald-950/80 to-emerald-900/60 border-emerald-500/70 text-emerald-100 hover:border-emerald-400 hover:shadow-emerald-950/50 hover:brightness-110 active:scale-95'
               : 'bg-slate-900/60 border-slate-800 text-slate-500 opacity-60 cursor-not-allowed'
@@ -118,10 +121,10 @@ export const SpellBar: React.FC<SpellBarProps> = ({
         ) : (
           <div 
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-500"
-            title="Adquira a melhoria 'Convocação Automática' no Sindicato (Contatos) para habilitar o modo idle"
+            title={`Neutralize ${AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS} rivais nesta rodada para liberar gratuitamente a Auto-Convocação N1`}
           >
             <Lock className="w-3.5 h-3.5 text-slate-600" />
-            <span>Auto-Convocação (Sindicato)</span>
+            <span>Auto-Convocação: {autoRecruitMilestoneProgress}/{AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS}</span>
           </div>
         )}
       </div>

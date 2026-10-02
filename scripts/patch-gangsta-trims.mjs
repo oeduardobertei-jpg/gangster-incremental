@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+const p='src/audio/youtubeTrackEngine.ts';
+let s=fs.readFileSync(p,'utf8');
+s=s.replace("export interface YouTubeTrack {\n  videoId: string;\n  title: string;\n}","export interface YouTubeTrack {\n  videoId: string;\n  title: string;\n  startSeconds: number;\n  endLeadSeconds: number;\n}");
+s=s.replace("{ videoId:'hHc2BGwayQs', title:'Vida Loka Parte 1 — Instrumental' },","{ videoId:'hHc2BGwayQs', title:'Vida Loka Parte 1 — Instrumental', startSeconds:.9, endLeadSeconds:1.8 },");
+s=s.replace("{ videoId:'qv7FOKsQ6EE', title:'Vida Loka Parte 2 — Instrumental' },","{ videoId:'qv7FOKsQ6EE', title:'Vida Loka Parte 2 — Instrumental', startSeconds:1.0, endLeadSeconds:1.7 },");
+s=s.replace("{ videoId:'w-hNt5rgZ4k', title:'Diário de um Detento — Instrumental em Vinil' },","{ videoId:'w-hNt5rgZ4k', title:'Diário de um Detento — Instrumental em Vinil', startSeconds:1.1, endLeadSeconds:1.9 },");
+s=s.replace("{ videoId:'7v9HuNKBSaY', title:'Capítulo 4, Versículo 3 — Instrumental em Vinil' },","{ videoId:'7v9HuNKBSaY', title:'Capítulo 4, Versículo 3 — Instrumental em Vinil', startSeconds:.8, endLeadSeconds:1.6 },");
+s=s.replace("{ videoId:'1jG6KUEhstE', title:'Crime Vai e Vem — Instrumental em Vinil' },","{ videoId:'1jG6KUEhstE', title:'Crime Vai e Vem — Instrumental em Vinil', startSeconds:1.0, endLeadSeconds:1.8 },");
+fs.writeFileSync(p,s);
+s=fs.readFileSync(p,'utf8');
+s=s.replace("if (autoplay) this.player.loadVideoById(track.videoId);\n        else this.player.cueVideoById(track.videoId);","const request={videoId:track.videoId,startSeconds:track.startSeconds};\n        if (autoplay) this.player.loadVideoById(request);\n        else this.player.cueVideoById(request);");
+s=s.replace("if (duration>0 && remaining>0 && remaining<=.75) this.transitionToTrack(this.state.trackIndex+1,true);","const track=BRAZILIAN_GANGSTA_TRACKS[this.state.trackIndex];\n        const threshold=Math.max(.8,track?.endLeadSeconds ?? 1.6);\n        if (duration>0 && remaining>0 && remaining<=threshold) this.transitionToTrack(this.state.trackIndex+1,true);");
+fs.writeFileSync(p,s);
+console.log('Brazilian Gangsta cue trims applied');

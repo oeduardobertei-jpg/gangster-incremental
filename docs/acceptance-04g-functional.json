@@ -1,0 +1,97 @@
+[
+  {
+    "name": "diagnostic hidden initially",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "F8 opens diagnostic without replacing battlefield",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "diagnostic includes populated camera and counters",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "F8 closes diagnostic",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "minimap recenters camera",
+    "passed": true,
+    "detail": "{\"centerX\":832,\"centerY\":360,\"zoom\":1.9999999999999996}"
+  },
+  {
+    "name": "1440x600 field, HUD and minimap fit",
+    "passed": true,
+    "detail": "{\"fits\":true,\"overlap\":false,\"minimap\":true}"
+  },
+  {
+    "name": "1024x700 field, HUD and minimap fit",
+    "passed": true,
+    "detail": "{\"fits\":true,\"overlap\":false,\"minimap\":true}"
+  },
+  {
+    "name": "390x740 field, HUD and minimap fit",
+    "passed": true,
+    "detail": "{\"fits\":true,\"overlap\":false,\"minimap\":true}"
+  },
+  {
+    "name": "320x640 field, HUD and minimap fit",
+    "passed": true,
+    "detail": "{\"fits\":true,\"overlap\":false,\"minimap\":true}"
+  },
+  {
+    "name": "Space on battlefield recruits exactly once",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "Space on interface does not also recruit",
+    "passed": true,
+    "detail": "recruited=1"
+  },
+  {
+    "name": "automatic recruitment actually creates troops",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid save is refused",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "export/import preserves current battle and resources",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "reload preserves imported battle",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "territory completion exposes advancement",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "completed objective does not cover camera on mobile",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "advancement reaches territory 2",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "no browser errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

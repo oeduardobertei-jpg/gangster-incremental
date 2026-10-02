@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const root=process.cwd();
+const skins=root+'/src/components/canvas/buildingSkins.ts';
+let s=fs.readFileSync(skins,'utf8');
+s=s.replace('  ctx.save();\n  // Sombra projetada 2.5D consistente com o restante da cidade.','  ctx.save();\n  drawBespokeArchitectureUnderlay({ctx,b,territoryId:1,roofY,facadeY,height:visualHeight,controlColor,time});\n  // Sombra projetada 2.5D consistente com o restante da cidade.');
+fs.writeFileSync(skins,s,'utf8');
+const game=root+'/src/components/GameCanvas.tsx';
+let g=fs.readFileSync(game,'utf8');
+if(!g.includes("territoryStructuralDeepRenderer"))g=g.replace("import { drawSemanticBuildingContext } from './canvas/semanticBuildingRenderer';","import { drawSemanticBuildingContext } from './canvas/semanticBuildingRenderer';\nimport { drawTerritoryStructuralDeepFoundation } from './canvas/territoryStructuralDeepRenderer';");
+g=g.replace('          drawArchitectureGrounding(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);','          drawArchitectureGrounding(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);\n          drawTerritoryStructuralDeepFoundation(layerCtx, width, height, currentTerritory.id, tacticalBuildings);');
+fs.writeFileSync(game,g,'utf8');
+console.log('0.8P T1/T2 foundation integrated');

@@ -31,3 +31,55 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.6);
 }
+
+/* Fit combat overlays to the battlefield, including a desktop side panel. */
+.battlefield-shell { container-type: inline-size; }
+@container (max-width: 700px) {
+  .battle-hud { left: .75rem; right: .75rem; min-width: 0; max-width: none; }
+  .battle-hud > div:first-child { flex-wrap: wrap; row-gap: .125rem; }
+  .battle-hud > div:first-child > span:first-child { flex-basis: 100%; }
+  .battle-hud > div:first-child > span:nth-child(2) { display: none; }
+  .battle-controls { top: 6rem; right: .75rem; }
+  .battle-layout-controls { top: 8.5rem; }
+  .battlefield-shell:has(.battle-advance) .battle-controls { top: 10rem; }
+  .battlefield-shell:has(.battle-advance) .battle-layout-controls { top: 12.75rem; }
+  .battle-advance { max-width: 100%; text-align: left; }
+  .battle-help { right: 3rem; flex-wrap: wrap; gap: .25rem .5rem; }
+}
+
+/* 0.5 Cidade Viva: entrada de distrito curta, informativa e não bloqueante. */
+@keyframes territory-intro {
+  0% { opacity: 0; transform: translate(-50%, 10px) scale(.97); }
+  14% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  76% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -8px) scale(.99); }
+}
+.territory-intro-card { animation: territory-intro 1.2s cubic-bezier(.2,.75,.2,1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .territory-intro-card { animation: none; opacity: 1; }
+}
+
+/* 0.8X.3 — HUD autoral BR: concreto, sinalização urbana e leitura operacional. */
+@keyframes hudEventIn {
+  from { opacity: 0; transform: translateY(-7px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hud-br-surface {
+  background-color: #0a0d12;
+  background-image:
+    radial-gradient(circle at 14% -20%, rgba(22, 163, 74, .055), transparent 34%),
+    radial-gradient(circle at 72% -35%, rgba(202, 138, 4, .045), transparent 32%),
+    linear-gradient(180deg, rgba(255,255,255,.018), transparent 46%),
+    repeating-linear-gradient(112deg, rgba(255,255,255,.009) 0 1px, transparent 1px 9px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), inset 0 -1px 0 rgba(0,0,0,.35);
+}
+
+.hud-br-card {
+  background-image: linear-gradient(145deg, rgba(255,255,255,.025), rgba(255,255,255,0) 42%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 5px 16px rgba(0,0,0,.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="hudEventIn"] { animation: none !important; }
+}

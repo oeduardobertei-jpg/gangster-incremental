@@ -1,0 +1,25 @@
+{
+  "playerFaction": "azul",
+  "intel": 42,
+  "cash": 875,
+  "ammo": 73,
+  "respect": 64,
+  "runRespectEarned": 999,
+  "contacts": 12,
+  "hegemonyEmblems": 3,
+  "currentTerritoryId": 3,
+  "territoryTakes": 27,
+  "upgrades": {
+    "armory_bulletproof_vest": 4,
+    "boca_fortified_bunkers": 2
+  },
+  "talents": {
+    "talent_cartel_cash": 1
+  },
+  "gameSpeed": 2,
+  "stats": {
+    "totalRespectEarned": 330,
+    "highestTerritoryReached": 4,
+    "hegemonyRituals": 1
+  }
+}

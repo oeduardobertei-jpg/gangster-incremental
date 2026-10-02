@@ -1,0 +1,77 @@
+[
+  {
+    "name": "T1 biome profile",
+    "passed": true,
+    "detail": "periferia-vivida; patches=6"
+  },
+  {
+    "name": "T1 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T2 biome profile",
+    "passed": true,
+    "detail": "ferrovia-comercial; patches=5"
+  },
+  {
+    "name": "T2 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T3 biome profile",
+    "passed": true,
+    "detail": "patio-industrial; patches=4"
+  },
+  {
+    "name": "T3 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T4 biome profile",
+    "passed": true,
+    "detail": "morro-terroso; patches=6"
+  },
+  {
+    "name": "T4 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=22"
+  },
+  {
+    "name": "T5 biome profile",
+    "passed": true,
+    "detail": "residencial-paisagistico; patches=6"
+  },
+  {
+    "name": "T5 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T6 biome profile",
+    "passed": true,
+    "detail": "complexo-operacional; patches=6"
+  },
+  {
+    "name": "T6 physics remains valid",
+    "passed": true,
+    "detail": "violations=0; colliders=23"
+  },
+  {
+    "name": "six authored biome signatures",
+    "passed": true,
+    "detail": "biomes=6"
+  },
+  {
+    "name": "six distinct visual captures",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

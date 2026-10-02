@@ -1,3 +1,4 @@
+import { drawSoldier34 } from './soldier34';
 import { AllyEntity, RivalEntity } from '../../types/game';
 
 // Deterministic helper to get character visual variant (0, 1, or 2)
@@ -628,12 +629,33 @@ export function drawAllySprite(
   const kickbackDist = recoil * 4.8;
   const kickbackAngle = recoil * 0.14;
 
-  // Realistic drop shadow
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
-  ctx.beginPath();
-  ctx.ellipse(x, y + (type === 'batedor_moto' ? 7 : 7.5), type === 'batedor_moto' ? 15 : 9.5, 4.5, 0, 0, Math.PI * 2);
-  ctx.fill();
+  // 0.5.5C: two-stage contact shadow anchors the sprite to the terrain.
+  const shadowY = y + (type === 'batedor_moto' ? 7 : 7.5);
+  const shadowW = type === 'batedor_moto' ? 16 : 10.5;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.24)';
+  ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.5, shadowW + 4, 6.2, 0, 0, Math.PI * 2);ctx.fill();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
+  ctx.beginPath();ctx.ellipse(x, shadowY, shadowW, 3.6, 0, 0, Math.PI * 2);ctx.fill();
 
+  const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
+  if (drawSoldier34(ctx, {
+    wx: x,
+    wy: y,
+    tx: 0,
+    ty: 0,
+    rot: 0,
+    angle,
+    faction,
+    type,
+    color,
+    walkDist,
+    isMoving,
+    recoil: kickbackDist
+  })) {
+    return;
+  }
+
+  // Legacy fallback for any unsupported future unit type.
   // BATEDOR DE MOTO
   if (type === 'batedor_moto') {
     ctx.save();
@@ -978,20 +1000,6 @@ export function drawAllySprite(
   }
 
   ctx.restore();
-
-  // Ally HP Bar (only when damaged)
-  if (hp < maxHp) {
-    const barWidth = 24;
-    const barHeight = 3.5;
-    const pct = Math.max(0, hp / maxHp);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-    ctx.fillRect(x - barWidth / 2, y - 20, barWidth, barHeight);
-    ctx.fillStyle = color; // PCC is always Blue, CV is always Red
-    ctx.fillRect(x - barWidth / 2, y - 20, barWidth * pct, barHeight);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    ctx.lineWidth = 0.6;
-    ctx.strokeRect(x - barWidth / 2, y - 20, barWidth, barHeight);
-  }
 }
 
 // -------------------------------------------------------------
@@ -1016,11 +1024,38 @@ export function drawRivalSprite(
   const kickbackDist = recoil * 4.8;
   const kickbackAngle = recoil * 0.14;
 
-  // Ground shadow
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
-  ctx.beginPath();
-  ctx.ellipse(x, y + radius - 2, radius * 0.95, 4.5, 0, 0, Math.PI * 2);
-  ctx.fill();
+  // 0.5.5C: same contact-shadow language as allied units.
+  const shadowY = y + radius - 2;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.24)';
+  ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.4, radius * 1.12 + 3, 6.0, 0, 0, Math.PI * 2);ctx.fill();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
+  ctx.beginPath();ctx.ellipse(x, shadowY, radius * 0.98, 3.6, 0, 0, Math.PI * 2);ctx.fill();
+
+  const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
+  if (drawSoldier34(ctx, {
+    wx: x,
+    wy: y,
+    tx: 0,
+    ty: 0,
+    rot: 0,
+    angle,
+    faction,
+    type,
+    color,
+    walkDist,
+    isMoving,
+    recoil: kickbackDist
+  })) {
+    if (type === 'chefe_morro') {
+      const auraPulse = Math.sin(time * 0.008) * 3.5;
+      ctx.strokeStyle = 'rgba(244, 63, 94, 0.65)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, 20 + auraPulse, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    return;
+  }
 
   ctx.save();
   ctx.translate(x, y + walkBob);
@@ -1427,28 +1462,5 @@ export function drawRivalSprite(
     ctx.arc(x, y, 14 + auraPulse * 0.5, 0, Math.PI * 2);
     ctx.stroke();
   }
-
-  // Faction Tag
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
-  ctx.beginPath();
-  ctx.roundRect(x - 12, y - radius - 16, 24, 9.5, 2.5);
-  ctx.fill();
-  ctx.fillStyle = color;
-  ctx.font = 'bold 7px "Plus Jakarta Sans", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(factionTag, x, y - radius - 11.2);
-
-  // HP Bar
-  const barWidth = radius * 2.2;
-  const barHeight = 3.5;
-  const pct = Math.max(0, hp / maxHp);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-  ctx.fillRect(x - barWidth / 2, y - radius - 5, barWidth, barHeight);
-  ctx.fillStyle = color; // PCC is always Blue (#3b82f6), CV is always Red (#ef4444)
-  ctx.fillRect(x - barWidth / 2, y - radius - 5, barWidth * pct, barHeight);
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.lineWidth = 0.5;
-  ctx.strokeRect(x - barWidth / 2, y - radius - 5, barWidth, barHeight);
 }
 

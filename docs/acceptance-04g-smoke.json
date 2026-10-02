@@ -1,0 +1,332 @@
+[
+  [
+    "load",
+    true,
+    ""
+  ],
+  [
+    "open settings baseline",
+    true,
+    ""
+  ],
+  [
+    "save baseline",
+    true,
+    ""
+  ],
+  [
+    "modal pauses",
+    true,
+    "speed=0"
+  ],
+  [
+    "recruit button",
+    true,
+    ""
+  ],
+  [
+    "open settings after recruit",
+    true,
+    ""
+  ],
+  [
+    "save after recruit",
+    true,
+    ""
+  ],
+  [
+    "recruit costs about 10 intel",
+    true,
+    "spent=9.45"
+  ],
+  [
+    "recruit materializes ally",
+    true,
+    "stats=1, field=1"
+  ],
+  [
+    "pause hud",
+    true,
+    ""
+  ],
+  [
+    "space blocked while paused",
+    true,
+    ""
+  ],
+  [
+    "economy frozen while paused",
+    true,
+    "intel=52.74940000000595"
+  ],
+  [
+    "open gdd",
+    true,
+    ""
+  ],
+  [
+    "gdd rendered",
+    true,
+    ""
+  ],
+  [
+    "return battle",
+    true,
+    ""
+  ],
+  [
+    "gdd preserves battle",
+    true,
+    "before=1, after=1"
+  ],
+  [
+    "resume hud",
+    true,
+    ""
+  ],
+  [
+    "D1 upgrade preview visible",
+    true,
+    ""
+  ],
+  [
+    "open boca upgrades",
+    true,
+    ""
+  ],
+  [
+    "D1 barricade cap visible",
+    true,
+    ""
+  ],
+  [
+    "D5 auto-ammo formula visible",
+    true,
+    "Recolhimento Rápido de Cápsulas | Equipe logística que recolhe e redistribui munição continuamente durante a disputa. | Nvl 0/15 | TIER VISUAL 0/5 | PRÓXIMO MARCO: NVL 3 | Caixas por ciclo | 0 → 2 | Intervalo do ciclo | Desligado → 5,0 s | Produção estimada | 0,0/min → 24,0/min | Custo: | 60 | Comprar"
+  ],
+  [
+    "D5 auto-ammo cost rebalanced",
+    true,
+    ""
+  ],
+  [
+    "open territory map",
+    true,
+    ""
+  ],
+  [
+    "D2 multipliers visible",
+    true,
+    ""
+  ],
+  [
+    "open sindicato",
+    true,
+    ""
+  ],
+  [
+    "D4 run milestone visible",
+    true,
+    ""
+  ],
+  [
+    "D4 level 1 is not purchasable",
+    true,
+    ""
+  ],
+  [
+    "D4 milestone grants auto recruit",
+    true,
+    ""
+  ],
+  [
+    "open sindicato after milestone",
+    true,
+    ""
+  ],
+  [
+    "D4 granted level shown",
+    true,
+    ""
+  ],
+  [
+    "D4 next levels use contacts",
+    true,
+    ""
+  ],
+  [
+    "open intel upgrades",
+    true,
+    ""
+  ],
+  [
+    "redundant tactical training removed",
+    true,
+    ""
+  ],
+  [
+    "open hegemony",
+    true,
+    ""
+  ],
+  [
+    "hegemony exact effect rows visible",
+    true,
+    ""
+  ],
+  [
+    "zero prestige disabled",
+    true,
+    ""
+  ],
+  [
+    "prepared advanced run before prestige",
+    true,
+    ""
+  ],
+  [
+    "open hegemony for reset test",
+    true,
+    ""
+  ],
+  [
+    "perform hegemony reset",
+    true,
+    ""
+  ],
+  [
+    "hegemony resets auto recruit progress",
+    true,
+    ""
+  ],
+  [
+    "hegemony returns to territory 1",
+    true,
+    ""
+  ],
+  [
+    "open reset territory map",
+    true,
+    ""
+  ],
+  [
+    "hegemony relocks territory map",
+    true,
+    ""
+  ],
+  [
+    "open settings after D5 production",
+    true,
+    ""
+  ],
+  [
+    "save D5 production state",
+    true,
+    ""
+  ],
+  [
+    "D5 level 1 produces ammo in batches of two",
+    true,
+    "gain=4, ammo=104"
+  ],
+  [
+    "D6 buy vest for live troop",
+    true,
+    ""
+  ],
+  [
+    "D6 buy calibers for live troop",
+    true,
+    ""
+  ],
+  [
+    "D6 buy speed for live troop",
+    true,
+    ""
+  ],
+  [
+    "open settings for D6 snapshot",
+    true,
+    ""
+  ],
+  [
+    "save D6 upgraded troop",
+    true,
+    ""
+  ],
+  [
+    "D6 live troop core stats update",
+    true,
+    "hpMax=67, dmg=16.8, speed=1.2"
+  ],
+  [
+    "D6 HP percentage preserved",
+    true,
+    "hp=26.8/67"
+  ],
+  [
+    "open hegemony for D6 veteran",
+    true,
+    ""
+  ],
+  [
+    "D6 buy veteran talent live",
+    true,
+    ""
+  ],
+  [
+    "open settings after veteran",
+    true,
+    ""
+  ],
+  [
+    "save veteran live update",
+    true,
+    ""
+  ],
+  [
+    "D6 veteran talent updates living troop",
+    true,
+    "hp=33.5/83.75, dmg=21"
+  ],
+  [
+    "0.4A open settings after anchor recruit",
+    true,
+    ""
+  ],
+  [
+    "0.4A open settings after cursor zoom recruit",
+    true,
+    ""
+  ],
+  [
+    "0.4A/0.4.1 cursor zoom keeps organic recruit near the anchored world point",
+    true,
+    "drift=29.39"
+  ],
+  [
+    "0.4A open settings after drag",
+    true,
+    ""
+  ],
+  [
+    "0.4A drag does not recruit accidentally",
+    true,
+    "before=2, after=2"
+  ],
+  [
+    "0.4A HiDPI backing store follows DPR",
+    true,
+    "ratio=1.50, dpr=1.5, css=794, backing=1194"
+  ],
+  [
+    "0.4A resize does not move world entities while paused",
+    true,
+    ""
+  ],
+  [
+    "no browser runtime errors",
+    true,
+    "[]"
+  ]
+]

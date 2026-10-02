@@ -1,0 +1,67 @@
+[
+  {
+    "name": "T1 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=10"
+  },
+  {
+    "name": "T1 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-1.png"
+  },
+  {
+    "name": "T2 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=14"
+  },
+  {
+    "name": "T2 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-2.png"
+  },
+  {
+    "name": "T3 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=18"
+  },
+  {
+    "name": "T3 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-3.png"
+  },
+  {
+    "name": "T4 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=22"
+  },
+  {
+    "name": "T4 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-4.png"
+  },
+  {
+    "name": "T5 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=26"
+  },
+  {
+    "name": "T5 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-5.png"
+  },
+  {
+    "name": "T6 cleaned map keeps units outside solids",
+    "passed": true,
+    "detail": "violations=0; rivals=30"
+  },
+  {
+    "name": "T6 cleanup reference exists",
+    "passed": true,
+    "detail": "territory-6.png"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

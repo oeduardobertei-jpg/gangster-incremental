@@ -42,6 +42,28 @@ export interface RivalEntity {
   patrolTargetY?: number;
   patrolWaitTimer?: number;
   originBuilding?: string;
+  targetSearchTimer?: number;
+  aiDecisionTimer?: number;
+  isFinalResistance?: boolean;
+  commandReinforcementCalled?: boolean;
+  bossPhase?: 1 | 2 | 3;
+  bossLastStandCalled?: boolean;
+  stuckTimer?: number;
+  stuckSampleX?: number;
+  stuckSampleY?: number;
+  unstuckTimer?: number;
+  unstuckTargetX?: number;
+  unstuckTargetY?: number;
+  unstuckCooldown?: number;
+  unstuckAttempts?: number;
+  lineOfSightTimer?: number;
+  lineOfSightTargetId?: string;
+  lineOfSightClear?: boolean;
+  detourX?: number;
+  detourY?: number;
+  detourTimer?: number;
+  detourTargetId?: string;
+  pathCheckTimer?: number;
 }
 
 export interface AllyEntity {
@@ -67,6 +89,27 @@ export interface AllyEntity {
   recoilTimer?: number;
   walkDistance?: number;
   variant?: number;
+  targetSearchTimer?: number;
+  scavengeCheckTimer?: number;
+  separationTimer?: number;
+  separationX?: number;
+  separationY?: number;
+  stuckTimer?: number;
+  stuckSampleX?: number;
+  stuckSampleY?: number;
+  unstuckTimer?: number;
+  unstuckTargetX?: number;
+  unstuckTargetY?: number;
+  unstuckCooldown?: number;
+  unstuckAttempts?: number;
+  lineOfSightTimer?: number;
+  lineOfSightTargetId?: string;
+  lineOfSightClear?: boolean;
+  detourX?: number;
+  detourY?: number;
+  detourTimer?: number;
+  detourTargetId?: string;
+  pathCheckTimer?: number;
 }
 
 export interface FallenEntity {
@@ -94,6 +137,9 @@ export interface BulletProjectile {
   color: string;
   radius: number;
   isExplosive?: boolean;
+  dirX?: number;
+  dirY?: number;
+  remainingDistance?: number;
 }
 
 export type CoverObstacleType = 
@@ -114,6 +160,28 @@ export interface CoverObstacle {
   isExplosive: boolean;
   destroyed: boolean;
   rotation?: number;
+}
+
+export type ControlPointStatus = 'rival' | 'contested' | 'captured';
+export type DistrictOperationPhase = 'capture' | 'final_resistance' | 'dominated';
+
+export interface TerritoryControlPoint {
+  id: string;
+  buildingId: string;
+  label: string;
+  x: number;
+  y: number;
+  progress: number;
+  status: ControlPointStatus;
+}
+
+export interface DistrictOperationStatus {
+  enabled: boolean;
+  phase: DistrictOperationPhase;
+  captured: number;
+  total: number;
+  activeLabel?: string;
+  activeProgress?: number;
 }
 
 export interface FloatingText {
@@ -179,7 +247,6 @@ export interface SyndicatePrestigeTalent {
   level: number;
   maxLevel: number;
   cost: number;
-  effectMultiplier: number;
 }
 
 export interface TerritoryZone {
@@ -198,9 +265,14 @@ export interface TerritoryZone {
     blindado_choque: number;
     chefe_morro: number;
   };
+  // Guarnição fixa que já ocupa o território no instante em que ele começa.
+  // Reforços posteriores continuam obedecendo rivalPool/spawnRate/maxRivals.
+  openingGarrison: Array<{ type: RivalType; count: number }>;
   spawnRate: number;
   maxRivals: number;
-  bountyMultiplier: number;
+  healthMultiplier: number;
+  damageMultiplier: number;
+  rewardMultiplier: number;
 }
 
 export interface GameStats {
@@ -226,6 +298,41 @@ export interface FactionConfig {
   motto: string;
 }
 
+export type RecruitOrigin = 'button' | 'keyboard' | 'canvas' | 'auto';
+
+export type RecruitRefusalReason =
+  | 'paused'
+  | 'insufficient_intel'
+  | 'capacity'
+  | 'battle_unavailable';
+
+export interface RecruitCommandResult {
+  ok: boolean;
+  reason?: RecruitRefusalReason;
+  created?: number;
+  capacityReached?: boolean;
+}
+
+export interface BattleSnapshot {
+  version: 1;
+  runId: string;
+  territoryId: number;
+  faction: FactionId;
+  capturedAt: number;
+  allies: AllyEntity[];
+  rivals: RivalEntity[];
+  fallen: FallenEntity[];
+  bullets: BulletProjectile[];
+  obstacles: CoverObstacle[];
+  spawnElapsedMs: number;
+  autoRecruitElapsedMs: number;
+  controlPoints?: TerritoryControlPoint[];
+  operationPhase?: DistrictOperationPhase;
+  finalResistanceSpawned?: boolean;
+  finalResistanceWave?: number;
+  campaignMilestonesTriggered?: string[];
+}
+
 export interface GameState {
   // Configuração da Facção do Jogador
   playerFaction: FactionId;
@@ -245,6 +352,8 @@ export interface GameState {
   // Território & Batalha
   currentTerritoryId: number;
   territoryTakes: number;
+  runRivalsNeutralized: number;
+  runHighestTerritoryReached: number;
 
   // Limites
   maxAllies: number;
@@ -265,7 +374,13 @@ export interface GameState {
   showDamageNumbers: boolean;
   showCombatSplatters: boolean;
 
-  // Metadados
+  // Metadados de save e rodada
+  saveFormatVersion: number;
+  balanceRevision: number;
+  runId: string;
+  runStartedAt: number;
+  battleSnapshot?: BattleSnapshot;
   stats: GameStats;
   lastSaveTimestamp: number;
 }
+

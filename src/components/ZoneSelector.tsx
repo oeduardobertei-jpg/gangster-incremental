@@ -79,7 +79,11 @@ export const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                         </span>
                       </div>
                       <span className="text-slate-600">·</span>
-                      <span className="text-emerald-400 font-mono-numbers">Recompensa: {territory.bountyMultiplier}x</span>
+                      <span className="text-rose-300 font-mono-numbers">Vida: {territory.healthMultiplier}x</span>
+                      <span className="text-slate-600">·</span>
+                      <span className="text-orange-300 font-mono-numbers">Dano: {territory.damageMultiplier}x</span>
+                      <span className="text-slate-600">·</span>
+                      <span className="text-emerald-400 font-mono-numbers">Grana/Suprimentos: {territory.rewardMultiplier}x</span>
                     </div>
                   </div>
 

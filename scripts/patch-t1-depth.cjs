@@ -1,0 +1,11 @@
+const fs=require('fs');
+const p='C:/Users/eduardo.bertei/Downloads/gangster-incremental-0.9.3b/src/components/canvas/buildingSkins.ts';
+let s=fs.readFileSync(p,'utf8');
+s=s.replace(/  const visualHeight = heroHeight;[^\r\n]*/,"  const visualHeight = options.contextual ? (b.type === 'laje' ? 38 : 32) : heroHeight; // T1 depth pass: stronger contextual massing.");
+const marker="  if (b.type === 'zinc') {";
+const i=s.indexOf(marker);
+if(i<0) throw new Error('marker not found');
+const extra=`  // T1 architectural depth pass: visible massing for contextual architecture.\n  if (options.contextual) {\n    const hash=[...b.id].reduce((a,c)=>a+c.charCodeAt(0),0);\n    ctx.fillStyle='rgba(12,18,24,.46)';ctx.fillRect(b.x-2,roofY-2,b.w+4,6);\n    ctx.fillStyle=wall.highlight;ctx.globalAlpha=.42;ctx.fillRect(b.x,roofY-4,b.w,3);ctx.globalAlpha=1;\n    ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(b.x+b.w-5,roofY-1,5,b.h+1);\n    const blockW=Math.max(22,Math.min(34,b.w*.34));\n    const blockH=Math.max(14,Math.min(22,b.h*.42));\n    const blockX=hash%2===0?b.x+8:b.x+b.w-blockW-8;\n    const blockY=roofY+8;\n    ctx.fillStyle='rgba(0,0,0,.34)';ctx.fillRect(blockX+5,blockY+5,blockW,blockH);\n    ctx.fillStyle=b.type==='brick'?'#6c382b':'#4b5864';ctx.fillRect(blockX,blockY,blockW,blockH);\n    ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(blockX+2,blockY+2,blockW-4,2);\n    ctx.strokeStyle='rgba(226,232,240,.22)';ctx.strokeRect(blockX,blockY,blockW,blockH);\n    const awningY=facadeY+8;\n    ctx.fillStyle='rgba(8,12,18,.52)';ctx.fillRect(b.x-3,awningY+4,b.w+6,5);\n    ctx.fillStyle=b.type==='brick'?'#8a4b35':'#667786';ctx.fillRect(b.x-4,awningY,b.w+8,5);\n    ctx.strokeStyle='rgba(226,232,240,.18)';ctx.beginPath();ctx.moveTo(b.x-4,awningY);ctx.lineTo(b.x+b.w+4,awningY);ctx.stroke();\n    ctx.fillStyle='rgba(255,255,255,.055)';for(let xx=b.x+10;xx<b.x+b.w-8;xx+=18)ctx.fillRect(xx,facadeY+3,2,visualHeight-9);\n  }\n\n`;
+s=s.slice(0,i)+extra+s.slice(i);
+fs.writeFileSync(p,s);
+console.log('PATCHED');

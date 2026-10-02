@@ -1,0 +1,13 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+const path='src/audio/radioEngine.ts';
+let s=readFileSync(path,'utf8');
+const rep=(a,b,label)=>{if(!s.includes(a))throw new Error('missing '+label);s=s.replace(a,b)};
+rep("source?: 'procedural' | 'youtube';","source?: 'procedural' | 'youtube-chapters' | 'youtube-tracks';",'source union');
+rep("source:'youtube', videoId:'2LfG9LlqyWw',","source:'youtube-chapters', videoId:'2LfG9LlqyWw',",'lofi source');
+const old=`  {\n    id:'central', frequency:'89.5', name:'Frequência Central',\n    tagline:'Ritmo industrial · subgrave · tensão de operação',\n    tracks:[\n      T('linha','Última Linha',88,38,'dark',[0,1,5,3],[0,0,1,5,0,3,1,-2]),\n      T('fita','Fita de Comando',84,36,'dark',[0,5,1,-2],[0,5,0,1,-2,0,3,1]),\n      T('retorno','Sem Retorno',91,40,'dark',[0,-2,1,5],[0,-2,0,1,5,1,0,-2])\n    ]\n  }`;
+const next=`  {\n    id:'central', frequency:'89.5', name:'Brazilian Gangsta',\n    tagline:'Rap brasileiro de rua · instrumentais autorizados · rádio principal',\n    source:'youtube-tracks',\n    tracks:[T('brazilian-gangsta','Brazilian Gangsta',0,0,'dark',[0],[0])]\n  }`;
+rep(old,next,'central station');
+rep("stationId:'concreto', trackIndex:0, playing:false, volume:.28, systemMuted:false","stationId:'central', trackIndex:0, playing:false, volume:.28, systemMuted:false",'default station');
+rep("if (this.getStation().source === 'youtube') return;","if (this.getStation().source && this.getStation().source !== 'procedural') return;",'scheduler guard');
+writeFileSync(path,s,'utf8');
+console.log('Brazilian Gangsta configured as main station');

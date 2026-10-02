@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+const root='C:/Users/eduardo.bertei/organizacao/IA/prototipos/fac incremental/gangster-incremental-0.8l-full/gangster-incremental';
+const env=`${root}/src/components/canvas/environmentRenderer.ts`;
+let e=fs.readFileSync(env,'utf8');
+const old=`  // Terraços: bandas em diferentes tons vendem altura sem alterar física.\n  const terraces = [\n    {topL:.18,topR:.165,botL:.34,botR:.315,c:'rgba(67,54,43,.40)'},\n    {topL:.40,topR:.385,botL:.56,botR:.545,c:'rgba(57,46,38,.36)'},\n    {topL:.64,topR:.615,botL:.81,botR:.795,c:'rgba(47,39,33,.40)'}\n  ];\n  for(const t of terraces){\n    ctx.beginPath();ctx.moveTo(width*.025,height*t.topL);ctx.lineTo(width*.975,height*t.topR);ctx.lineTo(width*.945,height*t.botR);ctx.lineTo(width*.055,height*t.botL);ctx.closePath();ctx.fillStyle=t.c;ctx.fill();\n    ctx.strokeStyle='rgba(139,115,92,.085)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(width*.055,height*t.botL);ctx.lineTo(width*.945,height*t.botR);ctx.stroke();\n  }`;
+const neu=`  // Gold composition: terraced pads hug each hillside side instead of forming map-wide bands.\n  const terraces = [\n    {p:[[.02,.18],[.43,.17],[.39,.33],[.055,.34]],c:'rgba(67,54,43,.38)'},\n    {p:[[.57,.17],[.98,.18],[.945,.32],[.61,.33]],c:'rgba(63,51,42,.34)'},\n    {p:[[.02,.40],[.42,.39],[.38,.55],[.05,.56]],c:'rgba(57,46,38,.34)'},\n    {p:[[.58,.39],[.98,.40],[.95,.54],[.62,.55]],c:'rgba(55,45,38,.31)'},\n    {p:[[.02,.64],[.41,.63],[.37,.80],[.055,.81]],c:'rgba(47,39,33,.37)'},\n    {p:[[.59,.62],[.98,.64],[.945,.79],[.63,.80]],c:'rgba(49,40,34,.34)'}\n  ] as const;\n  for(const t of terraces){ctx.beginPath();t.p.forEach(([x,y],i)=>i?ctx.lineTo(width*x,height*y):ctx.moveTo(width*x,height*y));ctx.closePath();ctx.fillStyle=t.c;ctx.fill();ctx.strokeStyle='rgba(139,115,92,.075)';ctx.lineWidth=1.25;ctx.stroke();}`;
+if(!e.includes(old)) throw new Error('T4 terraces block not found');
+e=e.replace(old,neu);fs.writeFileSync(env,e,'utf8');
+const ground=`${root}/src/components/canvas/groundRenderer.ts`;let g=fs.readFileSync(ground,'utf8');
+g=g.replace("ctx.strokeStyle=biome.id===5?'rgba(226,232,240,.026)':biome.id===6?'rgba(226,232,240,.032)':'rgba(226,232,240,.065)'","ctx.strokeStyle=biome.id===5?'rgba(226,232,240,.014)':biome.id===6?'rgba(226,232,240,.032)':'rgba(226,232,240,.065)'");
+g=g.replace("    ctx.strokeStyle='rgba(226,232,240,.020)';ctx.lineWidth=1;","    ctx.strokeStyle='rgba(226,232,240,.012)';ctx.lineWidth=1;");
+fs.writeFileSync(ground,g,'utf8');
+const tokens=`${root}/src/data/visualTokens.ts`;let v=fs.readFileSync(tokens,'utf8').replace(/export const CITY_VIVA_VISUAL_REVISION = '[^']+';/,"export const CITY_VIVA_VISUAL_REVISION = '0.8x2-territory-composition-v1';");fs.writeFileSync(tokens,v,'utf8');
+console.log('0.8X.2 territory composition applied');

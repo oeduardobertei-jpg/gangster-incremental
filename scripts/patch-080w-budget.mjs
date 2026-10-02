@@ -1,0 +1,9 @@
+import fs from 'node:fs';
+const root='C:/Users/eduardo.bertei/organizacao/IA/prototipos/fac incremental/gangster-incremental-0.8l-full/gangster-incremental';
+const game=`${root}/src/components/GameCanvas.tsx`;let g=fs.readFileSync(game,'utf8');
+g=g.replace("      const camera = cameraRef.current;\n      ctx.translate(viewportWidth / 2, viewportHeight / 2);","      const camera = cameraRef.current;\n      const battleEntityCount = alliesRef.current.length + rivalsRef.current.length;\n      const visualLoadZoom = battleEntityCount >= 100 ? Math.min(camera.zoom, .70) : battleEntityCount >= 70 ? Math.min(camera.zoom, .85) : camera.zoom;\n      ctx.translate(viewportWidth / 2, viewportHeight / 2);");
+g=g.replace("              factionConfig.color, factionConfig.tag, camera.zoom","              factionConfig.color, factionConfig.tag, visualLoadZoom");
+g=g.replace("      if (particlesRef.current.length > MAX_COMBAT_PARTICLES) {\n        particlesRef.current.splice(0, particlesRef.current.length - MAX_COMBAT_PARTICLES);\n      }","      const particleBudget = battleEntityCount >= 110 ? 240 : battleEntityCount >= 70 ? 360 : MAX_COMBAT_PARTICLES;\n      if (particlesRef.current.length > particleBudget) {\n        particlesRef.current.splice(0, particlesRef.current.length - particleBudget);\n      }");
+fs.writeFileSync(game,g,'utf8');console.log('0.8W adaptive visual budget applied');const tokens=`${root}/src/data/visualTokens.ts`;let v=fs.readFileSync(tokens,'utf8');
+v=v.replace(/export const CITY_VIVA_VISUAL_REVISION = '[^']+';/,"export const CITY_VIVA_VISUAL_REVISION = '0.8w-visual-budget-v1';");
+fs.writeFileSync(tokens,v,'utf8');

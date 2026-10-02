@@ -1,0 +1,72 @@
+[
+  {
+    "name": "T1 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T1 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "T2 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T2 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "T3 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T3 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "T4 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=22"
+  },
+  {
+    "name": "T4 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "T5 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T5 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "T6 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=23"
+  },
+  {
+    "name": "T6 biome depth changed frame",
+    "passed": true,
+    "detail": "0.5.6 differs from 0.5.5"
+  },
+  {
+    "name": "six distinct biome-depth territories",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

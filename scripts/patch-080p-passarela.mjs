@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const p=process.cwd()+'/src/components/canvas/bespokeArchitectureRenderer.ts';
+let s=fs.readFileSync(p,'utf8');
+const oldUnder="  else if(n.includes('passarela')){const span=Math.min(180,b.w+92),sx=b.x+b.w/2-span/2,dy=roofY-12;rect(ctx,sx,dy,span,9,'#4b5563','#cbd5e1');posts(ctx,sx+12,dy+9,span-24,facadeY+height-dy-9,4,'#64748b');}";
+const newUnder="  else if(n.includes('passarela')){const cx=b.x+b.w/2,top=facadeY+height-2;rect(ctx,cx-12,top,24,62,'#414b56','#94a3b8');posts(ctx,cx-8,top+4,16,54,2,'#64748b');stair(ctx,cx-30,top+34,18,28,1);stair(ctx,cx+12,top+34,18,28,-1);}";
+s=s.replace(oldUnder,newUnder);
+const oldOver="  else if(n.includes('passarela')){const span=Math.min(180,b.w+92),sx=b.x+b.w/2-span/2,y=roofY-21;rail(ctx,sx,y,span,10);rect(ctx,sx,y+10,span,5,'#58636f','#cbd5e1');rect(ctx,b.x+b.w*.43,y+11,b.w*.14,3,controlColor);}";
+const newOver="  else if(n.includes('passarela')){const cx=b.x+b.w/2,landingY=roofY-14;rect(ctx,b.x+b.w*.28,landingY,b.w*.44,11,'#58636f','#cbd5e1');rail(ctx,b.x+b.w*.24,landingY-9,b.w*.52,9);line(ctx,cx-9,facadeY+height,cx-9,facadeY+height+60,'#cbd5e1',1.4);line(ctx,cx+9,facadeY+height,cx+9,facadeY+height+60,'#cbd5e1',1.4);for(let y=facadeY+height+7;y<facadeY+height+58;y+=10)line(ctx,cx-9,y,cx+9,y,'rgba(203,213,225,.55)',1);rect(ctx,cx-5,landingY+3,10,3,controlColor);}";
+s=s.replace(oldOver,newOver);
+fs.writeFileSync(p,s,'utf8');
+console.log('Passarela architecture reoriented');

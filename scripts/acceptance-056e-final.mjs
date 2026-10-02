@@ -1,0 +1,25 @@
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+const read = path => JSON.parse(readFileSync(path,'utf8'));
+const checks=[];
+const check=(name,ok,detail='')=>{checks.push({name,passed:Boolean(ok),detail});console.log(`${ok?'PASS':'FAIL'} | ${name} | ${detail}`)};
+const objectRows = (path, expected) => {
+  const rows=read(path); const failed=rows.filter(row=>!row.passed);
+  check(path, rows.length===expected && failed.length===0, `passed=${rows.length-failed.length}/${rows.length}; expected=${expected}`);
+};
+const smoke=read('docs/acceptance-04g-smoke.json');
+check('smoke functional',smoke.length===66 && smoke.every(row=>row[1]===true),`passed=${smoke.filter(row=>row[1]).length}/${smoke.length}`);
+objectRows('docs/acceptance-056d-atmosphere.json',14);
+objectRows('docs/acceptance-056c-combat.json',10);
+objectRows('docs/acceptance-053b-control.json',7);
+const t5=read('docs/acceptance-051b-t5.json');
+check('T5 anti-stuck',t5.results?.length===8 && t5.results.every(row=>row.passed),`passed=${t5.results?.filter(row=>row.passed).length}/${t5.results?.length}`);
+const staticShots=[1,2,3,4,5,6].map(t=>`docs/screenshots/0.5.6d/territory-${t}.png`);
+const combatShots=[1,3,6].map(t=>`docs/screenshots/0.5.6d/combat/territory-${t}.png`);
+check('0.5.6D static gallery',staticShots.every(existsSync),`${staticShots.filter(existsSync).length}/6 screenshots`);
+check('0.5.6D combat gallery',combatShots.every(existsSync),`${combatShots.filter(existsSync).length}/3 screenshots`);
+const tokens=readFileSync('src/data/visualTokens.ts','utf8');
+check('visual revision locked',tokens.includes("0.5.6d-atmosphere-v1"),'0.5.6d-atmosphere-v1');
+const failed=checks.filter(row=>!row.passed);
+writeFileSync('docs/acceptance-056e-final.json',JSON.stringify(checks,null,2));
+console.log(`ACCEPTANCE_056E passed=${checks.length-failed.length} failed=${failed.length}`);
+if(failed.length) process.exitCode=1;

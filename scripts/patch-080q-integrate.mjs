@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const root='C:/Users/eduardo.bertei/organizacao/IA/prototipos/fac incremental/gangster-incremental-0.8l-full/gangster-incremental';
+const skins=`${root}/src/components/canvas/buildingSkins.ts`;
+let s=fs.readFileSync(skins,'utf8');
+s=s.replace("import { drawBespokeArchitectureUnderlay, drawBespokeArchitectureOverlay } from './bespokeArchitectureRenderer';","import { drawBespokeArchitectureUnderlay, drawBespokeArchitectureOverlay } from './bespokeArchitectureRenderer';\nimport { drawRooftopLife } from './rooftopLifeRenderer';");
+s=s.replace("  drawBespokeArchitectureOverlay({ctx,b,territoryId:1,roofY,facadeY,height:visualHeight,controlColor,time});\n  drawSemanticBuildingIdentity", "  drawBespokeArchitectureOverlay({ctx,b,territoryId:1,roofY,facadeY,height:visualHeight,controlColor,time});\n  drawRooftopLife({ctx,b,territoryId:1,roofY,facadeY,height:visualHeight,controlColor,time});\n  drawSemanticBuildingIdentity");
+s=s.replace("  drawBespokeArchitectureOverlay({ctx,b,territoryId,roofY,facadeY,height,controlColor,time});\n  drawSemanticBuildingIdentity", "  drawBespokeArchitectureOverlay({ctx,b,territoryId,roofY,facadeY,height,controlColor,time});\n  drawRooftopLife({ctx,b,territoryId,roofY,facadeY,height,controlColor,time});\n  drawSemanticBuildingIdentity");
+fs.writeFileSync(skins,s,'utf8');
+const tokens=`${root}/src/data/visualTokens.ts`;
+let v=fs.readFileSync(tokens,'utf8').replace('0.8p-territory-deep-v3','0.8q-rooftops-lajes-v1');
+fs.writeFileSync(tokens,v,'utf8');
+console.log('0.8Q rooftop layer integrated');

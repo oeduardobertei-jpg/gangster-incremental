@@ -30,13 +30,14 @@ export const ResourceBar: React.FC<ResourceBarProps> = ({
     : 100;
 
   return (
-    <div className="w-full bg-[#0c0e15] border-b border-slate-800/80 px-4 py-2.5 shadow-md flex flex-wrap items-center justify-between gap-4 select-none">
+    <div className="hud-br-surface relative w-full border-b border-slate-800/80 px-2 sm:px-4 py-2 shadow-md flex items-center gap-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden select-none">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-[linear-gradient(90deg,rgba(22,163,74,.35),rgba(234,179,8,.32),rgba(37,99,235,.35))]" />
       {/* Group 1: Faction Badge & Currencies */}
-      <div className="flex items-center flex-wrap gap-3 text-xs">
+      <div className="flex items-center gap-2 sm:gap-3 text-xs shrink-0">
         {/* Faction Selector Pill */}
         <button
           onClick={onOpenFactionModal}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-900 hover:bg-slate-800 text-left"
+          className="hud-br-card flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-900/90 hover:bg-slate-800 text-left"
           style={{ borderColor: `${factionConfig.color}66` }}
         >
           <div 
@@ -134,10 +135,10 @@ export const ResourceBar: React.FC<ResourceBarProps> = ({
       </div>
 
       {/* Group 2: Current Territory & Progress */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 shrink-0 ml-auto">
         <button
           onClick={onOpenTerritoryModal}
-          className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-lg text-xs transition-colors cursor-pointer"
+          className="hud-br-card flex items-center gap-2 px-3 py-1.5 bg-slate-800/70 hover:bg-slate-700/80 border border-slate-700 rounded-lg text-xs transition-colors cursor-pointer"
         >
           <MapPin className="w-4 h-4 text-rose-400 shrink-0" />
           <div className="text-left">

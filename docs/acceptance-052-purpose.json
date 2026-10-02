@@ -1,0 +1,137 @@
+[
+  {
+    "name": "T1 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T1 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T1 identity props",
+    "passed": true,
+    "detail": "low_wall,stall,dumpster,bench,crate_stack,service_unit"
+  },
+  {
+    "name": "T1 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=21,violations=0"
+  },
+  {
+    "name": "T2 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T2 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T2 identity props",
+    "passed": true,
+    "detail": "stall,crate_stack,barricade,dumpster,bench"
+  },
+  {
+    "name": "T2 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=24,violations=0"
+  },
+  {
+    "name": "T3 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T3 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T3 identity props",
+    "passed": true,
+    "detail": "container,pallets,barricade,service_unit,dumpster"
+  },
+  {
+    "name": "T3 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=21,violations=0"
+  },
+  {
+    "name": "T4 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T4 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T4 identity props",
+    "passed": true,
+    "detail": "sandbags,watch_post,barricade,crate_stack,service_unit"
+  },
+  {
+    "name": "T4 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=22,violations=0"
+  },
+  {
+    "name": "T5 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T5 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T5 identity props",
+    "passed": true,
+    "detail": "planter,security_booth,parked_car,bollards,bench"
+  },
+  {
+    "name": "T5 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=24,violations=0"
+  },
+  {
+    "name": "T6 purposeful prop set",
+    "passed": true,
+    "detail": "props=7"
+  },
+  {
+    "name": "T6 functional solids",
+    "passed": true,
+    "detail": "solids=7"
+  },
+  {
+    "name": "T6 identity props",
+    "passed": true,
+    "detail": "checkpoint,parked_car,sandbags,service_unit,bollards"
+  },
+  {
+    "name": "T6 visual scene stays physically valid",
+    "passed": true,
+    "detail": "colliders=23,violations=0"
+  },
+  {
+    "name": "all six districts use distinct authored building layouts",
+    "passed": true,
+    "detail": "layouts=6"
+  },
+  {
+    "name": "all six visual captures are distinct",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

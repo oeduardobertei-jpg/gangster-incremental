@@ -1,0 +1,15 @@
+const endpoint='http://127.0.0.1:9225/json';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const targets=await (await fetch(endpoint)).json();
+const target=targets.find(t=>t.type==='page'&&t.url.includes('localhost:3000'));
+const ws=new WebSocket(target.webSocketDebuggerUrl);
+await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
+let seq=0; const pending=new Map();
+ws.onmessage=e=>{const m=JSON.parse(e.data);if(!m.id||!pending.has(m.id))return;const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(m.error):p.resolve(m.result);};
+const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));});
+const evalv=async expression=>(await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true})).result.value;
+await send('Runtime.enable');
+await evalv(`(()=>{const k='factions_war_pt_br_save_v2';const s=JSON.parse(localStorage.getItem(k));s.balanceRevision=1;s.ammo=100;s.intel=0;s.gameSpeed=1;s.autoCollectAmmo=true;s.upgrades={boca_auto_ammo_scavenge:1};s.talents={};s.stats={...s.stats,timePlayedSeconds:0};s.battleSnapshot=undefined;localStorage.setItem(k,JSON.stringify(s));location.reload();return true;})()`);
+await sleep(7000);
+const info=await evalv(`(()=>{const raw=JSON.parse(localStorage.getItem('factions_war_pt_br_save_v2'));const label=[...document.querySelectorAll('div')].find(x=>x.textContent?.trim()==='Munição (Caixas)');const intel=[...document.querySelectorAll('div')].find(x=>x.textContent?.trim()==='Rádio / Intel');return {visibility:document.visibilityState,savedAmmo:raw.ammo,savedIntel:raw.intel,time:raw.stats?.timePlayedSeconds,speed:raw.gameSpeed,upgrade:raw.upgrades?.boca_auto_ammo_scavenge,auto:raw.autoCollectAmmo,hud:label?.parentElement?.innerText||'',intelHud:intel?.parentElement?.innerText||''};})()`);
+console.log(info); ws.close();
