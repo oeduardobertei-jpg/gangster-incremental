@@ -1,0 +1,66 @@
+{
+  "passed": 12,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "T2 authored market fixtures present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "rail access story present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "rail signaling present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "market circulation authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "legacy global T2 paver grid retired",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T2 landmark identity overlay present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "warehouse station and footbridge differentiated",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T2 biome no longer dominated by paver slabs",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T2 HUD identity preserved",
+      "detail": "T2Praça da Feira & Linha do Trem|Aliados 0/15Rivais 14FEIRA • TRILHOS • COMÉRCIO LOCALINTE"
+    },
+    {
+      "ok": true,
+      "label": "T2 runtime physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T2 battlefield remains readable",
+      "detail": "canvas=1130x672"
+    },
+    {
+      "ok": true,
+      "label": "T2 runtime has no browser errors",
+      "detail": "[]"
+    }
+  ]
+}

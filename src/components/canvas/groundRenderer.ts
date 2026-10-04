@@ -267,15 +267,12 @@ export function drawLivingGroundFoundation(
 
   for (const patch of biome.patches) drawPatch(ctx, width, height, biome, patch, controlColor);
 
-  if (territoryId === 2) {
-    drawPaverGrid(ctx, width, height, territoryId, biome);
-  }
-
   drawSurfaceNoise(ctx, width, height, territoryId, biome);
   // 0.9.6A: T1 no longer stacks legacy wetness/inspection marks over the authored surface.
   if (territoryId !== 1) {
     drawWetness(ctx, width, height, territoryId, biome);
-    drawTerritoryGroundStory(ctx, width, height, territoryId, biome, controlColor);
+    // 1.1K: T2 rail/market storytelling is authored in t2RailGroundReauthorRenderer.
+    if (territoryId !== 2) drawTerritoryGroundStory(ctx, width, height, territoryId, biome, controlColor);
   }
   ctx.restore();
 }

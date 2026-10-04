@@ -93,3 +93,9 @@ Nenhum territÃ³rio passa de fase atÃ© responder **sim** Ã  pergunta: â€
 - aceite Performance 16/16, Camera 13/13, Organic 6/6, Combat 10/10;
 - referência: `docs/1.1J_PERFORMANCE.md`.
 
+## 1.1K concluída
+- T2 reautorado como feira + ferrovia integrada;
+- piso monolítico substituído por ilhas comerciais e corredores legíveis;
+- Armazém, Estação, Cabine e Passarela ganharam identidade física própria;
+- microarquitetura comercial evita footprints de gameplay;
+- referência: `docs/1.1K_T2_POLISH.md`.

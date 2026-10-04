@@ -83,6 +83,41 @@ const drawT1=(a:Args)=>{
   }
 };
 
+const drawT2=(a:Args)=>{
+  const {ctx,b,roofY,facadeY,height,controlColor}=a;
+  if(b.id==='beco_01'){
+    zinc(ctx,b.x-7,roofY-10,b.w+14,13,-2);
+    for(const x of [b.x+6,b.x+b.w-7])line(ctx,x,roofY+2,x,facadeY+height,'#6b5541',2);
+    rect(ctx,b.x+6,facadeY+height-14,b.w-12,11,'#5f422b','#9c7548');
+    ctx.fillStyle='#d7b35a';ctx.globalAlpha=.28;ctx.fillRect(b.x+12,facadeY+height-18,b.w*.28,3);ctx.globalAlpha=1;
+  } else if(b.id==='laje_ponto'){
+    zinc(ctx,b.x-4,roofY-13,b.w+8,12,1);
+    rect(ctx,b.x+b.w*.54,facadeY+height-18,b.w*.38,15,'#3e342d','#8b745e');
+    line(ctx,b.x+b.w*.57,facadeY+height-20,b.x+b.w+34,facadeY+height-20,'#d0a94e',2);
+    for(let x=b.x+b.w*.60;x<b.x+b.w+28;x+=14)line(ctx,x,facadeY+height-17,x,facadeY+height-6,'rgba(91,72,52,.55)',1);
+  } else if(b.id==='barraquinha'){
+    poly(ctx,[[b.x-10,roofY+3],[b.x+b.w*.5,roofY-15],[b.x+b.w+10,roofY+3],[b.x+b.w+5,roofY+10],[b.x-5,roofY+10]],'#8a6737','#d7b35a');
+    for(let x=b.x;x<b.x+b.w;x+=18){ctx.fillStyle=(Math.floor((x-b.x)/18)%2)?'#f0dfb8':'#c17b32';ctx.fillRect(x,roofY+4,12,6);}
+  } else if(b.id==='esconderijo'){
+    zinc(ctx,b.x+5,roofY-7,b.w-10,10,0);
+    rect(ctx,b.x+8,facadeY+height-18,b.w*.56,15,'#50463d','#817366');
+    rect(ctx,b.x+b.w*.68,facadeY+height-13,b.w*.20,10,'#6a4b30','#a47749');
+  } else if(b.id==='boca_leste'){
+    rect(ctx,b.x-14,roofY-12,b.w+28,7,'#70644f','#d9bd68');
+    for(const x of [b.x-6,b.x+b.w*.28,b.x+b.w*.72,b.x+b.w+6])line(ctx,x,roofY-5,x,facadeY+height,'#77818a',2);
+    rect(ctx,b.x+b.w*.30,facadeY+7,b.w*.40,11,'#17222d','#d8b64f');
+    ctx.fillStyle=controlColor;ctx.globalAlpha=.22;ctx.fillRect(b.x+b.w*.34,facadeY+10,b.w*.12,3);ctx.globalAlpha=1;
+  } else if(b.id==='torre_guarda'){
+    rect(ctx,b.x+9,roofY-12,b.w-18,18,'#34404a','#8e9aa4');
+    for(let x=b.x+15;x<b.x+b.w-12;x+=15)rect(ctx,x,roofY-7,9,6,'#162b38','#83919b');
+    line(ctx,b.x+b.w-10,roofY-10,b.x+b.w-10,roofY-34,'#77818a',2);
+    for(const [dy,c] of [[-31,'#ef4444'],[-23,'#f59e0b'],[-15,'#22c55e']] as const){ctx.fillStyle=c;ctx.beginPath();ctx.arc(b.x+b.w-10,roofY+dy,2.6,0,Math.PI*2);ctx.fill();}
+  } else if(b.id==='mirante'){
+    const deckY=roofY-11;rect(ctx,b.x-16,deckY,b.w+32,8,'#4b555e','#aeb8c1');rail(ctx,b.x-16,deckY-10,b.w+32,10);
+    for(const x of [b.x-11,b.x+b.w+11]){line(ctx,x,deckY+7,x,facadeY+height+18,'#737e87',2.2);line(ctx,x-5,facadeY+height+18,x+5,facadeY+height+18,'#aab2b9',1.2);}
+  }
+};
+
 const sandbag=(ctx:CanvasRenderingContext2D,x:number,y:number,w=12)=>{
   ctx.fillStyle='#71675e';ctx.beginPath();ctx.ellipse(x,y,w*.5,3.2,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(226,232,240,.12)';ctx.stroke();
 };
@@ -108,9 +143,10 @@ const drawT4=(a:Args)=>{
 };
 
 export function drawCariocaBuildingIdentity(args:Args){
-  if(![1,4,5,6].includes(args.territoryId)) return;
+  if(![1,2,4,5,6].includes(args.territoryId)) return;
   args.ctx.save();
   if(args.territoryId===1) drawT1(args);
+  else if(args.territoryId===2) drawT2(args);
   else if(args.territoryId===4) drawT4(args);
   else if(args.territoryId===5) drawT5(args);
   else drawT6(args);

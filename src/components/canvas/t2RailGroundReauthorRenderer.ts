@@ -7,7 +7,7 @@ const strokePath=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:number,
 const blob=(ctx:CanvasRenderingContext2D,W:number,H:number,pts:readonly (readonly [number,number])[],fill:string,stroke?:string)=>{ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}};
 
 const drawAccessRoad=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:number)=>{
-  const w=Math.max(72,path.width*.72);
+  const w=Math.max(62,path.width*.58);
   strokePath(ctx,path,W,H,'#5a5145',w+18,.42);
   strokePath(ctx,path,W,H,'#292d30',w+10,.91);
   strokePath(ctx,path,W,H,'#404347',w,1);
@@ -16,11 +16,13 @@ const drawAccessRoad=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:num
 
 const drawMarketGround=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();
-  blob(ctx,W,H,[[.055,.455],[.205,.435],[.405,.455],[.495,.505],[.610,.455],[.835,.438],[.945,.475],[.955,.655],[.900,.805],[.655,.825],[.465,.790],[.275,.825],[.095,.805],[.045,.650]],'rgba(47,44,48,.54)');
-  blob(ctx,W,H,[[.075,.515],[.245,.495],[.405,.520],[.455,.610],[.375,.735],[.185,.760],[.070,.690]],'rgba(100,82,61,.075)');
-  blob(ctx,W,H,[[.565,.515],[.760,.490],[.925,.535],[.930,.700],[.805,.770],[.610,.735]],'rgba(74,83,75,.065)');
-  ctx.strokeStyle='rgba(187,174,151,.10)';ctx.lineCap='round';
-  for(const [x1,y1,x2,y2] of [[.13,.565,.39,.57],[.61,.56,.86,.55],[.19,.72,.41,.69],[.59,.70,.83,.73]] as const){ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();}
+  // 1.1K: distinct market islands replace the old almost-map-wide slab.
+  blob(ctx,W,H,[[.045,.475],[.16,.445],[.31,.455],[.405,.505],[.435,.61],[.39,.735],[.27,.79],[.11,.775],[.035,.68]],'rgba(62,55,50,.48)','rgba(136,116,86,.16)');
+  blob(ctx,W,H,[[.565,.49],[.69,.45],[.86,.455],[.95,.505],[.965,.625],[.92,.745],[.80,.80],[.64,.775],[.555,.66]],'rgba(57,55,51,.46)','rgba(125,119,101,.15)');
+  blob(ctx,W,H,[[.34,.72],[.42,.675],[.50,.695],[.59,.675],[.665,.73],[.65,.86],[.56,.91],[.43,.91],[.345,.845]],'rgba(54,50,47,.35)','rgba(122,111,91,.12)');
+  for(const [x,y,rx,ry,a] of [[.14,.57,58,18,.10],[.30,.69,72,20,.08],[.73,.56,62,18,.08],[.84,.69,70,19,.075],[.24,.78,45,13,.07],[.58,.82,48,14,.06]] as const){ctx.fillStyle=`rgba(137,111,76,${a})`;ctx.beginPath();ctx.ellipse(W*x,H*y,rx,ry,(x-y)*.24,0,Math.PI*2);ctx.fill();}
+  ctx.strokeStyle='rgba(184,166,132,.07)';ctx.lineWidth=1;
+  for(const [x0,x1,y] of [[.08,.39,.54],[.10,.40,.66],[.61,.93,.55],[.60,.90,.68],[.39,.63,.79]] as const){for(let x=x0;x<x1;x+=.042){ctx.beginPath();ctx.moveTo(W*x,H*(y-.035));ctx.lineTo(W*(x+.012),H*(y+.035));ctx.stroke();}}
   ctx.restore();
 };
 
@@ -78,6 +80,53 @@ const drawPaverClusters=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.restore();
 };
 
+const drawMarketAisles=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  ctx.lineCap='round';ctx.lineJoin='round';
+  const lanes=[
+    [[.10,.62],[.24,.60],[.36,.63],[.445,.60]],
+    [[.555,.60],[.66,.58],[.79,.61],[.90,.64]],
+    [[.23,.76],[.36,.72],[.46,.76],[.50,.82]],
+    [[.50,.82],[.57,.75],[.71,.73],[.83,.76]]
+  ] as const;
+  for(const pts of lanes){
+    ctx.strokeStyle='rgba(18,20,22,.18)';ctx.lineWidth=15;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.stroke();
+    ctx.strokeStyle='rgba(144,132,112,.13)';ctx.lineWidth=9;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.stroke();
+    ctx.strokeStyle='rgba(210,190,151,.065)';ctx.lineWidth=1;ctx.setLineDash([7,11]);ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.stroke();ctx.setLineDash([]);
+  }
+  // The central crossing becomes the pedestrian/freight spine instead of an empty road rectangle.
+  ctx.strokeStyle='rgba(74,72,68,.52)';ctx.lineWidth=22;ctx.beginPath();ctx.moveTo(W*.50,H*.39);ctx.lineTo(W*.50,H*.82);ctx.stroke();
+  ctx.strokeStyle='rgba(168,151,122,.11)';ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(W*.50,H*.39);ctx.lineTo(W*.50,H*.82);ctx.stroke();
+  ctx.restore();
+};
+
+const drawRailAccessStory=(ctx:CanvasRenderingContext2D,W:number,H:number,items:readonly GroundFootprint[])=>{
+  const railY=H*.29;ctx.save();
+  const armazem=findBuilding(items,'armazem');
+  if(armazem){
+    const x1=armazem.x+armazem.w*.46,x2=Math.min(W*.36,armazem.x+armazem.w+105),y=railY-38;
+    ctx.fillStyle='rgba(89,69,48,.30)';ctx.beginPath();ctx.moveTo(armazem.x-9,armazem.y+armazem.h-8);ctx.lineTo(armazem.x+armazem.w+12,armazem.y+armazem.h-7);ctx.lineTo(x2,y+17);ctx.lineTo(x1,y+18);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(201,163,91,.26)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x1,y+15);ctx.lineTo(x2,y+15);ctx.stroke();
+    ctx.strokeStyle='rgba(91,72,52,.42)';ctx.lineWidth=3;for(let x=x1+7;x<x2-3;x+=18){ctx.beginPath();ctx.moveTo(x,y+6);ctx.lineTo(x,y+18);ctx.stroke();}
+  }
+  const station=findBuilding(items,'estacao');
+  if(station){
+    const sx=Math.max(W*.755,station.x-28), sw=Math.min(W-sx-8,station.w+56);
+    ctx.fillStyle='rgba(83,80,72,.42)';ctx.fillRect(sx,railY-62,sw,29);
+    ctx.fillStyle='rgba(205,171,83,.46)';ctx.fillRect(sx,railY-36,sw,3);
+    ctx.strokeStyle='rgba(213,205,184,.10)';ctx.lineWidth=1;for(let x=sx+13;x<sx+sw-7;x+=24){ctx.beginPath();ctx.moveTo(x,railY-60);ctx.lineTo(x,railY-36);ctx.stroke();}
+  }
+  const passarela=findBuilding(items,'passarela');
+  if(passarela){
+    const cx=passarela.x+passarela.w*.5, landingY=railY-66;
+    ctx.fillStyle='rgba(70,75,78,.52)';ctx.fillRect(cx-13,passarela.y+passarela.h-3,26,Math.max(8,landingY-(passarela.y+passarela.h)+4));
+    ctx.strokeStyle='rgba(184,193,198,.38)';ctx.lineWidth=1;for(let y=passarela.y+passarela.h+4;y<landingY;y+=8){ctx.beginPath();ctx.moveTo(cx-11,y);ctx.lineTo(cx+11,y);ctx.stroke();}
+    ctx.fillStyle='rgba(76,80,82,.72)';ctx.fillRect(cx-25,landingY-3,50,9);
+    ctx.fillStyle='rgba(222,187,83,.38)';ctx.fillRect(cx-25,landingY+4,50,2);
+  }
+  ctx.restore();
+};
+
 const drawFootTraffic=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();ctx.fillStyle='rgba(19,21,23,.16)';
   for(const [x,y,rx,ry,r] of [[.18,.59,42,9,-.08],[.38,.64,34,8,.08],[.66,.62,38,8,-.06],[.82,.60,31,7,.10],[.48,.76,35,8,.03]] as const){ctx.beginPath();ctx.ellipse(W*x,H*y,rx,ry,r,0,Math.PI*2);ctx.fill();}
@@ -109,6 +158,71 @@ const drawRailDrainage=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   for(const [x1,x2,dy] of [[.03,.39,43],[.61,.97,43],[.05,.40,-43],[.60,.95,-43]] as const){ctx.beginPath();ctx.moveTo(W*x1,y+dy);ctx.lineTo(W*x2,y+dy);ctx.stroke();}
   ctx.strokeStyle='rgba(137,145,143,.17)';ctx.lineWidth=1;
   for(const nx of [.18,.36,.66,.84]){const x=nx*W;ctx.strokeRect(x,y+37,22,6);for(let i=4;i<20;i+=5){ctx.beginPath();ctx.moveTo(x+i,y+38);ctx.lineTo(x+i,y+42);ctx.stroke();}}
+  ctx.restore();
+};
+
+const overlapsFootprint=(x:number,y:number,w:number,h:number,items:readonly GroundFootprint[],pad=10)=>
+  items.some(b=>x<b.x+b.w+pad&&x+w>b.x-pad&&y<b.y+b.h+pad&&y+h>b.y-pad);
+
+const drawMarketFixtures=(ctx:CanvasRenderingContext2D,W:number,H:number,items:readonly GroundFootprint[])=>{
+  ctx.save();
+  const stall=(nx:number,ny:number,variant:number)=>{
+    const w=42,h=24,x=W*nx-w/2,y=H*ny-h/2;
+    if(overlapsFootprint(x,y,w,h,items,12)) return;
+    ctx.fillStyle='rgba(0,0,0,.20)';ctx.beginPath();ctx.ellipse(x+w*.52,y+h+5,w*.55,5,.03,0,Math.PI*2);ctx.fill();
+    const cloth=variant%3===0?'#c58b33':variant%3===1?'#786f58':'#4f7773';
+    const alt=variant%2===0?'#ead9aa':'#c8b98f';
+    ctx.strokeStyle='#6c5945';ctx.lineWidth=2;
+    for(const px of [x+5,x+w-5]){ctx.beginPath();ctx.moveTo(px,y+3);ctx.lineTo(px,y+h+3);ctx.stroke();}
+    ctx.fillStyle='#4a3728';ctx.fillRect(x+4,y+h*.52,w-8,h*.40);
+    ctx.fillStyle='#79583a';ctx.fillRect(x+7,y+h*.56,w-14,3);
+    ctx.beginPath();ctx.moveTo(x-3,y+4);ctx.lineTo(x+w*.5,y-5);ctx.lineTo(x+w+3,y+4);ctx.lineTo(x+w,y+10);ctx.lineTo(x,y+10);ctx.closePath();ctx.fillStyle=cloth;ctx.fill();
+    for(let i=0;i<5;i++){ctx.fillStyle=i%2?alt:cloth;ctx.fillRect(x+i*(w/5),y+5,w/5+1,5);}
+    ctx.fillStyle=variant%2?'rgba(189,135,65,.68)':'rgba(96,135,78,.62)';
+    for(let i=0;i<3;i++)ctx.fillRect(x+8+i*9,y+h*.68,5,3);
+  };
+  const cart=(nx:number,ny:number,rot:number)=>{
+    const x=W*nx,y=H*ny; if(overlapsFootprint(x-16,y-9,32,18,items,8)) return;
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+    ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(-15,6,31,5);
+    ctx.fillStyle='#6d5338';ctx.fillRect(-14,-5,28,12);ctx.strokeStyle='#a98352';ctx.strokeRect(-14,-5,28,12);
+    ctx.fillStyle='#2d3336';for(const wx of [-10,10]){ctx.beginPath();ctx.arc(wx,9,3,0,Math.PI*2);ctx.fill();}
+    ctx.strokeStyle='#838b8e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,-1);ctx.lineTo(23,-5);ctx.stroke();
+    ctx.restore();
+  };
+  const pallet=(nx:number,ny:number,variant:number)=>{
+    const x=W*nx,y=H*ny;if(overlapsFootprint(x-14,y-8,28,16,items,7)) return;
+    ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(x-13,y+5,28,5);
+    ctx.fillStyle='#725238';ctx.fillRect(x-14,y-5,28,10);ctx.strokeStyle='#a77b4d';ctx.strokeRect(x-14,y-5,28,10);
+    ctx.strokeStyle='rgba(47,35,26,.55)';for(let xx=x-9;xx<x+13;xx+=7){ctx.beginPath();ctx.moveTo(xx,y-5);ctx.lineTo(xx,y+5);ctx.stroke();}
+    if(variant%2===0){ctx.fillStyle='#8b6b45';ctx.fillRect(x-8,y-13,12,8);ctx.strokeStyle='#b28b5b';ctx.strokeRect(x-8,y-13,12,8);}
+  };
+
+  // Authored market rows: dense enough to read as commerce, spaced around tactical footprints.
+  [[.11,.57,0],[.18,.60,1],[.29,.57,2],[.36,.61,3],[.64,.57,1],[.72,.60,2],[.82,.57,0],[.89,.62,3],
+   [.14,.72,2],[.25,.71,0],[.34,.75,1],[.66,.74,3],[.76,.71,1],[.87,.73,2]].forEach(([x,y,v])=>stall(x as number,y as number,v as number));
+  [[.20,.79,-.10],[.38,.68,.06],[.62,.68,-.05],[.80,.79,.12]].forEach(([x,y,r])=>cart(x as number,y as number,r as number));
+  [[.09,.50,0],[.31,.80,1],[.69,.80,0],[.91,.52,1]].forEach(([x,y,v])=>pallet(x as number,y as number,v as number));
+
+  // Edge bollards keep the central freight/pedestrian spine readable without filling it.
+  for(const side of [-1,1]) for(const ny of [.47,.57,.68,.78]){
+    const x=W*(.50+side*.045),y=H*ny;
+    ctx.fillStyle='rgba(0,0,0,.20)';ctx.beginPath();ctx.ellipse(x,y+4,4,2,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#6b6e6e';ctx.fillRect(x-2,y-7,4,10);ctx.fillStyle='#d1a63a';ctx.fillRect(x-2,y-5,4,2);
+  }
+  ctx.restore();
+};
+
+const drawRailSignals=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  const y=H*.29;ctx.save();
+  for(const [nx,side] of [[.405,-1],[.595,1]] as const){
+    const x=W*nx, mastY=y+(side*48);
+    ctx.strokeStyle='#69747b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,mastY);ctx.lineTo(x,mastY-31*side);ctx.stroke();
+    ctx.fillStyle='#242b30';ctx.fillRect(x-6,mastY-25*side-6,12,18);
+    const lights=side<0?['#ef4444','#d19a2b','#344b3c']:['#334d3c','#d19a2b','#ef4444'];
+    lights.forEach((c,i)=>{ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,mastY-22*side+i*6*side,2.2,0,Math.PI*2);ctx.fill();});
+    ctx.fillStyle='rgba(213,181,92,.48)';ctx.fillRect(x-9,mastY-3,18,3);
+  }
   ctx.restore();
 };
 
@@ -154,13 +268,17 @@ export function drawT2ReauthoredSurface(ctx:CanvasRenderingContext2D,W:number,H:
   drawRailBed(ctx,W,H);
   drawRailVerge(ctx,W,H);
   drawRailDrainage(ctx,W,H);
+  drawMarketAisles(ctx,W,H);
   drawBuildingRailLinks(ctx,W,H,footprints);
+  drawRailAccessStory(ctx,W,H,footprints);
   drawPlatforms(ctx,W,H);
   drawCrossing(ctx,W,H);
   drawRailFence(ctx,W,H);
+  drawRailSignals(ctx,W,H);
   drawPaverClusters(ctx,W,H);
   drawFootTraffic(ctx,W,H);
   drawMarketWear(ctx,W,H);
+  drawMarketFixtures(ctx,W,H,footprints);
   drawMarketMicroLife(ctx,W,H);
   ctx.restore();
 }

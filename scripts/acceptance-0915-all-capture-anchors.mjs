@@ -1,5 +1,6 @@
-﻿import { openTestSession, sleep } from './cdp-session.mjs';
-const session=await openTestSession({url:'http://127.0.0.1:3000',width:1440,height:900});
+import { openTestSession, sleep } from './cdp-session.mjs';
+const baseUrl=process.env.BASE_URL || 'http://127.0.0.1:3000';
+const session=await openTestSession({url:baseUrl,width:1440,height:900});
 const {evaluate}=session;const results=[];
 const check=(name,ok,detail='')=>{results.push({name,ok:!!ok,detail});console.log(`${ok?'PASS':'FAIL'} | ${name} | ${detail}`)};
 const saveKey='factions_war_pt_br_save_v2';

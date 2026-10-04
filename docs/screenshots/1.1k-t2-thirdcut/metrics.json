@@ -1,0 +1,63 @@
+{
+  "hud": {
+    "perf": {
+      "avgFrameMs": 16.6639344262295,
+      "p95FrameMs": 16.700000000000728,
+      "sampledAt": 4250.4,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 360,
+        "zoom": 1.572
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 60.009837678307946,
+      "avgSimulationMs": 0.00983606557529725,
+      "avgRenderMs": 1.645901639344644,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.40163934426802045,
+      "avgEntityRenderMs": 1.204918032777343,
+      "avgEffectsRenderMs": 0,
+      "allies": 0,
+      "rivals": 14,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 25,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 620.9329611185666,
+      "rivalCentroidY": 276.0018882723153
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "text": "T2Praça da Feira & Linha do Trem|Aliados 0/15Rivais 14FEIRA • TRILHOS • COMÉRCIO LOCALINTERDIÇÃO · PRESSÃO0/40POSIÇÕES 0/6ALVOArmazém do Trilho0%"
+  },
+  "runtimeErrors": []
+}

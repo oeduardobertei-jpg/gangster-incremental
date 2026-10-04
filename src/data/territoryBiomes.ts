@@ -57,10 +57,10 @@ export const TERRITORY_BIOMES: Record<number, TerritoryBiomeProfile> = {
     noiseDensity: 1.05, crackDensity: .72, seamDensity: .8, wetness: .42,
     patches: [
       { kind:'ballast', x:0,y:.245,w:1,h:.09,alpha:.95 },
-      { kind:'pavers', x:.06,y:.43,w:.88,h:.39,alpha:.70 },
       { kind:'dirt', x:.03,y:.06,w:.19,h:.14,rotation:.04,alpha:.55 },
-      { kind:'concrete', x:.27,y:.13,w:.46,h:.16,alpha:.72 },
-      { kind:'mud', x:.72,y:.54,w:.19,h:.16,rotation:.08,alpha:.46 }
+      { kind:'concrete', x:.22,y:.13,w:.23,h:.12,rotation:-.006,alpha:.46 },
+      { kind:'concrete', x:.55,y:.13,w:.25,h:.12,rotation:.006,alpha:.48 },
+      { kind:'mud', x:.72,y:.54,w:.19,h:.16,rotation:.08,alpha:.40 }
     ]
   },
   3: {
