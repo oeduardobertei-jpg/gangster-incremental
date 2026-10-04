@@ -2184,7 +2184,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                   const muzzleX = r.x + Math.cos(combatAngle) * barrelOffset;
                   const muzzleY = r.y + Math.sin(combatAngle) * barrelOffset;
                   addMuzzleFlash(muzzleX, muzzleY, combatAngle, r.color);
-                  soundEngine.playGunfireShot(r.type === 'atirador_fuzil' ? 'fuzil' : 'rival');
+                  soundEngine.playGunfireShot(r.type === 'atirador_fuzil' ? 'fuzil' : 'rival', { x: muzzleX, width });
 
                   bulletsRef.current.push({
                     id: Math.random().toString(36).substring(7),
@@ -2497,7 +2497,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                 addMuzzleFlash(muzzleX, muzzleY, angle, factionConfig.color);
 
                 const weaponSound = a.type === 'soldado_fuzil' ? 'fuzil' : (a.type === 'batedor_moto' ? 'moto' : 'pistol');
-                soundEngine.playGunfireShot(weaponSound);
+                soundEngine.playGunfireShot(weaponSound, { x: muzzleX, width });
 
                 bulletsRef.current.push({
                   id: Math.random().toString(36).substring(7),
@@ -2754,7 +2754,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                 : material === 'glass' ? '#bae6fd'
                   : material === 'brick' ? '#fdba74' : '#cbd5e1';
               addImpactSparks(b.x, b.y, false, sparkColor);
-              soundEngine.playBulletImpact(false);
+              soundEngine.playBulletImpact(false, { x: b.x, width });
               if (material === 'brick' || material === 'concrete') {
                 addGroundMark(b.x, b.y);
               }
@@ -2762,7 +2762,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
               const obs = impact.obstacle;
               obs.hp -= b.damage;
               addImpactSparks(b.x, b.y, false, '#fef08a');
-              soundEngine.playBulletImpact(false);
+              soundEngine.playBulletImpact(false, { x: b.x, width });
               addFloatingText(`-${Math.round(b.damage)}`, obs.x, obs.y - 10, '#94a3b8');
 
               if (obs.hp <= 0 && !obs.destroyed) {
@@ -2804,13 +2804,13 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
               const finalDmg = b.damage * (1 - reduction);
               ally.hp -= finalDmg;
               addImpactSparks(b.x, b.y, true, '#ef4444');
-              soundEngine.playBulletImpact(true);
+              soundEngine.playBulletImpact(true, { x: b.x, width });
               addFloatingText(`-${Math.round(finalDmg)}`, ally.x, ally.y, '#f87171');
             } else {
               const rival = impact.rival;
               rival.hp -= b.damage;
               addImpactSparks(b.x, b.y, true, b.color);
-              soundEngine.playBulletImpact(true);
+              soundEngine.playBulletImpact(true, { x: b.x, width });
               addFloatingText(`-${Math.round(b.damage)}`, rival.x, rival.y, b.color);
               addGroundMark(rival.x, rival.y, 'bullet_mark');
             }

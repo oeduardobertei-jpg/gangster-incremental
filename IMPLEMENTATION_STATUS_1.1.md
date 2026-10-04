@@ -61,3 +61,11 @@ Nenhum territÃ³rio passa de fase atÃ© responder **sim** Ã  pergunta: â€
 - desktop/mobile sem overflow; aceite 12/12 PASS;
 - referência: `docs/1.1F_HUD_2.md`.
 
+
+## 1.1H concluída
+- tiros reconstruídos em ataque/corpo/cauda por família;
+- compressor + pan estéreo + 8 vozes máximas;
+- variação procedural elimina repetição direta;
+- gate próprio 16/16 + combate 10/10 PASS;
+- referência: `docs/1.1H_COMBAT_AUDIO.md`.
+

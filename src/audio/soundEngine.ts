@@ -1,355 +1,235 @@
-// Procedural Web Audio API sound synthesizer for Gangs & Factions War PT-BR
+import { clampAudioPan, getGunVoiceGain, GUNFIRE_PROFILES, type GunfireType } from './combatAudioProfiles';
+
+type SpatialSound = { x?: number; width?: number };
+
 class SoundEngine {
   private ctx: AudioContext | null = null;
-  private volume: number = 0.3;
-  private muted: boolean = false;
-  private gunNoiseBuffer: AudioBuffer | null = null;
-  private lastGunfireAt: Record<'pistol' | 'fuzil' | 'moto' | 'rival', number> = {
+  private volume = 0.3;
+  private muted = false;
+  private gunNoiseBuffers: AudioBuffer[] = [];
+  private lastGunfireAt: Record<GunfireType, number> = {
     pistol: -Infinity, fuzil: -Infinity, moto: -Infinity, rival: -Infinity
   };
   private lastImpactAt = -Infinity;
+  private activeGunVoices = 0;
+  private readonly maxGunVoices = 8;
+  private combatBus: GainNode | null = null;
 
   private initContext() {
     if (!this.ctx && typeof window !== 'undefined') {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtx) {
-        this.ctx = new AudioCtx();
-      }
+      if (AudioCtx) this.ctx = new AudioCtx();
     }
-    if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume().catch(() => {});
-    }
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+    if (this.ctx && !this.combatBus) this.initCombatBus();
+  }
+
+  private initCombatBus() {
+    if (!this.ctx || this.combatBus) return;
+    const bus = this.ctx.createGain();
+    const compressor = this.ctx.createDynamicsCompressor();
+    bus.gain.value = .9;
+    compressor.threshold.value = -18;
+    compressor.knee.value = 12;
+    compressor.ratio.value = 4.5;
+    compressor.attack.value = .003;
+    compressor.release.value = .14;
+    bus.connect(compressor);
+    compressor.connect(this.ctx.destination);
+    this.combatBus = bus;
   }
 
   private getGunNoiseBuffer() {
     if (!this.ctx) return null;
-    if (this.gunNoiseBuffer && this.gunNoiseBuffer.sampleRate === this.ctx.sampleRate) return this.gunNoiseBuffer;
-    const bufferSize = Math.floor(this.ctx.sampleRate * 0.05);
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+    if (this.gunNoiseBuffers.length === 0 || this.gunNoiseBuffers[0]?.sampleRate !== this.ctx.sampleRate) {
+      this.gunNoiseBuffers = Array.from({ length: 4 }, () => {
+        const bufferSize = Math.floor(this.ctx!.sampleRate * .18);
+        const buffer = this.ctx!.createBuffer(1, bufferSize, this.ctx!.sampleRate);
+        const output = buffer.getChannelData(0);
+        let previous = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          previous = previous * .15 + white * .85;
+          output[i] = previous;
+        }
+        return buffer;
+      });
     }
-    this.gunNoiseBuffer = buffer;
-    return buffer;
+    return this.gunNoiseBuffers[Math.floor(Math.random() * this.gunNoiseBuffers.length)];
   }
 
-  public setVolume(v: number) {
-    this.volume = Math.max(0, Math.min(1, v));
+  private connectSpatial(node: AudioNode, pan: number, destination?: AudioNode) {
+    if (!this.ctx) return;
+    const target = destination ?? this.combatBus ?? this.ctx.destination;
+    if (typeof this.ctx.createStereoPanner === 'function') {
+      const panner = this.ctx.createStereoPanner();
+      panner.pan.value = pan;
+      node.connect(panner);
+      panner.connect(target);
+    } else {
+      node.connect(target);
+    }
   }
 
-  public setMuted(muted: boolean) {
-    this.muted = muted;
-  }
+  public setVolume(v: number) { this.volume = Math.max(0, Math.min(1, v)); }
+  public setMuted(muted: boolean) { this.muted = muted; }
 
-  // Som de Recrutamento / Contratação (Rádio / Apito de Alerta)
   public playRecruitAlly() {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
+      const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(580, now);
-      osc.frequency.linearRampToValueAtTime(880, now + 0.12);
-      osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
-
-      gain.gain.setValueAtTime(this.volume * 0.35, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.26);
+      osc.frequency.linearRampToValueAtTime(880, now + .12);
+      osc.frequency.exponentialRampToValueAtTime(440, now + .25);
+      gain.gain.setValueAtTime(this.volume * .25, now);
+      gain.gain.exponentialRampToValueAtTime(.001, now + .26);
+      osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now); osc.stop(now + .26);
     } catch {}
   }
 
-  // Disparo de Sniper de Elite / Rajada Tática
-  public playSniperShot() {
-    if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
-    try {
-      const now = this.ctx.currentTime;
-      // Gunshot blast
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(950, now);
-      osc.frequency.exponentialRampToValueAtTime(60, now + 0.2);
-
-      gain.gain.setValueAtTime(this.volume * 0.5, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.25);
-    } catch {}
+  public playSniperShot(spatial?: SpatialSound) {
+    this.playGunfireShot('fuzil', spatial, 1.18);
   }
 
-  // Disparo de Arma com Ruído Balístico e Transiente Realista
-  public playGunfireShot(type: 'pistol' | 'fuzil' | 'moto' | 'rival' = 'pistol') {
+  public playGunfireShot(type: GunfireType = 'pistol', spatial?: SpatialSound, emphasis = 1) {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx || !this.combatBus) return;
     try {
       const now = this.ctx.currentTime;
-      const minGap = type === 'fuzil' ? 0.035 : type === 'moto' ? 0.03 : 0.024;
-      if (now - this.lastGunfireAt[type] < minGap) return;
+      const profile = GUNFIRE_PROFILES[type];
+      if (now - this.lastGunfireAt[type] < profile.minGap) return;
+      if (this.activeGunVoices >= this.maxGunVoices) return;
       this.lastGunfireAt[type] = now;
+      this.activeGunVoices += 1;
 
-      // Shared transient noise buffer: no per-shot sample generation/allocation.
-      const buffer = this.getGunNoiseBuffer();
-      if (!buffer) return;
-      const whiteNoise = this.ctx.createBufferSource();
-      whiteNoise.buffer = buffer;
+      const voiceGain = getGunVoiceGain(this.activeGunVoices, this.maxGunVoices) * Math.max(.72, Math.min(1.25, emphasis));
+      const pan = clampAudioPan(spatial?.x, spatial?.width);
+      const noiseBuffer = this.getGunNoiseBuffer();
+      if (!noiseBuffer) { this.activeGunVoices = Math.max(0, this.activeGunVoices - 1); return; }
+      const pick = ([a, b]: [number, number]) => a + Math.random() * (b - a);
+      const variance = 1 + (Math.random() * 2 - 1) * profile.pitchVariance;
 
-      const noiseFilter = this.ctx.createBiquadFilter();
-      noiseFilter.type = type === 'fuzil' ? 'bandpass' : 'highpass';
-      noiseFilter.frequency.setValueAtTime(type === 'fuzil' ? 1400 : 2200, now);
+      const attack = this.ctx.createBufferSource();
+      const attackFilter = this.ctx.createBiquadFilter();
+      const attackGain = this.ctx.createGain();
+      attack.buffer = noiseBuffer;
+      attack.playbackRate.value = .92 + Math.random() * .18;
+      attackFilter.type = profile.transientFilter;
+      attackFilter.frequency.value = pick(profile.transientHz) * variance;
+      if (profile.transientFilter === 'bandpass') attackFilter.Q.value = .75 + Math.random() * .45;
+      attackGain.gain.setValueAtTime(this.volume * profile.transientVolume * voiceGain, now);
+      attackGain.gain.exponentialRampToValueAtTime(.001, now + .055);
+      attack.connect(attackFilter); attackFilter.connect(attackGain); this.connectSpatial(attackGain, pan);
+      attack.start(now, Math.random() * .03, .065);
 
-      const noiseGain = this.ctx.createGain();
-      const nVol = type === 'fuzil' ? 0.35 : 0.22;
-      noiseGain.gain.setValueAtTime(this.volume * nVol, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      const body = this.ctx.createOscillator();
+      const bodyFilter = this.ctx.createBiquadFilter();
+      const bodyGain = this.ctx.createGain();
+      body.type = profile.bodyWave;
+      body.frequency.setValueAtTime(pick(profile.bodyHz) * variance, now);
+      body.frequency.exponentialRampToValueAtTime(profile.bodyEndHz, now + profile.bodyDuration);
+      bodyFilter.type = 'lowpass';
+      bodyFilter.frequency.value = type === 'fuzil' ? 1350 : 1750;
+      bodyGain.gain.setValueAtTime(this.volume * profile.bodyVolume * voiceGain, now);
+      bodyGain.gain.exponentialRampToValueAtTime(.001, now + profile.bodyDuration);
+      body.connect(bodyFilter); bodyFilter.connect(bodyGain); this.connectSpatial(bodyGain, pan * .75);
+      body.start(now); body.stop(now + profile.bodyDuration + .015);
 
-      whiteNoise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(this.ctx.destination);
-      whiteNoise.start(now);
+      const tail = this.ctx.createBufferSource();
+      const tailFilter = this.ctx.createBiquadFilter();
+      const tailGain = this.ctx.createGain();
+      tail.buffer = noiseBuffer;
+      tail.playbackRate.value = .78 + Math.random() * .24;
+      tailFilter.type = 'bandpass'; tailFilter.frequency.value = pick(profile.tailHz); tailFilter.Q.value = .65;
+      const tailStart = now + .018 + Math.random() * .012;
+      tailGain.gain.setValueAtTime(this.volume * profile.tailVolume * voiceGain, tailStart);
+      tailGain.gain.exponentialRampToValueAtTime(.001, tailStart + profile.tailDuration);
+      tail.connect(tailFilter); tailFilter.connect(tailGain); this.connectSpatial(tailGain, pan * .55);
+      tail.start(tailStart, Math.random() * .035, profile.tailDuration + .02);
 
-      // 2. Tonal Body Thump (Oscillator sweep)
-      const osc = this.ctx.createOscillator();
-      const oscGain = this.ctx.createGain();
-
-      if (type === 'fuzil') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(450, now);
-        osc.frequency.exponentialRampToValueAtTime(50, now + 0.12);
-        oscGain.gain.setValueAtTime(this.volume * 0.38, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-      } else if (type === 'moto') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(90, now + 0.07);
-        oscGain.gain.setValueAtTime(this.volume * 0.22, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      } else {
-        osc.type = 'triangle';
-        const startPitch = 320 + Math.random() * 80;
-        osc.frequency.setValueAtTime(startPitch, now);
-        osc.frequency.exponentialRampToValueAtTime(70, now + 0.08);
-        oscGain.gain.setValueAtTime(this.volume * 0.24, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-      }
-
-      osc.connect(oscGain);
-      oscGain.connect(this.ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.14);
-    } catch {}
+      setTimeout(() => { this.activeGunVoices = Math.max(0, this.activeGunVoices - 1); }, Math.ceil((profile.tailDuration + .07) * 1000));
+    } catch {
+      this.activeGunVoices = Math.max(0, this.activeGunVoices - 1);
+    }
   }
 
-  // Disparo de Pistola / Rajada Rápida (legado mantido)
-  public playGunfireHit() {
-    this.playGunfireShot('pistol');
-  }
+  public playGunfireHit() { this.playGunfireShot('pistol'); }
 
-  // Impacto de Projétil / Ricochete na parede ou corpo
-  public playBulletImpact(isFlesh = false) {
+  public playBulletImpact(isFlesh = false, spatial?: SpatialSound) {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
-      if (now - this.lastImpactAt < 0.016) return;
+      if (now - this.lastImpactAt < .022) return;
       this.lastImpactAt = now;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
+      const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); const filter = this.ctx.createBiquadFilter();
       osc.type = isFlesh ? 'triangle' : 'sine';
-      osc.frequency.setValueAtTime(isFlesh ? 160 : 780, now);
-      osc.frequency.exponentialRampToValueAtTime(40, now + 0.04);
-
-      gain.gain.setValueAtTime(this.volume * 0.15, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.05);
+      osc.frequency.setValueAtTime(isFlesh ? 150 + Math.random() * 35 : 720 + Math.random() * 180, now);
+      osc.frequency.exponentialRampToValueAtTime(isFlesh ? 48 : 90, now + .045);
+      filter.type = 'lowpass'; filter.frequency.value = isFlesh ? 850 : 2200;
+      gain.gain.setValueAtTime(this.volume * (isFlesh ? .08 : .105), now);
+      gain.gain.exponentialRampToValueAtTime(.001, now + .05);
+      osc.connect(filter); filter.connect(gain); this.connectSpatial(gain, clampAudioPan(spatial?.x, spatial?.width));
+      osc.start(now); osc.stop(now + .055);
     } catch {}
   }
 
-  // Soldado / Aliado Neutralizado (Queda de Soldado com Chiado de Rádio)
-  public playAllyDown() {
+  public playAllyDown() { this.playDropTone(320, 110, .18, .18, 'sawtooth'); }
+  public playRivalDown(isBoss = false) { this.playDropTone(isBoss ? 180 : 290, isBoss ? 35 : 65, isBoss ? .42 : .18, isBoss ? .42 : .25, isBoss ? 'sawtooth' : 'sine'); }
+
+  private playDropTone(startHz:number, endHz:number, gainLevel:number, duration:number, wave:OscillatorType) {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      // Static pulse
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(110, now + 0.18);
-
-      gain.gain.setValueAtTime(this.volume * 0.28, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.2);
+      const now=this.ctx.currentTime; const osc=this.ctx.createOscillator(); const gain=this.ctx.createGain();
+      osc.type=wave; osc.frequency.setValueAtTime(startHz,now); osc.frequency.exponentialRampToValueAtTime(endHz,now+duration);
+      gain.gain.setValueAtTime(this.volume*gainLevel,now); gain.gain.exponentialRampToValueAtTime(.001,now+duration);
+      osc.connect(gain); this.connectSpatial(gain,0); osc.start(now); osc.stop(now+duration+.01);
     } catch {}
   }
 
-  // Rival Neutralizado / Queda
-  public playRivalDown(isBoss = false) {
-    if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
+  public playCashAmmoCollect() { this.playUiTone(750, 1200, .16, .06, 'square'); }
 
-    try {
-      const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = isBoss ? 'sawtooth' : 'sine';
-      osc.frequency.setValueAtTime(isBoss ? 180 : 290, now);
-      osc.frequency.exponentialRampToValueAtTime(isBoss ? 35 : 65, now + (isBoss ? 0.4 : 0.22));
-
-      gain.gain.setValueAtTime(this.volume * (isBoss ? 0.6 : 0.32), now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + (isBoss ? 0.42 : 0.25));
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + (isBoss ? 0.43 : 0.25));
-    } catch {}
-  }
-
-  // Coleta de Caixas de Munição / Malote de Grana
-  public playCashAmmoCollect() {
-    if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
-    try {
-      const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(750, now);
-      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
-
-      gain.gain.setValueAtTime(this.volume * 0.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.06);
-    } catch {}
-  }
-
-  // Granada / Detonação de Carro-Bomba
   public playExplosion() {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(110, now);
-      osc.frequency.exponentialRampToValueAtTime(25, now + 0.45);
-
-      gain.gain.setValueAtTime(this.volume * 0.7, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.48);
+      const now=this.ctx.currentTime; const osc=this.ctx.createOscillator(); const gain=this.ctx.createGain();
+      osc.type='sawtooth'; osc.frequency.setValueAtTime(110,now); osc.frequency.exponentialRampToValueAtTime(25,now+.45);
+      gain.gain.setValueAtTime(this.volume*.55,now); gain.gain.exponentialRampToValueAtTime(.001,now+.48);
+      osc.connect(gain); this.connectSpatial(gain,0); osc.start(now); osc.stop(now+.48);
     } catch {}
   }
 
-  // Compra de Armas / Contrato Fechado
   public playUpgradeBuy() {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      const notes = [440, 554, 659];
-      notes.forEach((freq, idx) => {
-        const osc = this.ctx!.createOscillator();
-        const gain = this.ctx!.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-
-        gain.gain.setValueAtTime(this.volume * 0.25, now + idx * 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.1);
-
-        osc.connect(gain);
-        gain.connect(this.ctx!.destination);
-
-        osc.start(now + idx * 0.04);
-        osc.stop(now + idx * 0.04 + 0.12);
-      });
+      const now=this.ctx.currentTime;
+      [440,554,659].forEach((freq,idx)=>{const osc=this.ctx!.createOscillator();const gain=this.ctx!.createGain();osc.type='triangle';osc.frequency.setValueAtTime(freq,now+idx*.04);gain.gain.setValueAtTime(this.volume*.2,now+idx*.04);gain.gain.exponentialRampToValueAtTime(.001,now+idx*.04+.1);osc.connect(gain);gain.connect(this.ctx!.destination);osc.start(now+idx*.04);osc.stop(now+idx*.04+.12);});
     } catch {}
   }
 
-  // Hegemonia / Prestígio (Sirene de Domínio Máximo)
   public playPrestige() {
     if (this.muted || this.volume <= 0) return;
-    this.initContext();
-    if (!this.ctx) return;
-
+    this.initContext(); if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      const freqs = [330, 440, 523, 659, 784];
-      freqs.forEach((f, i) => {
-        const osc = this.ctx!.createOscillator();
-        const gain = this.ctx!.createGain();
+      const now=this.ctx.currentTime;
+      [330,440,523,659,784].forEach((f,i)=>{const osc=this.ctx!.createOscillator();const gain=this.ctx!.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(f,now+i*.08);gain.gain.setValueAtTime(this.volume*.28,now+i*.08);gain.gain.exponentialRampToValueAtTime(.001,now+i*.08+.5);osc.connect(gain);gain.connect(this.ctx!.destination);osc.start(now+i*.08);osc.stop(now+i*.08+.55);});
+    } catch {}
+  }
 
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(f, now + i * 0.08);
-
-        gain.gain.setValueAtTime(this.volume * 0.35, now + i * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.5);
-
-        osc.connect(gain);
-        gain.connect(this.ctx!.destination);
-
-        osc.start(now + i * 0.08);
-        osc.stop(now + i * 0.08 + 0.55);
-      });
+  private playUiTone(startHz:number, endHz:number, gainLevel:number, duration:number, wave:OscillatorType) {
+    if (this.muted || this.volume <= 0) return;
+    this.initContext(); if (!this.ctx) return;
+    try {
+      const now=this.ctx.currentTime; const osc=this.ctx.createOscillator(); const gain=this.ctx.createGain();
+      osc.type=wave; osc.frequency.setValueAtTime(startHz,now); osc.frequency.exponentialRampToValueAtTime(endHz,now+duration);
+      gain.gain.setValueAtTime(this.volume*gainLevel,now); gain.gain.exponentialRampToValueAtTime(.001,now+duration);
+      osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now); osc.stop(now+duration+.01);
     } catch {}
   }
 }
