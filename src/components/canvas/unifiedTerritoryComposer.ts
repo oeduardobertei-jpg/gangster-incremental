@@ -104,7 +104,7 @@ const districtPiecesFor=(territoryId:number,W:number,H:number):UnifiedSupportSol
 const visualLift=(territoryId:number)=>territoryId===6?38:territoryId===3?32:(territoryId===1||territoryId===4)?40:30;
 const expanded=(r:Rect,lift:number,pad=0):Rect=>({x:r.x-pad,y:r.y-lift-pad,w:r.w+pad*2,h:r.h+lift+pad*2});
 const intersects=(a:Rect,b:Rect)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
-const heroPad=(territoryId:number)=>territoryId===1||territoryId===4?18:territoryId===2||territoryId===3?14:16;
+const heroPad=(territoryId:number)=>territoryId===1?8:territoryId===4?18:territoryId===2||territoryId===3?14:16;
 const tacticalVisual=(b:TacticalBuilding,territoryId:number)=>expanded({x:b.x,y:b.y,w:b.w,h:b.h},visualLift(territoryId),heroPad(territoryId));
 const pieceClear=(p:UnifiedSupportSolid,territoryId:number,buildings:readonly TacticalBuilding[])=>{
   if(p.kind==='wall') return true;

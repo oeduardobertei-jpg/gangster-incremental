@@ -84,7 +84,7 @@ export function drawT1AtmosphericContrast(
   // 0.9.5S: crisp center, atmospheric edges. No global fog over units.
   const center=ctx.createRadialGradient(w*.51,h*.53,Math.min(w,h)*.11,w*.51,h*.53,Math.min(w,h)*.52);
   center.addColorStop(0,'rgba(12,19,25,0)');
-  center.addColorStop(.70,'rgba(7,14,20,.012)');center.addColorStop(1,'rgba(4,10,16,.060)');
+  center.addColorStop(.70,'rgba(7,14,20,.009)');center.addColorStop(1,'rgba(4,10,16,.038)');
   ctx.fillStyle=center;ctx.fillRect(0,0,w,h);
   if(zoom<1.35){
     const horizon=ctx.createLinearGradient(0,h*.08,0,h*.34);

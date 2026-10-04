@@ -31,16 +31,19 @@ const drawTerrainFields=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
 
 const drawNeighborhoodMaterialBridge=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();
-  // 0.9.6L: warm/cool occupied pockets bridge buildings into the authored road surface.
+  // 1.1B: occupied material pockets reach farther toward the circulation spine.
+  // Buildings should read as part of a neighborhood, not isolated sprites on a dark field.
   const fields=[
-    [[[.035,.245],[.165,.225],[.330,.285],[.350,.405],[.285,.485],[.120,.455],[.025,.365]],'rgba(118,91,60,.095)','rgba(173,145,106,.055)'],
-    [[[.650,.235],[.790,.220],[.955,.280],[.980,.405],[.920,.500],[.745,.470],[.635,.360]],'rgba(92,87,68,.085)','rgba(149,141,112,.050)'],
-    [[[.040,.545],[.160,.515],[.325,.570],[.370,.720],[.295,.830],[.120,.815],[.030,.700]],'rgba(111,82,54,.090)','rgba(168,137,101,.052)'],
-    [[[.635,.540],[.780,.515],[.955,.575],[.975,.730],[.895,.835],[.720,.815],[.625,.690]],'rgba(79,91,67,.080)','rgba(132,151,111,.045)']
+    [[[.020,.225],[.175,.205],[.365,.265],[.405,.390],[.345,.500],[.135,.485],[.018,.365]],'rgba(126,94,58,.145)','rgba(184,146,99,.075)'],
+    [[[.595,.220],[.785,.200],[.975,.265],[.988,.405],[.930,.510],[.715,.490],[.585,.365]],'rgba(99,91,65,.125)','rgba(157,146,106,.065)'],
+    [[[.025,.525],[.175,.500],[.350,.555],[.405,.715],[.320,.850],[.120,.835],[.018,.705]],'rgba(121,85,52,.135)','rgba(178,137,92,.068)'],
+    [[[.595,.520],[.785,.495],[.978,.560],[.988,.735],[.900,.855],[.700,.835],[.585,.690]],'rgba(74,94,65,.115)','rgba(132,158,106,.060)']
   ] as const;
   for(const [pts,fill,stroke] of fields) irregularBlob(ctx,W,H,pts,fill,stroke);
-  ctx.fillStyle='rgba(137,104,66,.070)';
-  for(const [x,y,rx,ry,r] of [[.265,.355,.085,.034,-.18],[.735,.365,.075,.030,.16],[.235,.710,.082,.032,.10],[.785,.695,.078,.030,-.12]] as const){
+
+  // Broad worn aprons are deliberately low-contrast: density without stealing unit silhouettes.
+  ctx.fillStyle='rgba(145,105,63,.105)';
+  for(const [x,y,rx,ry,r] of [[.255,.355,.105,.040,-.18],[.745,.360,.098,.038,.16],[.225,.710,.105,.040,.10],[.790,.695,.102,.038,-.12]] as const){
     ctx.beginPath();ctx.ellipse(x*W,y*H,rx*W,ry*H,r,0,Math.PI*2);ctx.fill();
   }
   ctx.restore();
@@ -63,20 +66,20 @@ const drawFineGroundDebris=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
 };
 
 const drawAsphalt=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:number)=>{
-  const w=Math.max(64,path.width*.84);
-  // 0.9.6D: narrower visual carriageway; navigation geometry is unchanged.
-  // Broken concrete/dirt shoulder, then patched asphalt core.
-  strokePath(ctx,path,W,H,'#574d40',w+22,.64);
-  strokePath(ctx,path,W,H,'#303433',w+12,.90);
-  strokePath(ctx,path,W,H,'#454743',w,1);
-  strokePath(ctx,path,W,H,'#5a5a54',Math.max(8,w-20),.34);
-  // No painted centerline: this is a local community access road, not a formal avenue.
+  // 1.1B: T1 is a community access road, not an avenue. The physical/pathing corridor
+  // is untouched; only the authored visual carriageway becomes narrower and more local.
+  const w=Math.max(56,path.width*.69);
+  strokePath(ctx,path,W,H,'#695843',w+18,.70);
+  strokePath(ctx,path,W,H,'#252a29',w+10,.94);
+  strokePath(ctx,path,W,H,'#3d403c',w,1);
+  strokePath(ctx,path,W,H,'#54544d',Math.max(8,w-18),.28);
 };
 const drawAlley=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:number)=>{
   const w=path.width;
-  strokePath(ctx,path,W,H,'#6a563f',w+12,.58);
-  strokePath(ctx,path,W,H,'#514e47',w+6,.96);
-  strokePath(ctx,path,W,H,'#6b6153',Math.max(6,w-6),.54);
+  // Side alleys need to survive wide zoom: warmer shoulders + a slightly lighter walked core.
+  strokePath(ctx,path,W,H,'#765d41',w+12,.66);
+  strokePath(ctx,path,W,H,'#59544a',w+6,.98);
+  strokePath(ctx,path,W,H,'#776a58',Math.max(6,w-6),.58);
 };
 const drawConcretePath=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:number)=>{
   const w=path.width;
@@ -211,6 +214,45 @@ const drawPlantCluster=(ctx:CanvasRenderingContext2D,W:number,H:number,nx:number
   }
   ctx.restore();
 };
+
+const drawUrbanColorAccents=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  // Muted ceramic/paint remnants: color belongs to materials, never to floating UI decoration.
+  const patches=[
+    [.105,.272,.040,.010,'rgba(35,139,161,.19)'],[.285,.615,.034,.009,'rgba(204,103,58,.18)'],
+    [.705,.292,.036,.009,'rgba(211,157,53,.17)'],[.835,.535,.042,.010,'rgba(42,133,147,.16)'],
+    [.155,.785,.038,.009,'rgba(190,83,57,.16)'],[.735,.805,.040,.010,'rgba(212,161,66,.15)']
+  ] as const;
+  for(const [nx,ny,nw,nh,col] of patches){
+    ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(nx*W,ny*H,nw*W,Math.max(3,nh*H),2);ctx.fill();
+  }
+  ctx.restore();
+};
+
+const drawVegetationCorridors=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  // Connected green seams make vegetation follow drainage/lot edges instead of reading as scatter.
+  const seams=[
+    [.03,.18,.12,.24,.19,.31],[.04,.67,.12,.72,.20,.80],
+    [.80,.17,.88,.23,.96,.30],[.81,.69,.90,.74,.97,.82]
+  ] as const;
+  ctx.strokeStyle='rgba(48,91,58,.24)';ctx.lineWidth=5;ctx.lineCap='round';
+  for(const [x1,y1,cx,cy,x2,y2] of seams){
+    ctx.beginPath();ctx.moveTo(x1*W,y1*H);ctx.quadraticCurveTo(cx*W,cy*H,x2*W,y2*H);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(82,132,76,.48)';ctx.lineWidth=1;
+  seams.forEach(([x1,y1,cx,cy,x2,y2],si)=>{
+    for(let i=0;i<9;i++){
+      const t=(i+.25)/9,u=1-t;
+      const x=(u*u*x1+2*u*t*cx+t*t*x2)*W;
+      const y=(u*u*y1+2*u*t*cy+t*t*y2)*H;
+      const lean=((i+si)%2?2:-2);
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+lean,y-5-(i%3)*2);ctx.stroke();
+    }
+  });
+  ctx.restore();
+};
+
 const drawNatureIntegration=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   const clusters=[
     [.035,.165,1.0,101],[.085,.535,.82,111],[.315,.185,.70,121],[.335,.905,.88,131],
@@ -294,16 +336,59 @@ const drawLotMaterialMosaic=(ctx:CanvasRenderingContext2D,footprints:readonly Gr
   });ctx.restore();
 };
 
+const drawLotConnections=(ctx:CanvasRenderingContext2D,W:number,H:number,footprints:readonly GroundFootprint[]=[])=>{
+  ctx.save();
+  footprints.forEach((b,i)=>{
+    const cx=b.x+b.w*.5,cy=b.y+b.h*.58;
+    const nx=cx/W;
+    const targetNx=nx<.34?.22:nx>.66?.78:.50;
+    const targetX=targetNx*W;
+    const dir=targetX>=cx?1:-1;
+    const startX=dir>0?b.x+b.w+2:b.x-2;
+    const startY=Math.max(b.y+10,Math.min(b.y+b.h-8,cy+(seeded(4100+i*37)-.5)*14));
+    const endY=startY+(seeded(4300+i*41)-.5)*24;
+    const midX=(startX+targetX)*.5;
+    const midY=(startY+endY)*.5+(seeded(4500+i*43)-.5)*18;
+
+    // Dirt/concrete threshold path, kept deliberately soft so it reads as circulation rather than a collider.
+    ctx.strokeStyle=i%3===0?'rgba(134,96,57,.24)':'rgba(126,111,88,.20)';
+    ctx.lineWidth=16;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(startX,startY);ctx.quadraticCurveTo(midX,midY,targetX,endY);ctx.stroke();
+    ctx.strokeStyle=i%3===0?'rgba(178,141,95,.16)':'rgba(165,157,137,.13)';
+    ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(startX,startY);ctx.quadraticCurveTo(midX,midY,targetX,endY);ctx.stroke();
+    ctx.strokeStyle='rgba(226,216,196,.055)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(startX,startY);ctx.quadraticCurveTo(midX,midY,targetX,endY);ctx.stroke();
+  });
+  ctx.restore();
+};
+
+const drawTerraceFootprints=(ctx:CanvasRenderingContext2D,W:number,H:number,footprints:readonly GroundFootprint[]=[])=>{
+  ctx.save();
+  footprints.forEach((b,i)=>{
+    const pad=12+(i%3)*3;
+    const x=b.x-pad,y=b.y-pad*.62,w=b.w+pad*2,h=b.h+pad*1.35;
+    ctx.strokeStyle=i%2===0?'rgba(194,150,97,.075)':'rgba(155,168,137,.065)';
+    ctx.lineWidth=1.2;ctx.setLineDash([9+(i%2)*4,7]);
+    ctx.beginPath();ctx.roundRect(x,y,w,h,8);ctx.stroke();ctx.setLineDash([]);
+    // Small paver stitches at the occupied edge give the lot a human scale.
+    ctx.fillStyle=i%3===0?'rgba(202,118,72,.12)':i%3===1?'rgba(42,140,155,.10)':'rgba(207,164,72,.10)';
+    const yy=b.y+b.h+7;
+    for(let k=0;k<4;k++)ctx.fillRect(b.x+6+k*7,yy+(k%2),5,3);
+  });
+  ctx.restore();
+};
+
 const drawBuildingGroundContact=(ctx:CanvasRenderingContext2D,W:number,H:number,footprints:readonly GroundFootprint[]=[])=>{
   ctx.save();
   footprints.forEach((b,i)=>{
-    const seed=seeded(1701+i*47+Math.round(b.x+b.y)),pad=5+seed*5;
+    const seed=seeded(1701+i*47+Math.round(b.x+b.y)),pad=8+seed*6;
     const x=b.x-pad,y=b.y-pad,w=b.w+pad*2,h=b.h+pad*2,j=(seed-.5)*5;
     ctx.beginPath();ctx.moveTo(x+4,y+j);ctx.lineTo(x+w-7,y+2);ctx.lineTo(x+w+1,y+h-7);ctx.lineTo(x+w-9,y+h+2);ctx.lineTo(x+6,y+h);ctx.lineTo(x-2,y+8);ctx.closePath();
-    ctx.fillStyle=i%3===0?'rgba(108,88,63,.075)':'rgba(82,88,75,.060)';ctx.fill();
-    ctx.fillStyle='rgba(22,24,22,.16)';ctx.beginPath();ctx.ellipse(b.x+b.w*.52,b.y+b.h+3,Math.max(10,b.w*.30),3.5,.04,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='rgba(132,117,94,.11)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(b.x+5,b.y+b.h+1);ctx.lineTo(b.x+b.w-6,b.y+b.h+1+(i%2?1:-1));ctx.stroke();
-    if(i%2===0){ctx.strokeStyle='rgba(67,108,69,.34)';for(let k=0;k<3;k++){const px=b.x+7+k*5;ctx.beginPath();ctx.moveTo(px,b.y+b.h+2);ctx.lineTo(px+(k%2?2:-2),b.y+b.h-3-k);ctx.stroke();}}
+    ctx.fillStyle=i%3===0?'rgba(123,91,57,.135)':i%3===1?'rgba(91,98,79,.112)':'rgba(112,95,70,.115)';ctx.fill();
+    ctx.strokeStyle=i%3===0?'rgba(186,143,91,.075)':'rgba(152,153,127,.060)';ctx.lineWidth=1;ctx.stroke();
+
+    // Contact shadow + worn threshold anchor the building to the same ground material.
+    ctx.fillStyle='rgba(19,22,20,.21)';ctx.beginPath();ctx.ellipse(b.x+b.w*.52,b.y+b.h+3,Math.max(12,b.w*.34),4.2,.04,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(155,126,89,.14)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(b.x+4,b.y+b.h+1);ctx.lineTo(b.x+b.w-5,b.y+b.h+1+(i%2?1:-1));ctx.stroke();
+    if(i%2===0){ctx.strokeStyle='rgba(69,119,72,.43)';for(let k=0;k<3;k++){const px=b.x+7+k*5;ctx.beginPath();ctx.moveTo(px,b.y+b.h+2);ctx.lineTo(px+(k%2?2:-2),b.y+b.h-4-k);ctx.stroke();}}
   });
   ctx.restore();
 };
@@ -331,13 +416,24 @@ export const drawT1CommunityYard=(ctx:CanvasRenderingContext2D,W:number,H:number
   if(!plaza)return;
   const x=plaza.x*W,y=plaza.y*H,w=plaza.w*W,h=plaza.h*H;
   ctx.save();
-  // Worn community slab: no full sports-field diagram.
-  ctx.fillStyle='rgba(18,21,22,.38)';ctx.beginPath();ctx.roundRect(x-6,y-4,w+12,h+8,11);ctx.fill();
-  ctx.fillStyle='#4c4d48';ctx.beginPath();ctx.roundRect(x,y,w,h,8);ctx.fill();
-  ctx.fillStyle='rgba(113,91,62,.18)';ctx.beginPath();ctx.ellipse(x+w*.26,y+h*.72,w*.20,h*.14,-.18,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='rgba(18,25,28,.22)';ctx.beginPath();ctx.ellipse(x+w*.72,y+h*.35,w*.16,h*.11,.14,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle='rgba(218,210,194,.07)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+w*.18,y+h*.52);ctx.lineTo(x+w*.43,y+h*.50);ctx.stroke();
-  ctx.fillStyle='rgba(115,79,48,.28)';ctx.fillRect(x+7,y+h-5,w*.20,4);ctx.fillRect(x+w*.72,y+h-5,w*.18,4);
+  // 1.1B: irregular community courtyard. It must not read like a clean UI rectangle/camp prototype.
+  ctx.beginPath();
+  ctx.moveTo(x-4,y+7);ctx.lineTo(x+w*.22,y-5);ctx.lineTo(x+w*.78,y-2);ctx.lineTo(x+w+7,y+10);
+  ctx.lineTo(x+w+3,y+h-9);ctx.lineTo(x+w*.72,y+h+5);ctx.lineTo(x+w*.18,y+h+3);ctx.lineTo(x-7,y+h-12);ctx.closePath();
+  ctx.fillStyle='rgba(28,30,29,.48)';ctx.fill();
+  ctx.strokeStyle='rgba(152,139,117,.10)';ctx.lineWidth=1.4;ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x+3,y+8);ctx.lineTo(x+w*.24,y);ctx.lineTo(x+w*.76,y+2);ctx.lineTo(x+w-2,y+11);
+  ctx.lineTo(x+w-5,y+h-10);ctx.lineTo(x+w*.70,y+h-1);ctx.lineTo(x+w*.20,y+h-2);ctx.lineTo(x+1,y+h-12);ctx.closePath();
+  ctx.fillStyle='#4e4e47';ctx.fill();
+
+  // Repairs and faded paint give scale while keeping the center free for units.
+  ctx.fillStyle='rgba(135,96,57,.20)';ctx.beginPath();ctx.ellipse(x+w*.25,y+h*.73,w*.20,h*.13,-.18,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(24,31,31,.24)';ctx.beginPath();ctx.ellipse(x+w*.72,y+h*.34,w*.16,h*.10,.14,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(217,195,151,.075)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+w*.15,y+h*.53);ctx.quadraticCurveTo(x+w*.33,y+h*.48,x+w*.48,y+h*.52);ctx.stroke();
+  ctx.fillStyle='rgba(26,122,145,.18)';ctx.fillRect(x+8,y+h-5,w*.12,3);
+  ctx.fillStyle='rgba(201,91,55,.16)';ctx.fillRect(x+w*.77,y+h-5,w*.14,3);
   ctx.restore();
 };
 
@@ -348,6 +444,8 @@ export function drawT1ReauthoredSurface(
   drawTerrainFields(ctx,W,H);
   drawNeighborhoodMaterialBridge(ctx,W,H);
   drawEdgeEmbankments(ctx,W,H);
+  drawLotConnections(ctx,W,H,footprints);
+  drawTerraceFootprints(ctx,W,H,footprints);
   drawBuildingGroundContact(ctx,W,H,footprints);
   drawThresholdLife(ctx,footprints);
   drawLotMaterialMosaic(ctx,footprints);
@@ -363,6 +461,8 @@ export function drawT1ReauthoredSurface(
   drawDrainage(ctx,W,H);
   drawBrokenPaving(ctx,W,H);
   drawLocalConcreteRepairs(ctx,W,H);
+  drawUrbanColorAccents(ctx,W,H);
+  drawVegetationCorridors(ctx,W,H);
   drawNatureIntegration(ctx,W,H);
   drawDomesticGardens(ctx,W,H);
   drawT1CommunityYard(ctx,W,H,plaza);

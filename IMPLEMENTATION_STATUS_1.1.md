@@ -7,8 +7,8 @@ Ordem de prioridade: **visual → movimento/IA → HUD/interface → câmera →
 
 ## Fases
 - [x] 1.1A — Audit & Baseline
-- [ ] 1.1B — T1 Ground / Composition
-- [ ] 1.1C — T1 Architecture
+- [x] 1.1B — T1 Ground / Composition
+- [x] 1.1C — T1 Architecture
 - [ ] 1.1D — Crowd Movement
 - [ ] 1.1E — Camera 2.0
 - [ ] 1.1F — HUD 2.0
@@ -34,3 +34,11 @@ Ordem de prioridade: **visual → movimento/IA → HUD/interface → câmera →
 
 ## Regra de aceite
 Nenhum território passa de fase até responder **sim** à pergunta: “está no mesmo nível do T1 1.1?”.
+## 1.1B/C concluídas
+- chão T1 recomposto com via menos dominante, tecido de lotes, conexões e vegetação contínua;
+- arquitetura contextual reautorizada por função;
+- densidade física secundária T1: 11 → 17 volumes;
+- labels de mundo estabilizadas por zoom;
+- organic pathing 6/6 PASS;
+- all capture anchors 43/43 PASS, incluindo T1 6/6;
+- referência: `docs/1.1BC_T1_WORLD_REBUILD.md`.

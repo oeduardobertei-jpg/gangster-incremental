@@ -42,9 +42,9 @@ export interface TerritoryBiomeProfile {
 export const TERRITORY_BIOMES: Record<number, TerritoryBiomeProfile> = {
   1: {
     id:1,codename:'beco-dos-descalcos',
-    baseTop:'#302d27',baseMid:'#38342d',baseBottom:'#2a302a',
-    dust:'#ad8c65',dirt:'#73523a',concrete:'#65645e',edge:'#9d917f',
-    crack:'#15191a',damp:'#1a2926',vegetation:'#3a6045',accent:'#d97706',
+    baseTop:'#393229',baseMid:'#41392f',baseBottom:'#30372e',
+    dust:'#b79268',dirt:'#7b563b',concrete:'#6b6961',edge:'#a99a85',
+    crack:'#15191a',damp:'#1d2d29',vegetation:'#416d4d',accent:'#d97706',
     noiseDensity:.72,crackDensity:.72,seamDensity:.45,wetness:.42,
     patches:[]
   },

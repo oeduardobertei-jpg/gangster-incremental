@@ -25,49 +25,108 @@ const meter=(ctx:CanvasRenderingContext2D,x:number,y:number,accent:string)=>{
   rect(ctx,x+5,y+6,2,2,accent);
 };
 const finishT1=(a:Args)=>{
-  const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a,n=norm(a.role);  const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0), right=hash%2===0;
+  const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a;
+  const n=norm(a.role);
+  const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0);
+  const right=hash%2===0;
   const px=right?b.x+b.w-7:b.x+7;
-  rect(ctx,b.x+4,facadeY+height-5,b.w-8,3,'rgba(38,29,24,.42)');
-  line(ctx,b.x+5,roofY+b.h-3,b.x+b.w-5,roofY+b.h-3,'rgba(226,232,240,.20)');
-  line(ctx,px,facadeY+4,px,facadeY+height-4,'#5b6470',1.6);
-  if(renderZoom>=.92) meter(ctx,right?px-11:px+3,facadeY+height-15,controlColor);
+  const facadeBottom=facadeY+height;
 
-  // 0.9.4 Architecture Pass: every context building gets a readable urban function.
+  // 1.1C: contextual architecture is authored by role. Everything stays inside the
+  // existing physical footprint: no decorative solid-looking mass without collision.
+  const washes=n.includes('oficina')?['rgba(52,67,70,.40)','rgba(99,69,45,.24)']:
+    n.includes('mercadinho')?['rgba(128,76,48,.34)','rgba(36,106,111,.20)']:
+    n.includes('puxadinho')?['rgba(70,76,76,.42)','rgba(128,87,52,.20)']:
+    n.includes('varanda')?['rgba(115,89,67,.30)','rgba(52,103,85,.20)']:
+    n.includes('sobrado')?['rgba(126,72,51,.30)','rgba(165,120,74,.16)']:
+    ['rgba(121,77,55,.28)','rgba(61,102,91,.16)'];
+  ctx.fillStyle=washes[hash%2];ctx.fillRect(b.x+3,facadeY+3,b.w-6,Math.max(8,height-8));
+
+  // Foundation / service spine visually anchors every secondary building.
+  rect(ctx,b.x+4,facadeBottom-5,b.w-8,3,'rgba(38,29,24,.48)');
+  line(ctx,b.x+5,roofY+b.h-3,b.x+b.w-5,roofY+b.h-3,'rgba(226,232,240,.22)');
+  line(ctx,px,facadeY+4,px,facadeBottom-4,'#5b6470',1.6);
+  if(renderZoom>=.88) meter(ctx,right?px-11:px+3,facadeBottom-15,controlColor);
+
   if(n.includes('oficina')){
-    const x=b.x+7,y=facadeY+6,w=b.w-14,h=Math.max(12,height-8);
-    rect(ctx,x,y,w,h,'#28323a','#59636d');
-    for(let yy=y+4;yy<y+h;yy+=5) line(ctx,x+1,yy,x+w-1,yy,'rgba(203,213,225,.18)');
-    ctx.fillStyle='#f4b44b';ctx.globalAlpha=.72;ctx.beginPath();ctx.arc(b.x+b.w-10,facadeY+5,2.7,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-    rect(ctx,b.x+4,roofY+6,b.w*.34,5,'#59636d','#8a949e');
+    // Roller shutter + tool-side service strip.
+    const x=b.x+6,y=facadeY+5,w=b.w-12,h=Math.max(13,height-9);
+    rect(ctx,x,y,w,h,'#273238','#606b70');
+    for(let yy=y+4;yy<y+h-2;yy+=5) line(ctx,x+1,yy,x+w-1,yy,'rgba(203,213,225,.20)');
+    rect(ctx,b.x+5,roofY+5,Math.max(19,b.w*.36),6,'#59636d','#8a949e');
+    ctx.fillStyle='#f2a541';ctx.globalAlpha=.78;ctx.beginPath();ctx.arc(b.x+b.w-10,facadeY+5,2.8,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+    if(renderZoom>=1.05){
+      rect(ctx,b.x+8,facadeBottom-8,13,3,'#9b5d34');
+      line(ctx,b.x+24,facadeBottom-6,b.x+33,facadeBottom-11,'rgba(25,30,31,.72)',2);
+    }
   } else if(n.includes('puxadinho')){
-    ctx.beginPath();ctx.moveTo(b.x-4,roofY+5);ctx.lineTo(b.x+b.w*.55,roofY-5);ctx.lineTo(b.x+b.w+5,roofY+3);ctx.lineTo(b.x+b.w+2,roofY+10);ctx.lineTo(b.x-3,roofY+11);ctx.closePath();
-    ctx.fillStyle='#5d666b';ctx.fill();ctx.strokeStyle='#8e979c';ctx.stroke();
-    for(let xx=b.x+4;xx<b.x+b.w;xx+=8) line(ctx,xx,roofY+4,xx+2,roofY+10,'rgba(226,232,240,.17)');
-    rect(ctx,b.x+8,facadeY+7,b.w-16,height-9,'rgba(58,47,40,.55)');
+    // Corrugated lean-to roof and improvised timber frame.
+    ctx.beginPath();ctx.moveTo(b.x+1,roofY+8);ctx.lineTo(b.x+b.w*.55,roofY+1);ctx.lineTo(b.x+b.w-1,roofY+6);ctx.lineTo(b.x+b.w-1,roofY+12);ctx.lineTo(b.x+1,roofY+13);ctx.closePath();
+    ctx.fillStyle='#586166';ctx.fill();ctx.strokeStyle='#8b9498';ctx.lineWidth=1;ctx.stroke();
+    for(let xx=b.x+5;xx<b.x+b.w-3;xx+=8) line(ctx,xx,roofY+6,xx+2,roofY+12,'rgba(226,232,240,.19)');
+    rect(ctx,b.x+7,facadeY+7,b.w-14,Math.max(11,height-10),'rgba(63,49,40,.62)');
+    line(ctx,b.x+9,facadeY+7,b.x+9,facadeBottom-4,'rgba(147,111,76,.50)',2);
+    line(ctx,b.x+b.w-9,facadeY+7,b.x+b.w-9,facadeBottom-4,'rgba(147,111,76,.50)',2);
   } else if(n.includes('mercadinho')){
-    const aw=b.w-10, ax=b.x+5, ay=facadeY+3, sw=aw/6;
-    for(let i=0;i<6;i++) rect(ctx,ax+i*sw,ay,sw,7,i%2?'#e7d8b5':'#b75b3d');
-    rect(ctx,b.x+8,facadeY+12,b.w-16,8,'#2a211c','#6b5142');
-    if(renderZoom>=.9){ctx.fillStyle='#f6e6c8';ctx.font='700 5px "Plus Jakarta Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('MERCADO',b.x+b.w/2,facadeY+16);}
-  } else if(n.includes('laje')||n.includes('sobrado')){
-    line(ctx,b.x+7,roofY+7,b.x+b.w-7,roofY+7,'#8d969f',1.2);
-    line(ctx,b.x+7,roofY+15,b.x+b.w-7,roofY+15,'#68727a',1);    for(let xx=b.x+7;xx<=b.x+b.w-7;xx+=10) line(ctx,xx,roofY+7,xx,roofY+15,'rgba(203,213,225,.36)',.8);
-    const sx=right?b.x+b.w-8:b.x+8;
-    for(let i=0;i<4;i++){const ww=9+i*3;rect(ctx,right?sx-ww:sx,facadeY+height-5-i*4,ww,3,'#697178');}
-    if(n.includes('laje')) rect(ctx,right?b.x+8:b.x+b.w-26,roofY+18,18,5,'#58636b','#88939b');
+    // Strong local-business read: striped awning, counter and small painted sign.
+    const aw=b.w-10, ax=b.x+5, ay=facadeY+3, sw=aw/7;
+    for(let i=0;i<7;i++) rect(ctx,ax+i*sw,ay,sw+0.5,8,i%2?'#e6d3ae':'#b85b3d');
+    rect(ctx,b.x+7,facadeY+12,b.w-14,Math.max(8,height-17),'#29211d','#6b5142');
+    rect(ctx,b.x+10,facadeBottom-8,b.w-20,4,'#7f5738');
+    if(renderZoom>=.82){ctx.fillStyle='#f6e6c8';ctx.font='800 5px "Plus Jakarta Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('MERCADO',b.x+b.w/2,facadeY+16);}
+  } else if(n.includes('geminada')){
+    // Split fa?ade makes the row house read as two occupied homes rather than one box.
+    const mid=b.x+b.w*.5;
+    line(ctx,mid,facadeY+3,mid,facadeBottom-4,'rgba(42,35,30,.42)',1.2);
+    for(const sx of [b.x+6,mid+3]){
+      rect(ctx,sx,facadeBottom-14,8,11,'#302721','#80654f');
+      rect(ctx,sx+12,facadeY+7,10,7,'#18303c','#7c8790');
+    }
+    rect(ctx,b.x+4,roofY+5,b.w-8,4,hash%2?'#8c6b50':'#6d7770');
   } else if(n.includes('varanda')){
-    rect(ctx,b.x+7,facadeY+6,b.w-14,4,'#5e5044');
-    line(ctx,b.x+7,facadeY+10,b.x+b.w-7,facadeY+10,'#8c9499',1);
-    for(let xx=b.x+8;xx<b.x+b.w-7;xx+=10) line(ctx,xx,facadeY+4,xx,facadeY+10,'rgba(203,213,225,.32)',.8);
+    // Deep balcony/railing plus planter gives the fa?ade human scale.
+    const vy=facadeY+7;
+    rect(ctx,b.x+6,vy,b.w-12,4,'#655447');
+    line(ctx,b.x+6,vy+5,b.x+b.w-6,vy+5,'#92999d',1.1);
+    for(let xx=b.x+8;xx<b.x+b.w-7;xx+=9) line(ctx,xx,vy-1,xx,vy+5,'rgba(203,213,225,.38)',.8);
+    rect(ctx,b.x+9,vy+6,Math.min(24,b.w*.38),4,'#715039');
+    ctx.fillStyle='rgba(69,120,72,.72)';for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(b.x+12+i*5,vy+5,2.3,0,Math.PI*2);ctx.fill();}
+  } else if(n.includes('laje')||n.includes('sobrado')){
+    // Upper-floor rhythm and stair landing distinguish multi-storey homes.
+    line(ctx,b.x+7,roofY+7,b.x+b.w-7,roofY+7,'#9099a1',1.2);
+    line(ctx,b.x+7,roofY+15,b.x+b.w-7,roofY+15,'#68727a',1);
+    for(let xx=b.x+7;xx<=b.x+b.w-7;xx+=10) line(ctx,xx,roofY+7,xx,roofY+15,'rgba(203,213,225,.38)',.8);
+    for(const wx of [b.x+9,b.x+b.w-21]) rect(ctx,wx,facadeY+7,10,7,'#1c3340','#7b8790');
+    const sx=right?b.x+b.w-8:b.x+8;
+    for(let i=0;i<4;i++){const ww=9+i*3;rect(ctx,right?sx-ww:sx,facadeBottom-5-i*4,ww,3,'#697178');}
+    if(n.includes('laje')) rect(ctx,right?b.x+8:b.x+b.w-26,roofY+18,18,5,'#58636b','#88939b');
+    if(n.includes('tijolo')){
+      ctx.strokeStyle='rgba(67,36,27,.42)';ctx.lineWidth=.7;
+      for(let yy=facadeY+5;yy<facadeBottom-5;yy+=6) line(ctx,b.x+3,yy,b.x+b.w-3,yy,'rgba(67,36,27,.42)',.7);
+    }
+  } else if(n.includes('esquina')){
+    // Corner house gets a vertical painted return and a tiny awning.
+    rect(ctx,right?b.x+b.w-12:b.x+4,facadeY+3,8,height-8,hash%2?'rgba(40,115,122,.32)':'rgba(186,97,55,.30)');
+    const ax=right?b.x+5:b.x+b.w-30;
+    rect(ctx,ax,facadeY+7,25,5,'#6f5039','#a77b53');
+    rect(ctx,ax+5,facadeY+13,11,7,'#18303c','#78868f');
   } else {
-    ctx.fillStyle=hash%3===0?'rgba(128,67,49,.20)':hash%3===1?'rgba(57,102,96,.18)':'rgba(158,124,70,.18)';
+    // Generic fallback still receives two unequal fa?ade bays and security bars.
+    ctx.fillStyle=hash%3===0?'rgba(128,67,49,.22)':hash%3===1?'rgba(57,102,96,.20)':'rgba(158,124,70,.20)';
     ctx.fillRect(b.x+4,facadeY+4,b.w*.47,height-10);
-    for(const wx of [b.x+10,b.x+b.w-22]){
+    for(const wx of [b.x+9,b.x+b.w-22]){
       rect(ctx,wx,facadeY+8,11,7,'#1e3442','#77838d');
-      for(let gx=wx+3;gx<wx+11;gx+=4) line(ctx,gx,facadeY+9,gx,facadeY+14,'rgba(226,232,240,.35)',.7);
+      for(let gx=wx+3;gx<wx+11;gx+=4) line(ctx,gx,facadeY+9,gx,facadeY+14,'rgba(226,232,240,.38)',.7);
     }
   }
-  if(b.w>=48) line(ctx,b.x+8,roofY+3,b.x+b.w-9,roofY+3,'rgba(107,114,128,.48)',1.1);
+
+  // Shared authored roof edge, utility drop and subtle occupation detail.
+  if(b.w>=48) line(ctx,b.x+8,roofY+3,b.x+b.w-9,roofY+3,'rgba(107,114,128,.52)',1.1);
+  if(renderZoom>=1.15 && hash%3===0){
+    const wireY=roofY+2;
+    line(ctx,b.x+b.w*.18,wireY,b.x+b.w*.72,wireY-3,'rgba(31,37,40,.46)',.8);
+    ctx.fillStyle=hash%2?'rgba(51,132,151,.48)':'rgba(194,93,61,.44)';ctx.fillRect(b.x+b.w*.42,wireY-1,6,5);
+  }
 };
 const finishT2=(a:Args)=>{const {ctx,b,roofY,facadeY,height,role,renderZoom}=a,n=norm(role);
   const pole='#7b6042';line(ctx,b.x+5,roofY+3,b.x+5,facadeY+height,pole,1.5);line(ctx,b.x+b.w-5,roofY+3,b.x+b.w-5,facadeY+height,pole,1.5);

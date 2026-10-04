@@ -34,12 +34,12 @@ const drawZoomMicro=(ctx:CanvasRenderingContext2D,w:number,h:number,time:number,
 
 const drawFinalGrade=(ctx:CanvasRenderingContext2D,w:number,h:number,quality:number)=>{
   // 0.9.5M: grade acontece antes das unidades, preservando cores de combate e HUD.
-  const left=ctx.createLinearGradient(0,0,w*.24,0);left.addColorStop(0,'rgba(4,13,20,.085)');left.addColorStop(1,'rgba(4,13,20,0)');
+  const left=ctx.createLinearGradient(0,0,w*.24,0);left.addColorStop(0,'rgba(4,13,20,.050)');left.addColorStop(1,'rgba(4,13,20,0)');
   ctx.fillStyle=left;ctx.fillRect(0,0,w*.26,h);
-  const right=ctx.createLinearGradient(w,0,w*.76,0);right.addColorStop(0,'rgba(4,13,20,.078)');right.addColorStop(1,'rgba(4,13,20,0)');
+  const right=ctx.createLinearGradient(w,0,w*.76,0);right.addColorStop(0,'rgba(4,13,20,.045)');right.addColorStop(1,'rgba(4,13,20,0)');
   ctx.fillStyle=right;ctx.fillRect(w*.74,0,w*.26,h);
   if(quality>0){
-    const top=ctx.createLinearGradient(0,0,0,h*.26);top.addColorStop(0,'rgba(11,18,27,.055)');top.addColorStop(1,'rgba(11,18,27,0)');ctx.fillStyle=top;ctx.fillRect(0,0,w,h*.28);
+    const top=ctx.createLinearGradient(0,0,0,h*.26);top.addColorStop(0,'rgba(11,18,27,.035)');top.addColorStop(1,'rgba(11,18,27,0)');ctx.fillStyle=top;ctx.fillRect(0,0,w,h*.28);
   }
 };
 

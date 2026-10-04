@@ -1,0 +1,33 @@
+{
+  "battleHud": {
+    "x": 29,
+    "y": 141.328125,
+    "width": 413.3125,
+    "height": 83.984375,
+    "top": 141.328125,
+    "right": 442.3125,
+    "bottom": 225.3125,
+    "left": 29
+  },
+  "controls": {
+    "x": 927.421875,
+    "y": 141.328125,
+    "width": 199.578125,
+    "height": 32,
+    "top": 141.328125,
+    "right": 1127,
+    "bottom": 173.328125,
+    "left": 927.421875
+  },
+  "canvas": {
+    "x": 13,
+    "y": 129.328125,
+    "width": 1130,
+    "height": 648.671875,
+    "top": 129.328125,
+    "right": 1143,
+    "bottom": 778,
+    "left": 13
+  },
+  "text": "T1Beco dos Descalços (Periferia)|Aliados 0/15Rivais 10VIELAS • LAJES • COMÉRCIO LOCALVARREDURA · PRESSÃO0/20POSIÇÕES 0/6ALVOLaje do Ponto0%"
+}

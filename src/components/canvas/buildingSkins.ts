@@ -242,13 +242,21 @@ export function drawPeripheryBuildingSkin(
       ctx.fillText(b.label,signX+signW/2,signY+signH/2+.3);
       ctx.fillStyle=controlColor;ctx.globalAlpha=.58;ctx.fillRect(signX+4,signY+signH-1,signW-8,1);ctx.globalAlpha=1;
     } else {
-      ctx.fillStyle = 'rgba(9,14,22,.88)';
-      ctx.fillRect(b.x + 8, roofY + 5, Math.min(b.w - 16, 74), WORLD_SCALE.signHeight);
-      ctx.strokeStyle = controlColor; ctx.globalAlpha = .72;
-      ctx.strokeRect(b.x + 8, roofY + 5, Math.min(b.w - 16, 74), WORLD_SCALE.signHeight);
-      ctx.globalAlpha = 1; ctx.fillStyle = '#f8fafc';
-      ctx.font = '700 7px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(b.label, b.x + 8 + Math.min(b.w - 16, 74)/2, roofY + 11.5);
+      // 1.1C: world labels keep a stable screen footprint instead of becoming giant UI cards at close zoom.
+      const labelScale = renderZoom > 1 ? Math.max(.66, 1 / renderZoom) : 1;
+      const naturalW = Math.min(b.w - 16, 74);
+      const signW = Math.max(38, naturalW * labelScale);
+      const signH = Math.max(8, WORLD_SCALE.signHeight * labelScale);
+      const signX = b.x + (b.w - signW) / 2;
+      const signY = roofY + 5;
+      ctx.fillStyle = 'rgba(9,14,22,.80)';
+      ctx.beginPath(); ctx.roundRect(signX, signY, signW, signH, Math.max(1.5, 2 * labelScale)); ctx.fill();
+      ctx.strokeStyle = controlColor; ctx.globalAlpha = .52;
+      ctx.stroke();
+      ctx.globalAlpha = 1; ctx.fillStyle = '#f4f7fa';
+      ctx.font = `700 ${Math.max(5.1, 6.5 * labelScale)}px "Plus Jakarta Sans", sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(b.label, b.x + b.w / 2, signY + signH / 2 + .3, signW - 6);
     }
   }
 

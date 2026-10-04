@@ -29,14 +29,14 @@ const drawGroundGrade = (ctx: CanvasRenderingContext2D, width: number, height: n
   );
   edge.addColorStop(0, 'rgba(0,0,0,0)');
   edge.addColorStop(.70, 'rgba(8,16,23,.018)');
-  edge.addColorStop(1, 'rgba(8,16,23,.085)');
+  edge.addColorStop(1, 'rgba(8,16,23,.050)');
   ctx.fillStyle = edge;
   ctx.fillRect(0, 0, width, height);
 
   const warm = ctx.createLinearGradient(0, 0, width, height);
-  warm.addColorStop(0, 'rgba(154,83,39,.020)');
+  warm.addColorStop(0, 'rgba(154,83,39,.032)');
   warm.addColorStop(.48, 'rgba(0,0,0,0)');
-  warm.addColorStop(1, 'rgba(15,45,55,.018)');
+  warm.addColorStop(1, 'rgba(15,45,55,.026)');
   ctx.fillStyle = warm;
   ctx.fillRect(0, 0, width, height);
   ctx.restore();
