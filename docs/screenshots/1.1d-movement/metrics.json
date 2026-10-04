@@ -1,0 +1,168 @@
+{
+  "allies": [
+    {
+      "x": 784.8097846850734,
+      "y": 322.17764445047055
+    },
+    {
+      "x": 896.5476895332924,
+      "y": 674.1493595351217
+    },
+    {
+      "x": 973.6169603751746,
+      "y": 666.2328140403979
+    },
+    {
+      "x": 933.8022042408344,
+      "y": 664.2660728414198
+    },
+    {
+      "x": 862.8210317762872,
+      "y": 645.2879947843368
+    },
+    {
+      "x": 881.6992785342816,
+      "y": 634.7973926242253
+    },
+    {
+      "x": 897.9336885459513,
+      "y": 649.991260462419
+    },
+    {
+      "x": 987.7626299242116,
+      "y": 646.1652292497294
+    },
+    {
+      "x": 885.678242816659,
+      "y": 654.3887999861171
+    },
+    {
+      "x": 892.5686104808881,
+      "y": 659.8639220197009
+    },
+    {
+      "x": 868.0542943279339,
+      "y": 679.0051589014245
+    },
+    {
+      "x": 957.1903383472378,
+      "y": 654.4034496567284
+    }
+  ],
+  "perf": {
+    "avgFrameMs": 18.04642857145518,
+    "p95FrameMs": 33.39999999999998,
+    "sampledAt": 1154,
+    "speed": 5,
+    "camera": {
+      "centerX": 640,
+      "centerY": 360,
+      "zoom": 1
+    },
+    "viewport": {
+      "width": 1132,
+      "height": 650.671875,
+      "dpr": 1
+    },
+    "loot": 1,
+    "fps": 55.41262616259393,
+    "avgSimulationMs": 0.8375000005055752,
+    "avgRenderMs": 4.482142856743719,
+    "avgSteps": 5.196428571428571,
+    "avgTargetSearches": 1.0357142857142858,
+    "avgProjectileChecks": 0.14285714285714285,
+    "avgRivalAiMs": 0.22142857113587006,
+    "avgAllyAiMs": 0.4767857150041631,
+    "avgProjectileMs": 0.03035714304340737,
+    "allies": 12,
+    "rivals": 4,
+    "bullets": 0,
+    "particles": 0,
+    "worldColliders": 35,
+    "solidWorldViolations": 0,
+    "unstuckTriggers": 0,
+    "unstuckActive": 0,
+    "stuckPressure": 0,
+    "flowLaneRedirects": 0,
+    "edgeRecoveries": 0,
+    "hardUnstuckTriggers": 0,
+    "leftEdgePopulation": 0,
+    "rightEdgePopulation": 0,
+    "allyCentroidX": 901.8737294656522,
+    "allyCentroidY": 629.2274248793409,
+    "rivalCentroidX": 627.3433754720756,
+    "rivalCentroidY": 219.9096446998298
+  },
+  "cps": [
+    {
+      "id": "cp_laje_ponto",
+      "buildingId": "laje_ponto",
+      "label": "Laje do Ponto",
+      "x": 205.6,
+      "y": 342,
+      "progress": 0,
+      "status": "rival"
+    },
+    {
+      "id": "cp_barraquinha",
+      "buildingId": "barraquinha",
+      "label": "Barraquinha",
+      "x": 169.4,
+      "y": 166.8,
+      "progress": 0,
+      "status": "rival"
+    },
+    {
+      "id": "cp_esconderijo",
+      "buildingId": "esconderijo",
+      "label": "Esconderijo",
+      "x": 987.5538991093135,
+      "y": 593.0623356323365,
+      "progress": 0.5760416666666667,
+      "status": "contested"
+    },
+    {
+      "id": "cp_boca_leste",
+      "buildingId": "boca_leste",
+      "label": "Boca da Leste",
+      "x": 804.4,
+      "y": 301.8,
+      "progress": 0.5104166666666665,
+      "status": "contested"
+    },
+    {
+      "id": "cp_torre_guarda",
+      "buildingId": "torre_guarda",
+      "label": "Torre de Guarda",
+      "x": 979.8,
+      "y": 157.2,
+      "progress": 0,
+      "status": "rival"
+    },
+    {
+      "id": "cp_mirante",
+      "buildingId": "mirante",
+      "label": "Mirante",
+      "x": 566.4000000000001,
+      "y": 128,
+      "progress": 0,
+      "status": "rival"
+    }
+  ],
+  "avgNearest": 44.32250227852206,
+  "width": 202.95284523913824,
+  "height": 356.8275144509539,
+  "moved": 12,
+  "capturing": [
+    {
+      "label": "Esconderijo",
+      "progress": 0.5760416666666667,
+      "status": "contested"
+    },
+    {
+      "label": "Boca da Leste",
+      "progress": 0.5104166666666665,
+      "status": "contested"
+    }
+  ]
+}

@@ -122,6 +122,164 @@ export const computeAllySeparationVector = (
   return { x: pushX / length, y: pushY / length };
 };
 
+
+
+export interface AllyMassFlowVector {
+  separationX: number;
+  separationY: number;
+  cohesionX: number;
+  cohesionY: number;
+  alignmentX: number;
+  alignmentY: number;
+  neighborCount: number;
+}
+
+/**
+ * Low-frequency local flock sample for 1.1D.
+ * It intentionally shares the same O(A?) sampling cadence as personal-space separation,
+ * so faction cohesion does not add another full neighbor scan every frame.
+ */
+export const computeAllyMassFlow = (
+  ally: AllyEntity,
+  allies: readonly AllyEntity[],
+  neighborhoodRadius = 168
+): AllyMassFlowVector => {
+  let pushX = 0;
+  let pushY = 0;
+  let separationContributors = 0;
+  let centerX = 0;
+  let centerY = 0;
+  let velocityX = 0;
+  let velocityY = 0;
+  let neighborWeight = 0;
+  let neighborCount = 0;
+  const neighborhoodSq = neighborhoodRadius * neighborhoodRadius;
+
+  for (const other of allies) {
+    if (other === ally || other.hp <= 0) continue;
+    const dx = ally.x - other.x;
+    const dy = ally.y - other.y;
+    const distanceSq = dx * dx + dy * dy;
+    const preferred = getPreferredAllyDistance(ally, other);
+
+    if (distanceSq < preferred * preferred) {
+      let nx: number;
+      let ny: number;
+      let distance: number;
+      if (distanceSq < 0.0001) {
+        const angle = stableAngleFromId(`${ally.id}:${other.id}`);
+        nx = Math.cos(angle);
+        ny = Math.sin(angle);
+        distance = 0;
+      } else {
+        distance = Math.sqrt(distanceSq);
+        nx = dx / distance;
+        ny = dy / distance;
+      }
+      const overlap = (preferred - distance) / preferred;
+      pushX += nx * overlap;
+      pushY += ny * overlap;
+      separationContributors += 1;
+    }
+
+    if (distanceSq <= neighborhoodSq) {
+      const distance = Math.sqrt(Math.max(0, distanceSq));
+      // Near squadmates matter more, but the falloff never becomes zero inside the neighborhood.
+      const weight = .36 + .64 * (1 - Math.min(1, distance / neighborhoodRadius));
+      centerX += other.x * weight;
+      centerY += other.y * weight;
+      velocityX += other.vx * weight;
+      velocityY += other.vy * weight;
+      neighborWeight += weight;
+      neighborCount += 1;
+    }
+  }
+
+  let separationX = 0;
+  let separationY = 0;
+  if (separationContributors > 0) {
+    const length = Math.hypot(pushX, pushY);
+    if (length > 1) { separationX = pushX / length; separationY = pushY / length; }
+    else { separationX = pushX; separationY = pushY; }
+  }
+
+  let cohesionX = 0;
+  let cohesionY = 0;
+  let alignmentX = 0;
+  let alignmentY = 0;
+  if (neighborCount >= 2 && neighborWeight > 0) {
+    const cx = centerX / neighborWeight;
+    const cy = centerY / neighborWeight;
+    const dx = cx - ally.x;
+    const dy = cy - ally.y;
+    const distance = Math.hypot(dx, dy);
+    // Personal space remains dominant. Cohesion starts only after the unit is visibly leaving the mass.
+    const deadZone = 52 + ally.radius * .45;
+    if (distance > deadZone) {
+      const strength = Math.min(1, (distance - deadZone) / 90);
+      cohesionX = (dx / distance) * strength;
+      cohesionY = (dy / distance) * strength;
+    }
+
+    const avx = velocityX / neighborWeight;
+    const avy = velocityY / neighborWeight;
+    const speed = Math.hypot(avx, avy);
+    if (speed > .08) {
+      alignmentX = avx / speed;
+      alignmentY = avy / speed;
+    }
+  }
+
+  return { separationX, separationY, cohesionX, cohesionY, alignmentX, alignmentY, neighborCount };
+};
+
+export const applyFactionMassToVelocity = (
+  ally: Pick<AllyEntity, 'type' | 'speed'>,
+  vx: number,
+  vy: number,
+  flow: Pick<AllyMassFlowVector, 'cohesionX' | 'cohesionY' | 'alignmentX' | 'alignmentY' | 'neighborCount'>,
+  influence = 1
+): { vx: number; vy: number } => {
+  if (flow.neighborCount < 2 || influence <= 0) return { vx, vy };
+  const typeScale = ally.type === 'batedor_moto' ? .58 : ally.type === 'seguranca_pesado' ? .78 : 1;
+  const cohesionStrength = .24 * typeScale * influence;
+  const alignmentStrength = .075 * typeScale * influence;
+  let nextVx = vx + flow.cohesionX * ally.speed * cohesionStrength + flow.alignmentX * ally.speed * alignmentStrength;
+  let nextVy = vy + flow.cohesionY * ally.speed * cohesionStrength + flow.alignmentY * ally.speed * alignmentStrength;
+  const maxSpeed = ally.speed * (ally.type === 'batedor_moto' ? 1.24 : 1.14);
+  const currentSpeed = Math.hypot(nextVx, nextVy);
+  if (currentSpeed > maxSpeed && currentSpeed > 0) {
+    const scale = maxSpeed / currentSpeed;
+    nextVx *= scale;
+    nextVy *= scale;
+  }
+  return { vx: nextVx, vy: nextVy };
+};
+
+const stableUnit01 = (id: string): number => {
+  let hash = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    hash ^= id.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) / 4294967295;
+};
+
+/** Stable non-grid slot around a shared objective; prevents the whole faction from pathing to one pixel. */
+export const getFactionApproachPoint = (
+  unitId: string,
+  targetX: number,
+  targetY: number,
+  maxRadius: number
+): { x: number; y: number } => {
+  if (maxRadius <= 0) return { x: targetX, y: targetY };
+  const u = stableUnit01(`${unitId}:ring`);
+  const v = stableUnit01(`${unitId}:angle`);
+  const radius = maxRadius * (.38 + Math.sqrt(u) * .62);
+  const angle = v * Math.PI * 2;
+  return { x: targetX + Math.cos(angle) * radius, y: targetY + Math.sin(angle) * radius * .82 };
+};
+
 export const applySeparationToVelocity = (
   ally: Pick<AllyEntity, 'type' | 'speed' | 'vx' | 'vy'>,
   separationX: number,

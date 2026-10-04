@@ -60,7 +60,7 @@ import { MANUAL_RECRUIT_INTEL_COST, validateRecruitCommand } from '../rules/recr
 import { getAllyCoreStats, getAllyLiveStats, getAutoRecruitIntervalSeconds, getBarricadeDamageReduction, getDoubleRecruitChance, getFuzileiroChance, getMedicRegenPerSecond, rebaseAllyStatsForState } from '../rules/upgrades';
 import { getStarterGangCount } from '../rules/hegemonyTalents';
 import { EconomicReward, formatEconomicRewardFeedback, RivalEliminationReward, scaleScavengeLoot } from '../rules/rewards';
-import { applySeparationToVelocity, computeAllySeparationVector, findOrganicSpawnPosition } from '../rules/troopMovement';
+import { applyFactionMassToVelocity, applySeparationToVelocity, computeAllyMassFlow, findOrganicSpawnPosition, getFactionApproachPoint } from '../rules/troopMovement';
 import { getDoctrineComposition, getDoctrineInterval, getPendingCampaignMilestones, getReinforcementBatchSize, pickWeightedRivalType, selectExternalEntryIndex } from '../rules/campaign';
 import { getAllyCombatRole, getBossPhaseProfile, getRivalCombatRole, getRivalSupportDamageMultiplier, scoreRivalTargetForAlly } from '../rules/troopRoles';
 import { applyUnstuckNavigation } from '../rules/unstuck';
@@ -2514,8 +2514,11 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                 a.attackTimer = a.attackCooldown;
               }
             } else {
+              const rivalApproach = getFactionApproachPoint(
+                a.id, closestRival.x, closestRival.y, Math.min(22, Math.max(12, a.attackRange * .13))
+              );
               const routed = applyBlockedTargetDetour(
-                a, closestRival.x, closestRival.y, closestRival.id, decisionDt,
+                a, rivalApproach.x, rivalApproach.y, closestRival.id, decisionDt,
                 worldColliders, width, height, i + currentTerritory.id * 43
               );
               a.vx = routed.vx;
@@ -2525,8 +2528,11 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
             if (captureDistanceSq <= (CAPTURE_RADIUS * .55) ** 2) {
               a.vx = 0; a.vy = 0;
             } else {
+              const captureApproach = captureDistanceSq > (CAPTURE_RADIUS * .80) ** 2
+                ? getFactionApproachPoint(a.id, captureTarget.x, captureTarget.y, CAPTURE_RADIUS * .34)
+                : { x: captureTarget.x, y: captureTarget.y };
               const routed = applyBlockedTargetDetour(
-                a, captureTarget.x, captureTarget.y, `capture:${captureTarget.id}`, decisionDt,
+                a, captureApproach.x, captureApproach.y, `capture:${captureTarget.id}`, decisionDt,
                 worldColliders, width, height, i + currentTerritory.id * 59
               );
               a.vx = routed.vx; a.vy = routed.vy;
@@ -2540,24 +2546,37 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
             if (Math.abs(a.vy) < .04) a.vy = 0;
           }
 
-          // 0.4.1: cache a low-frequency personal-space vector, then apply it every step.
-          // This keeps firing lines and rapid recruits from collapsing into one sprite without O(A²) work at 60 Hz.
+          // 1.1D: one low-frequency neighbor scan now feeds both personal space and faction-mass behavior.
+          // Separation prevents blobs; cohesion/alignment only recover stragglers while the squad is travelling.
           a.separationTimer = (a.separationTimer ?? 0) - decisionDt;
           if (a.separationTimer <= 0) {
-            const separation = computeAllySeparationVector(a, alliesRef.current);
-            a.separationX = separation.x;
-            a.separationY = separation.y;
+            const massFlow = computeAllyMassFlow(a, alliesRef.current);
+            a.separationX = massFlow.separationX;
+            a.separationY = massFlow.separationY;
+            a.cohesionX = massFlow.cohesionX;
+            a.cohesionY = massFlow.cohesionY;
+            a.alignmentX = massFlow.alignmentX;
+            a.alignmentY = massFlow.alignmentY;
+            a.massNeighborCount = massFlow.neighborCount;
             a.separationTimer = 0.10 + (i % 7) * 0.009;
           }
           const allyDetouring = (a.detourTimer ?? 0) > 0;
           const spacedVelocity = applySeparationToVelocity(
             a, (a.separationX ?? 0) * (allyDetouring ? .25 : 1), (a.separationY ?? 0) * (allyDetouring ? .25 : 1)
           );
+          const travellingToThreat = Boolean(closestRival) && minDistSq > Math.max(64 * 64, (a.attackRange * .92) ** 2);
+          const travellingToCapture = Boolean(captureTarget) && captureDistanceSq > (CAPTURE_RADIUS * .70) ** 2;
+          const massInfluence = !allyDetouring && (travellingToThreat || travellingToCapture) ? 1 : 0;
+          const massVelocity = applyFactionMassToVelocity(a, spacedVelocity.vx, spacedVelocity.vy, {
+            cohesionX: a.cohesionX ?? 0, cohesionY: a.cohesionY ?? 0,
+            alignmentX: a.alignmentX ?? 0, alignmentY: a.alignmentY ?? 0,
+            neighborCount: a.massNeighborCount ?? 0
+          }, massInfluence);
           const allyWorldColliders = queryWorldColliderIndex(worldColliderIndex, a.x, a.y);
           const allyCanRecoverEdge = !allyDetouring && (!closestRival || minDistSq > (a.attackRange * .82) ** 2);
           const allyFlow = allyCanRecoverEdge
-            ? applyTerritoryEdgeRecovery(currentTerritory.id, a, spacedVelocity.vx, spacedVelocity.vy, alliesRef.current, width, height)
-            : { vx: spacedVelocity.vx, vy: spacedVelocity.vy, active: false };
+            ? applyTerritoryEdgeRecovery(currentTerritory.id, a, massVelocity.vx, massVelocity.vy, alliesRef.current, width, height)
+            : { vx: massVelocity.vx, vy: massVelocity.vy, active: false };
           if (allyFlow.active) edgeRecoveriesThisFrame += 1;
           const allyEscape = applyUnstuckNavigation(
             a, allyFlow.vx, allyFlow.vy, decisionDt, allyWorldColliders, alliesRef.current,

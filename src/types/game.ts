@@ -94,6 +94,11 @@ export interface AllyEntity {
   separationTimer?: number;
   separationX?: number;
   separationY?: number;
+  cohesionX?: number;
+  cohesionY?: number;
+  alignmentX?: number;
+  alignmentY?: number;
+  massNeighborCount?: number;
   stuckTimer?: number;
   stuckSampleX?: number;
   stuckSampleY?: number;

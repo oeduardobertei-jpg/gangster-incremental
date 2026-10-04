@@ -9,7 +9,7 @@ Ordem de prioridade: **visual → movimento/IA → HUD/interface → câmera →
 - [x] 1.1A — Audit & Baseline
 - [x] 1.1B — T1 Ground / Composition
 - [x] 1.1C — T1 Architecture
-- [ ] 1.1D — Crowd Movement
+- [x] 1.1D — Crowd Movement
 - [ ] 1.1E — Camera 2.0
 - [ ] 1.1F — HUD 2.0
 - [ ] 1.1G — Combat Visuals
@@ -42,3 +42,9 @@ Nenhum território passa de fase até responder **sim** à pergunta: “está no
 - organic pathing 6/6 PASS;
 - all capture anchors 43/43 PASS, incluindo T1 6/6;
 - referência: `docs/1.1BC_T1_WORLD_REBUILD.md`.
+## 1.1D concluída
+- mass-flow local une separação, coesão e alinhamento sem duplicar varredura O(A²);
+- slots estáveis distribuem aproximação a alvos/capturas;
+- aceite 1.1D 11/11 PASS;
+- organic 6/6, consolidation 19/19, live domination 8/8, anchors 43/43;
+- referência: `docs/1.1D_FACTION_MASS.md`.
