@@ -511,7 +511,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
     sampleStart: performance.now(), frames: 0, simulationMs: 0, renderMs: 0, frameTimes: [] as number[],
     simulationSteps: 0, targetSearches: 0, projectileChecks: 0, unstuckTriggers: 0,
     flowLaneRedirects: 0, edgeRecoveries: 0, hardUnstuckTriggers: 0,
-    rivalAiMs: 0, allyAiMs: 0, projectileMs: 0
+    rivalAiMs: 0, allyAiMs: 0, projectileMs: 0,
+    sceneRenderMs: 0, entityRenderMs: 0, effectsRenderMs: 0
   });
 
   // 0.4A: logical world + Camera2D independent from physical canvas size
@@ -2987,10 +2988,14 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       }
       drawCommandBaseProgression(ctx, baseHubX, baseHubY, factionConfig, gameState, currentTime, currentTerritory.id, camera.zoom, baseVisualPreviewRef.current ?? undefined, baseStageCelebration);
 
+      const perfSceneRenderMs = import.meta.env.DEV ? performance.now() - perfRenderStart : 0;
+      const perfEntityRenderStart = import.meta.env.DEV ? performance.now() : 0;
+
       // 4. 2.5D depth pass: pooled entries avoid per-entity closures/garbage every frame.
       const depthRenderables = depthRenderQueueRef.current;
       const depthPool = depthRenderPoolRef.current;
       depthRenderables.length = 0;
+      const unitVisualDetail: 'full' | 'low' = battleEntityCount >= 60 && camera.zoom <= 1.15 ? 'low' : 'full';
 
       for (const b of tacticalBuildings) {
         if (!isVisible(b.x + b.w / 2, b.y + b.h / 2, Math.max(b.w, b.h) + 36)) continue;
@@ -3049,7 +3054,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           case 'ally': {
             const ally = item.entity as AllyEntity;
             drawT1UnitGrounding(ctx,currentTerritory.id,ally.x,ally.y,10,false,currentTime,visualLoadZoom);
-            drawAllySprite(ctx, ally, currentTime); break;
+            drawAllySprite(ctx, ally, currentTime, unitVisualDetail); break;
           }
           case 'rival': {
             const rival = item.entity as RivalEntity;
@@ -3066,12 +3071,14 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
               ctx.lineWidth = phase === 3 ? 2.5 : 1.5; ctx.beginPath();
               ctx.arc(rival.x, rival.y + 4, rival.radius + 9 + pulse * 3, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
             }
-            drawRivalSprite(ctx, rival, currentTime); break;
+            drawRivalSprite(ctx, rival, currentTime, unitVisualDetail); break;
           }
         }
       }
       // 0.5.2: only the elevated cap/canopy is redrawn here, creating cheap 2.5D occlusion.
       drawPurposefulPropsOcclusion(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
+      const perfEntityRenderMs = import.meta.env.DEV ? performance.now() - perfEntityRenderStart : 0;
+      const perfEffectsRenderStart = import.meta.env.DEV ? performance.now() : 0;
 
       // 5. Bullets & Tracers
       bulletsRef.current.forEach(b => {
@@ -3174,6 +3181,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         ctx.fillText(ft.text, ft.x, ft.y);
       });
       ctx.globalAlpha = 1.0;
+      const perfEffectsRenderMs = import.meta.env.DEV ? performance.now() - perfEffectsRenderStart : 0;
       ctx.restore(); // Restore un-zoomed screen space for UI & tooltips
 
       // 0.4D: combat readability lives in screen-space so zoom never makes labels unreadable.
@@ -3441,6 +3449,9 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         perf.rivalAiMs += rivalAiMsThisFrame;
         perf.allyAiMs += allyAiMsThisFrame;
         perf.projectileMs += projectileMsThisFrame;
+        perf.sceneRenderMs += perfSceneRenderMs;
+        perf.entityRenderMs += perfEntityRenderMs;
+        perf.effectsRenderMs += perfEffectsRenderMs;
         const sampleDuration = currentTime - perf.sampleStart;
         if (sampleDuration >= 1000) {
           const divisor = Math.max(1, perf.frames);
@@ -3480,6 +3491,9 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
             avgRivalAiMs: perf.rivalAiMs / divisor,
             avgAllyAiMs: perf.allyAiMs / divisor,
             avgProjectileMs: perf.projectileMs / divisor,
+            avgSceneRenderMs: perf.sceneRenderMs / divisor,
+            avgEntityRenderMs: perf.entityRenderMs / divisor,
+            avgEffectsRenderMs: perf.effectsRenderMs / divisor,
             allies: alliesRef.current.length, rivals: rivalsRef.current.length,
             bullets: bulletsRef.current.length, particles: particlesRef.current.length,
             worldColliders: worldColliders.length, solidWorldViolations,
@@ -3497,6 +3511,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           perf.simulationSteps = 0; perf.targetSearches = 0; perf.projectileChecks = 0; perf.unstuckTriggers = 0;
           perf.flowLaneRedirects = 0; perf.edgeRecoveries = 0; perf.hardUnstuckTriggers = 0;
           perf.rivalAiMs = 0; perf.allyAiMs = 0; perf.projectileMs = 0;
+          perf.sceneRenderMs = 0; perf.entityRenderMs = 0; perf.effectsRenderMs = 0;
         }
 
       }

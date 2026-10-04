@@ -1,4 +1,4 @@
-﻿# Gangster Incremental â€” 1.1 Definitive Polish
+# Gangster Incremental â€” 1.1 Definitive Polish
 
 ## DireÃ§Ã£o
 A 1.1 Ã© uma reconstruÃ§Ã£o qualitativa da experiÃªncia existente. NÃ£o Ã© uma expansÃ£o de sistemas.
@@ -84,4 +84,12 @@ Nenhum territÃ³rio passa de fase atÃ© responder **sim** Ã  pergunta: â€
 - organic pathing 6/6 e anchors 43/43 PASS;
 - T1 inspecionado após refactor;
 - referência: `docs/1.1I_RENDERER_CLEANUP.md`.
+## 1.1J concluída
+- profiling DEV separa cenário, entidades e efeitos;
+- LOD adaptativo de infantaria comum entra somente com >=60 entidades e zoom <=115%;
+- especiais/chefes/motos/fuzileiros preservam sprite completo; zoom próximo restaura full detail;
+- A/B pausado: T5 -4,3% e T6 -7,2% no custo mediano de render;
+- caches ambientais, memoização contextual e LOD arquitetural antecipado foram medidos e rejeitados;
+- aceite Performance 16/16, Camera 13/13, Organic 6/6, Combat 10/10;
+- referência: `docs/1.1J_PERFORMANCE.md`.
 

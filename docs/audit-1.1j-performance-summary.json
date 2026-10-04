@@ -1,0 +1,123 @@
+{
+  "phase": "1.1J Performance",
+  "method": "1536x864 DEV/CDP. Static: 48 allies + 20 rivals, speed 0. Live: same fixture, speed 1. Medians used to reduce browser scheduling noise.",
+  "static_baseline_no_lod": {
+    "5": {
+      "samples": 2,
+      "entities": [
+        68,
+        68
+      ],
+      "render_ms_median": 3.391,
+      "entity_render_ms_median": 2.609,
+      "internal_fps_median": 59.95,
+      "raf_p95_ms_median": 17.05,
+      "raf_p99_ms_median": 17.25
+    },
+    "6": {
+      "samples": 2,
+      "entities": [
+        68,
+        68
+      ],
+      "render_ms_median": 3.522,
+      "entity_render_ms_median": 2.769,
+      "internal_fps_median": 59.94,
+      "raf_p95_ms_median": 16.9,
+      "raf_p99_ms_median": 17.15
+    }
+  },
+  "static_final_lod": {
+    "5": {
+      "samples": 2,
+      "entities": [
+        68,
+        68
+      ],
+      "render_ms_median": 3.246,
+      "entity_render_ms_median": 2.518,
+      "internal_fps_median": 59.94,
+      "raf_p95_ms_median": 16.85,
+      "raf_p99_ms_median": 25.1,
+      "render_improvement_pct": 4.3
+    },
+    "6": {
+      "samples": 2,
+      "entities": [
+        68,
+        68
+      ],
+      "render_ms_median": 3.267,
+      "entity_render_ms_median": 2.493,
+      "internal_fps_median": 59.93,
+      "raf_p95_ms_median": 16.8,
+      "raf_p99_ms_median": 17.05,
+      "render_improvement_pct": 7.2
+    }
+  },
+  "live_baseline_no_lod": {
+    "5": {
+      "samples": 3,
+      "entities": [
+        71,
+        71,
+        72
+      ],
+      "render_ms_median": 5.37,
+      "entity_render_ms_median": 3.579,
+      "internal_fps_median": 52.95,
+      "raf_p95_ms_median": 33.4,
+      "raf_p99_ms_median": 49.9
+    },
+    "6": {
+      "samples": 3,
+      "entities": [
+        70,
+        71,
+        71
+      ],
+      "render_ms_median": 4.479,
+      "entity_render_ms_median": 2.927,
+      "internal_fps_median": 55.94,
+      "raf_p95_ms_median": 33.4,
+      "raf_p99_ms_median": 33.6
+    }
+  },
+  "live_final_lod": {
+    "5": {
+      "samples": 2,
+      "entities": [
+        72,
+        71
+      ],
+      "render_ms_median": 4.43,
+      "entity_render_ms_median": 2.602,
+      "internal_fps_median": 55.44,
+      "raf_p95_ms_median": 33.35,
+      "raf_p99_ms_median": 33.6
+    },
+    "6": {
+      "samples": 2,
+      "entities": [
+        73,
+        72
+      ],
+      "render_ms_median": 4.394,
+      "entity_render_ms_median": 2.725,
+      "internal_fps_median": 53.95,
+      "raf_p95_ms_median": 33.3,
+      "raf_p99_ms_median": 41.7
+    }
+  },
+  "accepted": [
+    "mass-battle unit LOD for common infantry at >=60 entities and zoom <=1.15",
+    "full detail retained for special units and close zoom",
+    "DEV-only render phase instrumentation"
+  ],
+  "rejected": [
+    "environment overlay cache: lower average cost in T5 but periodic p99 spikes",
+    "low-resolution environment cache: degraded T6 consistency",
+    "memoized contextual geometry: slower in paused fixed-count A/B",
+    "building LOD threshold at 60 entities: T5 regressed and change was reverted"
+  ]
+}

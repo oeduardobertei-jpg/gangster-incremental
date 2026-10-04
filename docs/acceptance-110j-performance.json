@@ -1,0 +1,190 @@
+{
+  "passed": 16,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "mass LOD requires dense battle and non-close zoom",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "low LOD restricted to common infantry",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "boss excluded from low-detail condition",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "DEV render phase telemetry present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 fixed mass fixture",
+      "detail": "entities=68"
+    },
+    {
+      "ok": true,
+      "label": "T5 paused mass FPS",
+      "detail": "fps=59.9"
+    },
+    {
+      "ok": true,
+      "label": "T5 render budget",
+      "detail": "render=3.01ms"
+    },
+    {
+      "ok": true,
+      "label": "T5 entity render budget",
+      "detail": "entities=2.38ms"
+    },
+    {
+      "ok": true,
+      "label": "T5 frame p95 budget",
+      "detail": "p95=16.8ms"
+    },
+    {
+      "ok": true,
+      "label": "T5 no runtime errors",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "label": "T6 fixed mass fixture",
+      "detail": "entities=68"
+    },
+    {
+      "ok": true,
+      "label": "T6 paused mass FPS",
+      "detail": "fps=59.0"
+    },
+    {
+      "ok": true,
+      "label": "T6 render budget",
+      "detail": "render=3.81ms"
+    },
+    {
+      "ok": true,
+      "label": "T6 entity render budget",
+      "detail": "entities=3.03ms"
+    },
+    {
+      "ok": true,
+      "label": "T6 frame p95 budget",
+      "detail": "p95=16.8ms"
+    },
+    {
+      "ok": true,
+      "label": "T6 no runtime errors",
+      "detail": "[]"
+    }
+  ],
+  "runtime": [
+    {
+      "territory": 5,
+      "perf": {
+        "avgFrameMs": 16.683333333333334,
+        "p95FrameMs": 16.800000000000182,
+        "sampledAt": 3203.9,
+        "speed": 0,
+        "camera": {
+          "centerX": 640,
+          "centerY": 358.51063829787233,
+          "zoom": 0.94
+        },
+        "viewport": {
+          "width": 1132,
+          "height": 674,
+          "dpr": 1
+        },
+        "loot": 0,
+        "fps": 59.94005994005994,
+        "avgSimulationMs": 0.038333333532015484,
+        "avgRenderMs": 3.0083333338300386,
+        "avgSteps": 0,
+        "avgTargetSearches": 0,
+        "avgProjectileChecks": 0,
+        "avgRivalAiMs": 0,
+        "avgAllyAiMs": 0,
+        "avgProjectileMs": 0,
+        "avgSceneRenderMs": 0.5549999997019768,
+        "avgEntityRenderMs": 2.381666667138537,
+        "avgEffectsRenderMs": 0,
+        "allies": 48,
+        "rivals": 20,
+        "bullets": 0,
+        "particles": 0,
+        "worldColliders": 28,
+        "solidWorldViolations": 1,
+        "unstuckTriggers": 0,
+        "unstuckActive": 0,
+        "stuckPressure": 0,
+        "flowLaneRedirects": 0,
+        "edgeRecoveries": 0,
+        "hardUnstuckTriggers": 0,
+        "leftEdgePopulation": 11,
+        "rightEdgePopulation": 3,
+        "allyCentroidX": 583.2666666666668,
+        "allyCentroidY": 503.3533333333334,
+        "rivalCentroidX": 565.33,
+        "rivalCentroidY": 238.19
+      },
+      "errors": []
+    },
+    {
+      "territory": 6,
+      "perf": {
+        "avgFrameMs": 16.96271186440678,
+        "p95FrameMs": 16.800000000000182,
+        "sampledAt": 3204.8,
+        "speed": 0,
+        "camera": {
+          "centerX": 640,
+          "centerY": 358.51063829787233,
+          "zoom": 0.94
+        },
+        "viewport": {
+          "width": 1132,
+          "height": 674,
+          "dpr": 1
+        },
+        "loot": 0,
+        "fps": 58.95283772981614,
+        "avgSimulationMs": 0.03220338980525227,
+        "avgRenderMs": 3.8067796616736107,
+        "avgSteps": 0,
+        "avgTargetSearches": 0,
+        "avgProjectileChecks": 0,
+        "avgRivalAiMs": 0,
+        "avgAllyAiMs": 0,
+        "avgProjectileMs": 0,
+        "avgSceneRenderMs": 0.6830508480385199,
+        "avgEntityRenderMs": 3.028813558867422,
+        "avgEffectsRenderMs": 0.0033898305589869873,
+        "allies": 48,
+        "rivals": 20,
+        "bullets": 0,
+        "particles": 0,
+        "worldColliders": 31,
+        "solidWorldViolations": 0,
+        "unstuckTriggers": 0,
+        "unstuckActive": 0,
+        "stuckPressure": 0,
+        "flowLaneRedirects": 0,
+        "edgeRecoveries": 0,
+        "hardUnstuckTriggers": 0,
+        "leftEdgePopulation": 10,
+        "rightEdgePopulation": 2,
+        "allyCentroidX": 582.875,
+        "allyCentroidY": 501.5316666666666,
+        "rivalCentroidX": 568.524,
+        "rivalCentroidY": 237.06599999999997
+      },
+      "errors": []
+    }
+  ]
+}

@@ -613,7 +613,8 @@ export function drawArmsAndWeapon(
 export function drawAllySprite(
   ctx: CanvasRenderingContext2D,
   ally: AllyEntity,
-  time: number
+  time: number,
+  detail: 'full' | 'low' = 'full'
 ) {
   const { x, y, type, color, hp, maxHp } = ally;
   const angle = ally.facingAngle ?? Math.atan2(ally.vy, ally.vx);
@@ -632,10 +633,15 @@ export function drawAllySprite(
   // 0.5.5C: two-stage contact shadow anchors the sprite to the terrain.
   const shadowY = y + (type === 'batedor_moto' ? 7 : 7.5);
   const shadowW = type === 'batedor_moto' ? 16 : 10.5;
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
-  ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.5, shadowW + 4, 6.2, 0, 0, Math.PI * 2);ctx.fill();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.46)';
-  ctx.beginPath();ctx.ellipse(x, shadowY, shadowW, 3.6, 0, 0, Math.PI * 2);ctx.fill();
+  if (detail === 'low' && type === 'soldado_base') {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
+    ctx.beginPath(); ctx.ellipse(x, shadowY, shadowW + 1, 3.8, 0, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+    ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.5, shadowW + 4, 6.2, 0, 0, Math.PI * 2);ctx.fill();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.46)';
+    ctx.beginPath();ctx.ellipse(x, shadowY, shadowW, 3.6, 0, 0, Math.PI * 2);ctx.fill();
+  }
 
   const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
   if (drawSoldier34(ctx, {
@@ -650,7 +656,8 @@ export function drawAllySprite(
     color,
     walkDist,
     isMoving,
-    recoil: kickbackDist
+    recoil: kickbackDist,
+    detail
   })) {
     return;
   }
@@ -1008,7 +1015,8 @@ export function drawAllySprite(
 export function drawRivalSprite(
   ctx: CanvasRenderingContext2D,
   rival: RivalEntity,
-  time: number
+  time: number,
+  detail: 'full' | 'low' = 'full'
 ) {
   const { x, y, type, color, hp, maxHp, radius, factionTag } = rival;
   const angle = rival.facingAngle ?? Math.atan2(rival.vy, rival.vx);
@@ -1026,10 +1034,15 @@ export function drawRivalSprite(
 
   // 0.5.5C: same contact-shadow language as allied units.
   const shadowY = y + radius - 2;
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
-  ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.4, radius * 1.12 + 3, 6.0, 0, 0, Math.PI * 2);ctx.fill();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.46)';
-  ctx.beginPath();ctx.ellipse(x, shadowY, radius * 0.98, 3.6, 0, 0, Math.PI * 2);ctx.fill();
+  if (detail === 'low' && (type === 'soldado_pistola' || type === 'olheiro')) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
+    ctx.beginPath(); ctx.ellipse(x, shadowY, radius + 1, 3.8, 0, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+    ctx.beginPath();ctx.ellipse(x + 1.5, shadowY + 1.4, radius * 1.12 + 3, 6.0, 0, 0, Math.PI * 2);ctx.fill();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.46)';
+    ctx.beginPath();ctx.ellipse(x, shadowY, radius * 0.98, 3.6, 0, 0, Math.PI * 2);ctx.fill();
+  }
 
   const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
   if (drawSoldier34(ctx, {
@@ -1044,7 +1057,8 @@ export function drawRivalSprite(
     color,
     walkDist,
     isMoving,
-    recoil: kickbackDist
+    recoil: kickbackDist,
+    detail
   })) {
     if (type === 'chefe_morro') {
       const auraPulse = Math.sin(time * 0.008) * 3.5;

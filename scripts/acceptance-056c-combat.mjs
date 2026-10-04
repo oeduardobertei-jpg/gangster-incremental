@@ -1,7 +1,8 @@
 import { openTestSession, sleep } from './cdp-session.mjs';
+const baseUrl=process.env.BASE_URL || 'http://localhost:3000';
 import { installFixture } from './fixture-04g.mjs';
 import { writeFileSync } from 'node:fs';
-const session=await openTestSession({url:'http://localhost:3000',width:1440,height:900});
+const session=await openTestSession({url:baseUrl,width:1440,height:900});
 const results=[];
 const check=(name,ok,detail='')=>{results.push({name,passed:!!ok,detail});console.log(`${ok?'PASS':'FAIL'} | ${name} | ${detail}`)};
 const waitPerf=async()=>{for(let i=0;i<24;i++){const p=await session.evaluate('window.__GAME_PERF__');if(p)return p;await sleep(200);}return null;};

@@ -115,12 +115,59 @@ function moto(ctx: CanvasRenderingContext2D, wx: number, wy: number, dir: string
 export type Soldier34Params = {
   wx: number; wy: number; tx: number; ty: number; rot: number; angle: number;
   faction: 'CV' | 'PCC'; type: string; color: string; walkDist: number; isMoving: boolean; recoil: number;
+  detail?: 'full' | 'low';
 };
 
 export function drawSoldier34(ctx: CanvasRenderingContext2D, p: Soldier34Params): boolean {
   const role = ROLE[p.type];
   if (!role) return false;
   const o = LOOKS[p.faction][role];
+
+  // 1.1J: common infantry gets a cheaper silhouette at mass-battle zoom.
+  // Special roles always keep the authored 3/4 sprite, and zooming in disables this LOD.
+  const commonLowDetail = p.detail === 'low' &&
+    (p.type === 'soldado_base' || p.type === 'soldado_pistola' || p.type === 'olheiro');
+  if (commonLowDetail) {
+    const skin = o[0];
+    const dark = shade(p.color, .56);
+    const step = p.isMoving ? Math.sign(Math.sin(p.walkDist * .28)) * 1.25 : 0;
+    const armed = p.type !== 'olheiro';
+    ctx.save();
+    ctx.translate(p.wx, p.wy);
+    ctx.rotate(p.angle);
+
+    // Feet/legs retain motion direction while using only four compact primitives.
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(-5 + step, -4.5, 5.5, 3);
+    ctx.fillRect(-5 - step, 1.5, 5.5, 3);
+    ctx.fillStyle = '#e5e7eb';
+    ctx.fillRect(-1.2 + step, -4.2, 2.2, 2.4);
+    ctx.fillRect(-1.2 - step, 1.8, 2.2, 2.4);
+
+    // Torso + faction band are the primary mass-readability cues.
+    ctx.fillStyle = dark;
+    ctx.beginPath(); ctx.roundRect(-5.5, -5.2, 11.5, 10.4, 2.4); ctx.fill();
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-3.8, -5.2, 3.1, 10.4);
+    ctx.fillStyle = skin;
+    ctx.beginPath(); ctx.arc(5.2, 0, 4.1, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(3.4, -3.8, 4.6, 2.0);
+
+    if (armed) {
+      ctx.translate(-p.recoil, 0);
+      ctx.fillStyle = '#070a0f';
+      ctx.fillRect(3.8, -1.35, p.type === 'soldado_pistola' ? 9.5 : 11.5, 2.7);
+      ctx.fillStyle = p.color; ctx.globalAlpha = .85; ctx.fillRect(6.2, -1.65, 2.2, 3.3); ctx.globalAlpha = 1;
+    } else {
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(5.8, -1.8, 4.2, 3.6);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(7.1, -1.0, 1.4, 1.4);
+    }
+    ctx.restore();
+    return true;
+  }
   const u = 1.45, boss = p.type === 'chefe_morro' ? 1.22 : 1;
   const dx = Math.cos(p.angle), dy = Math.sin(p.angle);
   const dir = Math.abs(dy) > Math.abs(dx) * 0.9 ? (dy > 0 ? 'f' : 'b') : 's';

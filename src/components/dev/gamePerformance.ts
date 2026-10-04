@@ -3,6 +3,7 @@ export interface GamePerformance {
   avgSimulationMs: number; avgRenderMs: number; avgSteps: number;
   avgTargetSearches: number; avgProjectileChecks: number;
   avgRivalAiMs: number; avgAllyAiMs: number; avgProjectileMs: number;
+  avgSceneRenderMs: number; avgEntityRenderMs: number; avgEffectsRenderMs: number;
   allies: number; rivals: number; bullets: number; particles: number; loot: number;
   worldColliders: number; solidWorldViolations: number;
   unstuckTriggers: number; unstuckActive: number; stuckPressure: number;

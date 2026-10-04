@@ -1,5 +1,6 @@
 import { openTestSession, sleep } from './cdp-session.mjs';
-const session=await openTestSession({url:'http://localhost:3000',width:1440,height:900});
+const baseUrl=process.env.BASE_URL || 'http://localhost:3000';
+const session=await openTestSession({url:baseUrl,width:1440,height:900});
 const {evaluate}=session; const results=[];
 const check=(name,ok,detail='')=>{results.push({name,passed:!!ok,detail});console.log(`${ok?'PASS':'FAIL'} | ${name} | ${detail}`)};
 const install=async(territory,allies,rivals)=>evaluate(`(async()=>{
