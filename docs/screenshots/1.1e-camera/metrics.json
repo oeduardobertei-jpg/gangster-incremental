@@ -1,0 +1,78 @@
+{
+  "pure": {
+    "d": {
+      "centerX": 640,
+      "centerY": 350,
+      "zoom": 0.94
+    },
+    "min": 0.78,
+    "max": 2.35,
+    "stepIn": 1.12,
+    "stepOut": 0.893,
+    "small": 1.012,
+    "large": 1.155,
+    "anchorDrift": 2.842170943040401e-14,
+    "fit": {
+      "centerX": 640,
+      "centerY": 360,
+      "zoom": 0.8236111111111111
+    }
+  },
+  "runtime": {
+    "perf": {
+      "avgFrameMs": 16.683333333333334,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 7339.2,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 360,
+        "zoom": 0.8259331597222223
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 650.671875,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 59.94005994005994,
+      "avgSimulationMs": 0.01666666679084301,
+      "avgRenderMs": 3.583333333209157,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "allies": 0,
+      "rivals": 10,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 35,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 621.0599221711816,
+      "rivalCentroidY": 306.75470598235495
+    },
+    "label": "83%",
+    "canvas": {
+      "x": 13,
+      "y": 129.328125,
+      "width": 1130,
+      "height": 648.671875,
+      "top": 129.328125,
+      "right": 1143,
+      "bottom": 778,
+      "left": 13
+    }
+  }
+}

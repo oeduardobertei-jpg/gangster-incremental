@@ -1,10 +1,10 @@
 export const WORLD_WIDTH = 1280;
 export const WORLD_HEIGHT = 720;
-// 0.9.9-camera: keep tactical zoom useful instead of allowing a tiny 35% battlefield.
-// Close inspection now reaches 350%; controlled overscan keeps edge navigation from feeling hard-clamped.
-export const CAMERA_MIN_ZOOM = 0.80;
-export const CAMERA_MAX_ZOOM = 3.5;
-const CAMERA_MAX_OVERSCAN_PX = 220;
+// 1.1E Camera 2.0: useful tactical range without turning the canvas into pixel inspection.
+export const CAMERA_MIN_ZOOM = 0.78;
+export const CAMERA_DEFAULT_ZOOM = 0.94;
+export const CAMERA_MAX_ZOOM = 2.35;
+const CAMERA_MAX_OVERSCAN_PX = 150;
 
 export interface ViewportSize {
   width: number;
@@ -29,18 +29,31 @@ export interface WorldPoint {
 
 export const createDefaultCamera = (): Camera2D => ({
   centerX: WORLD_WIDTH / 2,
-  centerY: WORLD_HEIGHT / 2,
-  zoom: 1
+  // A slight upward world bias leaves more breathing room below top-left HUD overlays.
+  centerY: WORLD_HEIGHT / 2 - 10,
+  zoom: CAMERA_DEFAULT_ZOOM
 });
 
 export function clampZoom(zoom: number): number {
   return Math.min(CAMERA_MAX_ZOOM, Math.max(CAMERA_MIN_ZOOM, zoom));
 }
 
+/** Perceptual button step: equal-feeling increments at wide and close zoom. */
+export function stepCameraZoom(zoom: number, direction: -1 | 1): number {
+  const factor = direction > 0 ? 1.12 : 1 / 1.12;
+  return clampZoom(Number((zoom * factor).toFixed(3)));
+}
+
+/** Continuous wheel/trackpad curve, capped so a single noisy wheel event cannot jump the scene. */
+export function zoomFromWheelDelta(zoom: number, deltaY: number): number {
+  const exponent = Math.max(-.18, Math.min(.18, -deltaY * .0012));
+  return clampZoom(Number((zoom * Math.exp(exponent)).toFixed(3)));
+}
+
 function getPanOverscanPx(zoom: number): number {
-  if (zoom <= 1) return 0;
-  const t = Math.min(1, Math.max(0, (zoom - 1) / (CAMERA_MAX_ZOOM - 1)));
-  // Smooth growth: no leak at 100%, generous movement at tactical close zoom.
+  if (zoom <= 1.05) return 0;
+  const t = Math.min(1, Math.max(0, (zoom - 1.05) / (CAMERA_MAX_ZOOM - 1.05)));
+  // Smooth growth starts only after close inspection begins. Camera edges stay grounded near 100%.
   const eased = t * t * (3 - 2 * t);
   return CAMERA_MAX_OVERSCAN_PX * eased;
 }

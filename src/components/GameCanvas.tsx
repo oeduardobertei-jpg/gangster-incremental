@@ -91,8 +91,10 @@ import {
   fitCameraToWorld,
   panCameraByScreenDelta,
   screenToWorld,
+  stepCameraZoom,
   worldToScreen,
-  zoomCameraAtScreenPoint
+  zoomCameraAtScreenPoint,
+  zoomFromWheelDelta
 } from './canvas/camera2D';
 
 // Vite removes this import and diagnostic UI entirely from production.
@@ -587,9 +589,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
     setShowControlGuide(false);
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const factor = e.deltaY < 0 ? 1.12 : 0.89;
     setCameraZoomAt(
-      Number((cameraRef.current.zoom * factor).toFixed(3)),
+      zoomFromWheelDelta(cameraRef.current.zoom, e.deltaY),
       e.clientX - rect.left,
       e.clientY - rect.top
     );
@@ -598,13 +599,13 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
   const handleZoomIn = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     const viewport = viewportRef.current;
-    setCameraZoomAt(cameraRef.current.zoom + 0.15, viewport.width / 2, viewport.height / 2);
+    setCameraZoomAt(stepCameraZoom(cameraRef.current.zoom, 1), viewport.width / 2, viewport.height / 2);
   }, [setCameraZoomAt]);
 
   const handleZoomOut = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     const viewport = viewportRef.current;
-    setCameraZoomAt(cameraRef.current.zoom - 0.15, viewport.width / 2, viewport.height / 2);
+    setCameraZoomAt(stepCameraZoom(cameraRef.current.zoom, -1), viewport.width / 2, viewport.height / 2);
   }, [setCameraZoomAt]);
 
   const handleZoomReset = useCallback((e: React.MouseEvent) => {

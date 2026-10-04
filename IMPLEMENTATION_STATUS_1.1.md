@@ -10,7 +10,7 @@ Ordem de prioridade: **visual → movimento/IA → HUD/interface → câmera →
 - [x] 1.1B — T1 Ground / Composition
 - [x] 1.1C — T1 Architecture
 - [x] 1.1D — Crowd Movement
-- [ ] 1.1E — Camera 2.0
+- [x] 1.1E — Camera 2.0
 - [ ] 1.1F — HUD 2.0
 - [ ] 1.1G — Combat Visuals
 - [ ] 1.1H — Combat Audio
@@ -48,3 +48,9 @@ Nenhum território passa de fase até responder **sim** à pergunta: “está no
 - aceite 1.1D 11/11 PASS;
 - organic 6/6, consolidation 19/19, live domination 8/8, anchors 43/43;
 - referência: `docs/1.1D_FACTION_MASS.md`.
+## 1.1E concluída
+- zoom 78–235%, default 94%;
+- wheel contínuo e botões perceptuais;
+- overscan reduzido e framing inicial refinado;
+- aceite Camera 2.0 13/13 PASS;
+- referência: `docs/1.1E_CAMERA_2.md`.
