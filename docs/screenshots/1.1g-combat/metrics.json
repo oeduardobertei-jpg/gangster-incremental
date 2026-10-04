@@ -1,0 +1,173 @@
+[
+  {
+    "territory": 1,
+    "perf": {
+      "avgFrameMs": 16.683333333333334,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 3192.2,
+      "speed": 1,
+      "camera": {
+        "centerX": 640,
+        "centerY": 358.51063829787233,
+        "zoom": 0.94
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 59.94005994005994,
+      "avgSimulationMs": 0.4300000001986822,
+      "avgRenderMs": 4.406666666269302,
+      "avgSteps": 1,
+      "avgTargetSearches": 1.5333333333333334,
+      "avgProjectileChecks": 0.7666666666666667,
+      "avgRivalAiMs": 0.1333333329608043,
+      "avgAllyAiMs": 0.20666666738688946,
+      "avgProjectileMs": 0.044999999925494194,
+      "allies": 24,
+      "rivals": 16,
+      "bullets": 14,
+      "particles": 124,
+      "worldColliders": 35,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 2,
+      "unstuckActive": 1,
+      "stuckPressure": 1,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 542.5463255782643,
+      "allyCentroidY": 484.60120590732043,
+      "rivalCentroidX": 621.963701617831,
+      "rivalCentroidY": 242.38735069319887
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    }
+  },
+  {
+    "territory": 3,
+    "perf": {
+      "avgFrameMs": 16.683333333333334,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 3216.2,
+      "speed": 1,
+      "camera": {
+        "centerX": 640,
+        "centerY": 358.51063829787233,
+        "zoom": 0.94
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 59.94005994005994,
+      "avgSimulationMs": 0.5483333329359691,
+      "avgRenderMs": 2.8633333335320157,
+      "avgSteps": 1,
+      "avgTargetSearches": 1.9333333333333333,
+      "avgProjectileChecks": 0.75,
+      "avgRivalAiMs": 0.1849999995281299,
+      "avgAllyAiMs": 0.20833333345750968,
+      "avgProjectileMs": 0.07666666669150193,
+      "allies": 24,
+      "rivals": 17,
+      "bullets": 17,
+      "particles": 157,
+      "worldColliders": 19,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 2,
+      "unstuckActive": 1,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 555.7692231850145,
+      "allyCentroidY": 469.05759717199425,
+      "rivalCentroidX": 581.6747956730009,
+      "rivalCentroidY": 270.63484600559985
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    }
+  },
+  {
+    "territory": 6,
+    "perf": {
+      "avgFrameMs": 17.25689655172414,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 3228.6,
+      "speed": 1,
+      "camera": {
+        "centerX": 640,
+        "centerY": 358.51063829787233,
+        "zoom": 0.94
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 57.94784693775601,
+      "avgSimulationMs": 0.624137931471241,
+      "avgRenderMs": 3.108620689218414,
+      "avgSteps": 1.0344827586206897,
+      "avgTargetSearches": 1.896551724137931,
+      "avgProjectileChecks": 0.7241379310344828,
+      "avgRivalAiMs": 0.24137930995945273,
+      "avgAllyAiMs": 0.253448276684202,
+      "avgProjectileMs": 0.062068965286016464,
+      "allies": 24,
+      "rivals": 18,
+      "bullets": 12,
+      "particles": 143,
+      "worldColliders": 31,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 11,
+      "unstuckActive": 7,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 17,
+      "hardUnstuckTriggers": 1,
+      "leftEdgePopulation": 2,
+      "rightEdgePopulation": 1,
+      "allyCentroidX": 570.2347584362116,
+      "allyCentroidY": 448.6421227460481,
+      "rivalCentroidX": 622.3844516429591,
+      "rivalCentroidY": 267.0496287142685
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    }
+  }
+]

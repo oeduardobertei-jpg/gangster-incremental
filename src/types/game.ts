@@ -145,6 +145,7 @@ export interface BulletProjectile {
   dirX?: number;
   dirY?: number;
   remainingDistance?: number;
+  visualStyle?: 'pistol' | 'fuzil' | 'moto' | 'rival';
 }
 
 export type CoverObstacleType = 

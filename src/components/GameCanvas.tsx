@@ -727,10 +727,25 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
   // Add floating combat text
   const addFloatingText = useCallback((text: string, x: number, y: number, color: string) => {
     if (!showDamageNumbersRef.current) return;
-    // 0.5.6C: zero-damage and dense repeated numbers add noise but no information.
+    // 1.1G: dense faction combat aggregates nearby damage pulses instead of stacking text.
     if (/^-0(?:\D|$)/.test(text)) return;
     const numericDamage = /^-\d/.test(text);
-    if (numericDamage && floatingTextsRef.current.length > 80 && Math.random() < .55) return;
+    if (numericDamage) {
+      const amount = Number.parseInt(text.slice(1), 10);
+      const nearby = floatingTextsRef.current.find(ft =>
+        /^-\d/.test(ft.text) && ft.life > .42 && Math.hypot(ft.x - x, ft.y - y) < 20
+      );
+      if (nearby && Number.isFinite(amount)) {
+        const previous = Number.parseInt(nearby.text.slice(1), 10) || 0;
+        nearby.text = `-${Math.min(9999, previous + amount)}`;
+        nearby.opacity = 1;
+        nearby.life = Math.max(nearby.life, .72);
+        nearby.x += (x - nearby.x) * .22;
+        nearby.y = Math.min(nearby.y, y - 9);
+        return;
+      }
+      if (floatingTextsRef.current.length > 48 && Math.random() < .68) return;
+    }
     floatingTextsRef.current.push({
       id: Math.random().toString(36).substring(7),
       text,
@@ -766,21 +781,26 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
   // ==========================================
   // PARTICLE EMITTER SYSTEM
   // ==========================================
-  const addMuzzleFlash = useCallback((x: number, y: number, angle: number, color: string) => {
+  const addMuzzleFlash = useCallback((
+    x: number, y: number, angle: number, color: string,
+    style: NonNullable<BulletProjectile['visualStyle']> = 'pistol'
+  ) => {
     const particleLoad = particlesRef.current.length;
-    const sparkCount = particleLoad > 420 ? 0 : particleLoad > 280 ? 1 : particleLoad > 140 ? 2 : 4;
-    // 1. Muzzle Star Flash
+    const styleScale = style === 'fuzil' ? 1.24 : style === 'moto' ? .84 : style === 'rival' ? .94 : 1;
+    const baseSparkCount = style === 'fuzil' ? 5 : style === 'moto' ? 3 : 4;
+    const sparkCount = particleLoad > 420 ? 0 : particleLoad > 280 ? 1 : particleLoad > 140 ? Math.min(2, baseSparkCount) : baseSparkCount;
+    // 1. Weapon-class flash: same timing, different silhouette/readability.
     particlesRef.current.push({
       id: Math.random().toString(36).substring(7),
       x: x + Math.cos(angle) * 2,
       y: y + Math.sin(angle) * 2,
       vx: 0,
       vy: 0,
-      color: '#fef08a',
+      color: style === 'rival' ? '#fde68a' : '#fef08a',
       alpha: 1,
-      size: 7,
-      life: 0.08,
-      maxLife: 0.08,
+      size: 6.6 * styleScale,
+      life: style === 'fuzil' ? 0.095 : 0.078,
+      maxLife: style === 'fuzil' ? 0.095 : 0.078,
       type: 'muzzle',
       rotation: angle
     });
@@ -797,8 +817,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         vy: Math.sin(spread) * spd,
         color: Math.random() < 0.5 ? color : '#fef08a',
         alpha: 1,
-        size: 1.5 + Math.random() * 1.5,
-        life: 0.18 + Math.random() * 0.1,
+        size: (1.35 + Math.random() * 1.35) * styleScale,
+        life: (0.16 + Math.random() * 0.1) * Math.min(1.12, styleScale),
         maxLife: 0.28,
         type: 'spark',
         friction: 0.92
@@ -811,7 +831,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         id: Math.random().toString(36).substring(7), x, y,
         vx: Math.cos(angle) * .18 + (Math.random() - .5) * .12,
         vy: Math.sin(angle) * .18 - .18,
-        color: '#cbd5e1', alpha: .34, size: 2.4, life: .22, maxLife: .22,
+        color: '#cbd5e1', alpha: style === 'fuzil' ? .38 : .28, size: 2.15 * styleScale, life: .2, maxLife: .2,
         type: 'smoke', friction: .90
       });
     }
@@ -824,7 +844,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         id: Math.random().toString(36).substring(7), x, y,
         vx: Math.cos(casingAngle) * casingSpd,
         vy: Math.sin(casingAngle) * casingSpd - 0.8,
-        color: '#eab308', alpha: 0.9, size: 3, life: 0.7, maxLife: 0.7,
+        color: '#eab308', alpha: 0.82, size: 2.7 * styleScale, life: 0.62, maxLife: 0.62,
         type: 'casing', gravity: 0.15, friction: 0.94,
         rotation: Math.random() * Math.PI * 2, vRot: (Math.random() - 0.5) * 0.4
       });
@@ -2183,15 +2203,17 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                   const barrelOffset = r.type === 'atirador_fuzil' ? 22 : 12;
                   const muzzleX = r.x + Math.cos(combatAngle) * barrelOffset;
                   const muzzleY = r.y + Math.sin(combatAngle) * barrelOffset;
-                  addMuzzleFlash(muzzleX, muzzleY, combatAngle, r.color);
-                  soundEngine.playGunfireShot(r.type === 'atirador_fuzil' ? 'fuzil' : 'rival', { x: muzzleX, width });
+                  const rivalWeaponStyle: NonNullable<BulletProjectile['visualStyle']> = r.type === 'atirador_fuzil' ? 'fuzil' : 'rival';
+                  addMuzzleFlash(muzzleX, muzzleY, combatAngle, r.color, rivalWeaponStyle);
+                  soundEngine.playGunfireShot(rivalWeaponStyle, { x: muzzleX, width });
 
                   bulletsRef.current.push({
                     id: Math.random().toString(36).substring(7),
                     x: muzzleX, y: muzzleY,
                     targetX: closestAlly.x, targetY: closestAlly.y, speed: 6.5,
                     damage: r.damage * getRivalSupportDamageMultiplier(r, rivalManagers) * (r.type === 'chefe_morro' ? getBossPhaseProfile(r.maxHp > 0 ? r.hp / r.maxHp : 1).damageMultiplier : 1),
-                    source: 'rival', color: r.color, radius: 3
+                    source: 'rival', color: r.color, radius: rivalWeaponStyle === 'fuzil' ? 3.25 : 2.8,
+                    visualStyle: rivalWeaponStyle
                   });
                   r.attackTimer = r.attackCooldown * (r.type === 'chefe_morro' ? getBossPhaseProfile(r.maxHp > 0 ? r.hp / r.maxHp : 1).cooldownMultiplier : 1);
                 }
@@ -2494,9 +2516,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                 const barrelOffset = a.type === 'soldado_fuzil' ? 21 : 13;
                 const muzzleX = a.x + Math.cos(angle) * barrelOffset;
                 const muzzleY = a.y + Math.sin(angle) * barrelOffset;
-                addMuzzleFlash(muzzleX, muzzleY, angle, factionConfig.color);
-
-                const weaponSound = a.type === 'soldado_fuzil' ? 'fuzil' : (a.type === 'batedor_moto' ? 'moto' : 'pistol');
+                const weaponSound: NonNullable<BulletProjectile['visualStyle']> = a.type === 'soldado_fuzil' ? 'fuzil' : (a.type === 'batedor_moto' ? 'moto' : 'pistol');
+                addMuzzleFlash(muzzleX, muzzleY, angle, factionConfig.color, weaponSound);
                 soundEngine.playGunfireShot(weaponSound, { x: muzzleX, width });
 
                 bulletsRef.current.push({
@@ -2509,7 +2530,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                   damage: a.damage,
                   source: 'ally',
                   color: factionConfig.color,
-                  radius: 3
+                  radius: weaponSound === 'fuzil' ? 3.25 : weaponSound === 'moto' ? 2.55 : 2.8,
+                  visualStyle: weaponSound
                 });
 
                 a.attackTimer = a.attackCooldown;

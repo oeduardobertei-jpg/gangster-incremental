@@ -69,3 +69,11 @@ Nenhum territÃ³rio passa de fase atÃ© responder **sim** Ã  pergunta: â€
 - gate próprio 16/16 + combate 10/10 PASS;
 - referência: `docs/1.1H_COMBAT_AUDIO.md`.
 
+
+## 1.1G concluída
+- assinatura visual distinta por família de disparo;
+- dano flutuante agregado para combate de massa;
+- T1/T3/T6 preservam física e melhoram leitura;
+- gate 10/10 + combate 10/10 PASS;
+- referência: `docs/1.1G_COMBAT_VISUALS.md`.
+

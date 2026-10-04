@@ -1101,19 +1101,22 @@ export function drawBulletProjectile(
 ) {
   const { x, y, targetX, targetY, color, radius } = bullet;
   const angle = Math.atan2(targetY - y, targetX - x);
-  const tracerLen = 12;
+  const style = bullet.visualStyle ?? (bullet.source === 'rival' ? 'rival' : 'pistol');
+  const tracerLen = style === 'fuzil' ? 16 : style === 'moto' ? 8.5 : style === 'rival' ? 10 : 11;
+  const outerAlpha = style === 'fuzil' ? .32 : style === 'moto' ? .18 : style === 'rival' ? .22 : .25;
+  const coreScale = style === 'fuzil' ? 1.05 : style === 'moto' ? .72 : style === 'rival' ? .82 : .9;
   const backX = x - Math.cos(angle) * tracerLen;
   const backY = y - Math.sin(angle) * tracerLen;
 
-  ctx.save();ctx.lineCap='round';
-  // Faction-colored outer streak makes ownership readable without tinting the whole projectile.
-  ctx.globalAlpha=.28;ctx.strokeStyle=color;ctx.lineWidth=Math.max(2,radius*2.2);
-  ctx.beginPath();ctx.moveTo(backX,backY);ctx.lineTo(x,y);ctx.stroke();
+  ctx.save(); ctx.lineCap='round';
+  // Faction streak is deliberately restrained; weapon class is read through length/weight.
+  ctx.globalAlpha=outerAlpha; ctx.strokeStyle=color; ctx.lineWidth=Math.max(1.6,radius*1.9);
+  ctx.beginPath(); ctx.moveTo(backX,backY); ctx.lineTo(x,y); ctx.stroke();
   ctx.globalAlpha=1;
   const core=ctx.createLinearGradient(backX,backY,x,y);
-  core.addColorStop(0,'rgba(253,230,138,0)');core.addColorStop(.58,'rgba(253,230,138,.78)');core.addColorStop(1,'#ffffff');
-  ctx.strokeStyle=core;ctx.lineWidth=Math.max(1,radius*.9);
-  ctx.beginPath();ctx.moveTo(backX,backY);ctx.lineTo(x,y);ctx.stroke();
-  ctx.fillStyle='#fff7cc';ctx.beginPath();ctx.arc(x,y,Math.max(1.2,radius*.72),0,Math.PI*2);ctx.fill();
+  core.addColorStop(0,'rgba(253,230,138,0)'); core.addColorStop(.62,'rgba(253,230,138,.62)'); core.addColorStop(1,'#fffdf2');
+  ctx.strokeStyle=core; ctx.lineWidth=Math.max(.8,radius*coreScale);
+  ctx.beginPath(); ctx.moveTo(backX,backY); ctx.lineTo(x,y); ctx.stroke();
+  ctx.fillStyle='#fff7cc'; ctx.beginPath(); ctx.arc(x,y,Math.max(1,radius*.58),0,Math.PI*2); ctx.fill();
   ctx.restore();
 }

@@ -7,12 +7,12 @@
   {
     "name": "T1 combat active",
     "passed": true,
-    "detail": "bullets=3; particles=60"
+    "detail": "bullets=4; particles=61"
   },
   {
     "name": "T1 combat physics",
     "passed": true,
-    "detail": "violations=0; fps=50.0"
+    "detail": "violations=0; fps=57.9"
   },
   {
     "name": "T3 perf ready",
@@ -22,12 +22,12 @@
   {
     "name": "T3 combat active",
     "passed": true,
-    "detail": "bullets=12; particles=133"
+    "detail": "bullets=10; particles=123"
   },
   {
     "name": "T3 combat physics",
     "passed": true,
-    "detail": "violations=0; fps=41.0"
+    "detail": "violations=0; fps=53.9"
   },
   {
     "name": "T6 perf ready",
@@ -37,12 +37,12 @@
   {
     "name": "T6 combat active",
     "passed": true,
-    "detail": "bullets=12; particles=129"
+    "detail": "bullets=7; particles=100"
   },
   {
     "name": "T6 combat physics",
     "passed": true,
-    "detail": "violations=0; fps=54.9"
+    "detail": "violations=0; fps=57.9"
   },
   {
     "name": "no browser runtime errors",
