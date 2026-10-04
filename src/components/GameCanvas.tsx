@@ -29,11 +29,7 @@ import { drawBiomeDepthFoundation } from './canvas/biomeDepthRenderer';
 import { drawTerritoryAtmosphereFoundation, drawTerritoryAtmosphereUnderlay } from './canvas/atmosphereRenderer';
 import { drawArchitectureGrounding } from './canvas/architectureDepthRenderer';
 import { drawStreetLifeClusters } from './canvas/streetLifeRenderer';
-import { drawT1HeroLandmarkFoundation } from './canvas/t1HeroLandmarkRenderer';
-import { drawT1GoldFoundation } from './canvas/t1GoldFoundationRenderer';
-import { drawT1GoldOverlay } from './canvas/t1GoldOverlayRenderer';
-import { drawT1BeautyCoherence } from './canvas/t1BeautyCoherenceRenderer';
-import { drawT1ForegroundFraming, drawT1CharacterGrounding, drawT1LandmarkReadability, drawT1AtmosphericContrast, drawT1MicroBeauty } from './canvas/t1FinalPolishRenderer';
+import { drawT1StaticComposition, drawT1PreWorldOverlay, drawT1ReadabilityOverlay, drawT1UnitGrounding } from './canvas/t1SceneComposer';
 import { drawMaterialContinuity } from './canvas/materialContinuityRenderer';
 import { drawSemanticBuildingContext } from './canvas/semanticBuildingRenderer';
 import { drawTerritoryStructuralDeepFoundation } from './canvas/territoryStructuralDeepRenderer';
@@ -2902,10 +2898,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           if (![1,2,3,4].includes(currentTerritory.id)) drawGroundStoryUseZones(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
           drawAuthoredStoryClusters(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
           if (currentTerritory.id !== 1) drawStreetLifeClusters(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
-          drawT1HeroLandmarkFoundation(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
-          drawT1GoldFoundation(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
-          drawT1BeautyCoherence(layerCtx, currentTerritory.id, tacticalBuildings);
-          drawT1ForegroundFraming(layerCtx, width, height, currentTerritory.id, tacticalBuildings);
+          drawT1StaticComposition(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
           drawPurposefulPropsFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor, territoryDominated ? factionConfig.tag : factionConfig.rivalTag);
         }
         staticMapCanvasRef.current = layer;
@@ -2915,15 +2908,13 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         ctx.drawImage(staticMapCanvasRef.current, 0, 0, width, height);
       }
       drawCityVivaAmbientOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
-      drawT1GoldOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor, visualLoadZoom);
+      drawT1PreWorldOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor, visualLoadZoom);
       drawTerritoryPolishOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
       drawTerritoryAtmosphereUnderlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor, {
         left: visibleLeft, right: visibleRight, top: visibleTop, bottom: visibleBottom
       });
       drawWorldDensityOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
-      drawT1AtmosphericContrast(ctx, width, height, currentTerritory.id, visualLoadZoom);
-      drawT1LandmarkReadability(ctx, width, height, currentTerritory.id, tacticalBuildings, visualLoadZoom);
-      drawT1MicroBeauty(ctx, width, height, currentTerritory.id, currentTime, visualLoadZoom);
+      drawT1ReadabilityOverlay(ctx, width, height, currentTerritory.id, tacticalBuildings, currentTime, visualLoadZoom);
 
       // 2. Ground bullet marks & blood stains
       groundMarksRef.current.forEach(gm => {
@@ -3048,12 +3039,12 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           case 'fallen': drawFallenSprite(ctx, item.entity as FallenEntity, currentTime); break;
           case 'ally': {
             const ally = item.entity as AllyEntity;
-            drawT1CharacterGrounding(ctx,currentTerritory.id,ally.x,ally.y,10,false,currentTime,visualLoadZoom);
+            drawT1UnitGrounding(ctx,currentTerritory.id,ally.x,ally.y,10,false,currentTime,visualLoadZoom);
             drawAllySprite(ctx, ally, currentTime); break;
           }
           case 'rival': {
             const rival = item.entity as RivalEntity;
-            drawT1CharacterGrounding(ctx,currentTerritory.id,rival.x,rival.y,rival.radius,true,currentTime,visualLoadZoom);
+            drawT1UnitGrounding(ctx,currentTerritory.id,rival.x,rival.y,rival.radius,true,currentTime,visualLoadZoom);
             if (rival.type === 'gerente_boca') {
               const pulse = .5 + .5 * Math.sin(currentTime * .004 + rival.x * .01);
               ctx.save(); ctx.strokeStyle = `${factionConfig.rivalColor}${pulse > .5 ? '55' : '33'}`;

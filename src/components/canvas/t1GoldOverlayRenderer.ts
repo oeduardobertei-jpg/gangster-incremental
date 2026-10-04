@@ -6,14 +6,6 @@ const lightPool=(ctx:CanvasRenderingContext2D,x:number,y:number,r:number,a:numbe
   g.addColorStop(.42,`rgba(245,158,11,${a*.26})`);g.addColorStop(1,'rgba(245,158,11,0)');
   ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
 };
-const laundry=(ctx:CanvasRenderingContext2D,x1:number,y1:number,x2:number,y2:number,time:number,phase:number)=>{
-  const sway=Math.sin(time*.0022+phase)*2.2;
-  ctx.strokeStyle='rgba(203,213,225,.18)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo((x1+x2)/2,(y1+y2)/2+5+sway,x2,y2);ctx.stroke();
-  const cols=['#c56f42','#4d88a7','#d5b84d'];
-  for(let i=0;i<3;i++){const t=.25+i*.22,x=x1+(x2-x1)*t,y=y1+(y2-y1)*t+3+sway*(.45+i*.15);ctx.fillStyle=cols[i];ctx.globalAlpha=.70;ctx.fillRect(x-3,y,7,6);}
-  ctx.globalAlpha=1;
-};
-
 const drawAmbientLife=(ctx:CanvasRenderingContext2D,w:number,h:number,time:number,quality:number)=>{
   // 0.9.5F: movimento mínimo; a rua parece viva sem competir com combate.
   const pulse=.72+.28*Math.sin(time*.0057);
