@@ -77,3 +77,11 @@ Nenhum territÃ³rio passa de fase atÃ© responder **sim** Ã  pergunta: â€
 - gate 10/10 + combate 10/10 PASS;
 - referência: `docs/1.1G_COMBAT_VISUALS.md`.
 
+
+## 1.1I concluída
+- 26 chamadas ambientais diretas do GameCanvas reduzidas a 2 contratos;
+- pipeline estático/dinâmico centralizado sem alterar ordem visual;
+- organic pathing 6/6 e anchors 43/43 PASS;
+- T1 inspecionado após refactor;
+- referência: `docs/1.1I_RENDERER_CLEANUP.md`.
+

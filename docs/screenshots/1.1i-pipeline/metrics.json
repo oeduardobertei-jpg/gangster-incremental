@@ -1,0 +1,15 @@
+{
+  "focus": true,
+  "reset": true,
+  "canvas": {
+    "x": 13,
+    "y": 122,
+    "width": 1130,
+    "height": 672,
+    "top": 122,
+    "right": 1143,
+    "bottom": 794,
+    "left": 13
+  },
+  "errors": []
+}

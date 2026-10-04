@@ -20,27 +20,9 @@ import { getTerritoryVisualProfile } from '../data/territoryVisuals';
 import { getTerritoryScene } from '../data/territoryScenes';
 import { getTerritoryPurposeProps, type PurposeProp } from '../data/territoryPurposeProps';
 import { getCampaignExternalEntries, getTerritoryCampaignProfile } from '../data/territoryCampaigns';
-import { drawCityVivaAmbientOverlay, drawCityVivaMinimapFoundation, drawTerritorySceneFoundation } from './canvas/environmentRenderer';
-import { drawPurposefulPropsFoundation, drawPurposefulPropsOcclusion, drawPurposefulArchitecture, drawPurposefulDepthProp, isArchitecturalPurposeProp, isDepthSortedPurposeProp } from './canvas/purposefulPropsRenderer';
-import { drawTerritoryPolishFoundation, drawTerritoryPolishOverlay } from './canvas/polishRenderer';
-import { drawWorldDensityFoundation, drawWorldDensityOverlay } from './canvas/worldDensityRenderer';
-import { drawBrazilianContextFoundation } from './canvas/brazilianContextRenderer';
-import { drawBiomeDepthFoundation } from './canvas/biomeDepthRenderer';
-import { drawTerritoryAtmosphereFoundation, drawTerritoryAtmosphereUnderlay } from './canvas/atmosphereRenderer';
-import { drawArchitectureGrounding } from './canvas/architectureDepthRenderer';
-import { drawStreetLifeClusters } from './canvas/streetLifeRenderer';
-import { drawT1StaticComposition, drawT1PreWorldOverlay, drawT1ReadabilityOverlay, drawT1UnitGrounding } from './canvas/t1SceneComposer';
-import { drawMaterialContinuity } from './canvas/materialContinuityRenderer';
-import { drawSemanticBuildingContext } from './canvas/semanticBuildingRenderer';
-import { drawTerritoryStructuralDeepFoundation } from './canvas/territoryStructuralDeepRenderer';
-import { drawFunctionalBuildingAccess } from './canvas/accessCirculationRenderer';
-import { drawGroundStoryUseZones } from './canvas/groundStoryRenderer';
-import { drawAuthoredStoryClusters } from './canvas/environmentStoryRenderer';
-import { drawUrbanMoodFoundation } from './canvas/urbanMoodRenderer';
-import { drawVegetationNeglect } from './canvas/vegetationNeglectRenderer';
-import { drawMaterialHarmonizationGround } from './canvas/materialHarmonizationRenderer';
-import { drawCariocaDistrictFoundation, drawCariocaGroundIntegration } from './canvas/cariocaIdentityRenderer';
-import { drawUnifiedTerritoryComposition, getUnifiedSupportSolids, drawUnifiedContextArchitecture, type UnifiedSupportSolid } from './canvas/unifiedTerritoryComposer';
+import { drawPurposefulPropsOcclusion, drawPurposefulArchitecture, drawPurposefulDepthProp, isArchitecturalPurposeProp, isDepthSortedPurposeProp } from './canvas/purposefulPropsRenderer';
+import { drawT1UnitGrounding } from './canvas/t1SceneComposer';
+import { getUnifiedSupportSolids, drawUnifiedContextArchitecture, type UnifiedSupportSolid } from './canvas/unifiedTerritoryComposer';
 import { drawCityVivaBuildingSkin } from './canvas/buildingSkins';
 import { drawCommandBaseProgression } from './canvas/worldProgressionVisuals';
 import { getBaseCommandVisualProfile, type BaseCommandVisualProfile } from '../rules/baseCommandVisualProgression';
@@ -67,7 +49,6 @@ import { applyUnstuckNavigation } from '../rules/unstuck';
 import { applyBlockedTargetDetour } from '../rules/pathing';
 import { applyTerritoryEdgeRecovery, countTerritoryEdgePopulation, selectDecongestedExternalEntry } from '../rules/crowdFlow';
 import {
-  drawFavelaTileset,
   createDefaultObstacles,
   drawCoverObstacle,
   drawFallenSprite,
@@ -76,6 +57,8 @@ import {
   getTacticalBuildings,
   TacticalBuilding
 } from './canvas/favelaRenderer';
+import { drawCityVivaMinimapFoundation } from './canvas/environmentRenderer';
+import { drawStaticTerritoryScene, drawTerritoryEnvironmentOverlays } from './canvas/territoryScenePipeline';
 import {
   drawAllySprite,
   drawRivalSprite
@@ -2913,35 +2896,16 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         layer.height = height;
         const layerCtx = layer.getContext('2d');
         if (layerCtx) {
-          const renderedByCityViva = drawTerritorySceneFoundation(
-            layerCtx, width, height, currentTerritory.id, factionConfig, territoryDominated, tacticalBuildings
-          );
-          if (!renderedByCityViva) {
-            drawFavelaTileset(layerCtx, width, height, currentTerritory.id, factionConfig, 0, false, false);
-          }
-          if (![1,4].includes(currentTerritory.id)) drawCariocaDistrictFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor);
-          drawUnifiedTerritoryComposition({ ctx:layerCtx, width, height, territoryId:currentTerritory.id, buildings:tacticalBuildings, controlColor:environmentControlColor });
-          if (![2,3,4].includes(currentTerritory.id)) drawTerritoryPolishFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor);
-          if (![1,2,3].includes(currentTerritory.id)) drawWorldDensityFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor, tacticalBuildings);
-          if (![1,3,4].includes(currentTerritory.id)) drawBrazilianContextFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor);
-          if (![1,4].includes(currentTerritory.id)) drawBiomeDepthFoundation(layerCtx, width, height, currentTerritory.id);
-          drawTerritoryAtmosphereFoundation(
-            layerCtx, width, height, currentTerritory.id, environmentControlColor, tacticalBuildings
-          );
-          drawUrbanMoodFoundation(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
-          if (![1,2,3,4].includes(currentTerritory.id)) drawArchitectureGrounding(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
-          if (![1,3,4].includes(currentTerritory.id)) tacticalBuildings.forEach(building => drawCariocaGroundIntegration(layerCtx, building, currentTerritory.id, environmentControlColor));
-          if (![1,2,3,4].includes(currentTerritory.id)) drawTerritoryStructuralDeepFoundation(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
-          if (![1,2,3,4].includes(currentTerritory.id)) drawMaterialHarmonizationGround(layerCtx, tacticalBuildings, currentTerritory.id);
-          drawVegetationNeglect(layerCtx, tacticalBuildings, currentTerritory.id);
-          if (![1,2,3,4].includes(currentTerritory.id)) drawMaterialContinuity(layerCtx, tacticalBuildings, currentTerritory.id);
-          drawSemanticBuildingContext(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor, width, height);
-          if (![1,2,3,4].includes(currentTerritory.id)) drawFunctionalBuildingAccess(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor, width, height);
-          if (![1,2,3,4].includes(currentTerritory.id)) drawGroundStoryUseZones(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
-          drawAuthoredStoryClusters(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
-          if (currentTerritory.id !== 1) drawStreetLifeClusters(layerCtx, tacticalBuildings, currentTerritory.id, environmentControlColor);
-          drawT1StaticComposition(layerCtx, width, height, currentTerritory.id, tacticalBuildings, environmentControlColor);
-          drawPurposefulPropsFoundation(layerCtx, width, height, currentTerritory.id, environmentControlColor, territoryDominated ? factionConfig.tag : factionConfig.rivalTag);
+          drawStaticTerritoryScene({
+            ctx: layerCtx,
+            width,
+            height,
+            territoryId: currentTerritory.id,
+            factionConfig,
+            territoryDominated,
+            buildings: tacticalBuildings,
+            controlColor: environmentControlColor
+          });
         }
         staticMapCanvasRef.current = layer;
         staticMapKeyRef.current = staticMapKey;
@@ -2949,14 +2913,17 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       if (staticMapCanvasRef.current) {
         ctx.drawImage(staticMapCanvasRef.current, 0, 0, width, height);
       }
-      drawCityVivaAmbientOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
-      drawT1PreWorldOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor, visualLoadZoom);
-      drawTerritoryPolishOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
-      drawTerritoryAtmosphereUnderlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor, {
-        left: visibleLeft, right: visibleRight, top: visibleTop, bottom: visibleBottom
+      drawTerritoryEnvironmentOverlays({
+        ctx,
+        width,
+        height,
+        territoryId: currentTerritory.id,
+        time: currentTime,
+        controlColor: environmentControlColor,
+        buildings: tacticalBuildings,
+        renderZoom: visualLoadZoom,
+        visibleBounds: { left: visibleLeft, right: visibleRight, top: visibleTop, bottom: visibleBottom }
       });
-      drawWorldDensityOverlay(ctx, width, height, currentTerritory.id, currentTime, environmentControlColor);
-      drawT1ReadabilityOverlay(ctx, width, height, currentTerritory.id, tacticalBuildings, currentTime, visualLoadZoom);
 
       // 2. Ground bullet marks & blood stains
       groundMarksRef.current.forEach(gm => {
