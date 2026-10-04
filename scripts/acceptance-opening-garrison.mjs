@@ -4,6 +4,19 @@ const expected = new Map([[1,10],[2,14],[3,18],[4,22],[5,26],[6,30]]);
 const session = await openTestSession();
 const { evaluate } = session;
 const results = [];
+const isNavigationRace = error => /Inspected target navigated or closed|Execution context was destroyed|Cannot find context/i.test(error?.message || '');
+const evaluateReady = async (expression, attempts=35) => {
+  let lastError;
+  for (let i=0; i<attempts; i++) {
+    try { return await evaluate(expression); }
+    catch (error) {
+      if (!isNavigationRace(error)) throw error;
+      lastError = error;
+      await sleep(100);
+    }
+  }
+  throw lastError ?? new Error('CDP context did not become ready');
+};
 const check = (name, ok, detail='') => {
   results.push({ name, passed: Boolean(ok), detail });
   console.log(`${ok ? 'PASS' : 'FAIL'} | ${name} | ${detail}`);
@@ -12,7 +25,7 @@ const check = (name, ok, detail='') => {
 const readField = async territory => {
   let field = { rivals:-1, allies:-1, hud:'' };
   for (let i=0; i<35; i++) {
-    field = await evaluate(`({rivals:window.__GAME_PERF__?.rivals ?? -1,allies:window.__GAME_PERF__?.allies ?? -1,hud:document.querySelector('.battle-hud')?.innerText ?? ''})`);
+    field = await evaluateReady(`({rivals:window.__GAME_PERF__?.rivals ?? -1,allies:window.__GAME_PERF__?.allies ?? -1,hud:document.querySelector('.battle-hud')?.innerText ?? ''})`);
     if (field.rivals >= 0 && field.allies >= 0 && field.hud.includes(`T${territory}`)) return field;
     await sleep(100);
   }
@@ -56,7 +69,7 @@ try {
   })()`);
   let advanceReady = false;
   for (let i=0; i<35; i++) {
-    advanceReady = await evaluate(`!!document.querySelector('.battle-advance')`);
+    advanceReady = await evaluateReady(`!!document.querySelector('.battle-advance')`);
     if (advanceReady) break;
     await sleep(100);
   }
@@ -80,7 +93,7 @@ try {
   let starterField = await readField(2);
   for (let i=0; i<35 && starterField.allies !== 4; i++) {
     await sleep(100);
-    starterField = await evaluate(`({rivals:window.__GAME_PERF__?.rivals ?? -1,allies:window.__GAME_PERF__?.allies ?? -1,hud:document.querySelector('.battle-hud')?.innerText ?? ''})`);
+    starterField = await evaluateReady(`({rivals:window.__GAME_PERF__?.rivals ?? -1,allies:window.__GAME_PERF__?.allies ?? -1,hud:document.querySelector('.battle-hud')?.innerText ?? ''})`);
   }
   check(
     'Hegemony starter-gang talent is the only free-entry exception',

@@ -36,9 +36,35 @@ export async function openTestSession({ url = 'http://localhost:3000', width = 1
     ({ targetId } = await command('Target.createTarget', { url: 'about:blank', browserContextId: contextId }, null));
     ({ sessionId } = await command('Target.attachToTarget', { targetId, flatten: true }, null));
     const send = (method, params = {}) => command(method, params);
+    const waitForGameRemount = async () => {
+      for (let i = 0; i < 60; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        try {
+          const probe = await send('Runtime.evaluate', {
+            expression: "document.readyState !== 'loading' && !!document.querySelector('canvas')",
+            returnByValue: true,
+            awaitPromise: true
+          });
+          if (probe.result?.value) return;
+        } catch {}
+      }
+      throw new Error('Game did not remount after reload');
+    };
     const evaluate = async expression => {
-      const result = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+      const triggersReload = expression.includes('location.reload()');
+      let result;
+      try {
+        result = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+      } catch (error) {
+        const expectedReloadRace = triggersReload && /Inspected target navigated or closed|Execution context was destroyed|Cannot find context/i.test(error?.message || '');
+        if (expectedReloadRace) {
+          await waitForGameRemount();
+          return undefined;
+        }
+        throw error;
+      }
       if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
+      if (triggersReload) await waitForGameRemount();
       return result.result.value;
     };
     await send('Runtime.enable'); await send('Page.enable');

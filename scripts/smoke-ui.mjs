@@ -13,7 +13,7 @@ const getSave = () => evaluate(`(() => { const raw=localStorage.getItem('faction
 const results = [];
 const record = (name, ok, detail='') => results.push([name, Boolean(ok), detail]);
 const bodyText = await evaluate('document.body.innerText');
-record('load', bodyText.includes('Guerra de Fac') && bodyText.includes('Convocar Soldado / Recruta'));
+record('load', bodyText.includes('Guerra de Fac') && bodyText.includes('CONVOCAR REFOR\u00c7O'));
 record('open settings baseline', await clickTitle('Salvamento'));
 await sleep(80);
 record('save baseline', await clickText('Salvar Agora'));
@@ -21,7 +21,7 @@ await sleep(80);
 const before = await getSave();
 record('modal pauses', before?.gameSpeed === 0, `speed=${before?.gameSpeed}`);
 await closeModal(); await sleep(40);
-record('recruit button', await clickText('Convocar Soldado / Recruta'));
+record('recruit button', await evaluate(`(() => { const b=document.querySelector('.hud-recruit-command'); if(!(b instanceof HTMLButtonElement) || b.disabled) return false; b.click(); return true; })()`));
 await sleep(40);
 record('open settings after recruit', await clickTitle('Salvamento'));
 await sleep(80);
@@ -83,7 +83,13 @@ await evaluate(`(() => {
 })()`);
 await sleep(1200);
 const milestoneText = await evaluate('document.body.innerText');
-record('D4 milestone grants auto recruit', milestoneText.includes('Auto-Convocar') && !milestoneText.includes('Auto-Convocação: 100/100'));
+let milestoneUnlocked = false;
+for(let attempt=0; attempt<20; attempt++){
+  milestoneUnlocked = await evaluate(`Boolean(document.querySelector('button[title=\"Convoca\u00e7\u00e3o autom\u00e1tica\"]'))`);
+  if(milestoneUnlocked) break;
+  await sleep(100);
+}
+record('D4 milestone grants auto recruit', milestoneUnlocked, `unlocked=${milestoneUnlocked}`);
 record('open sindicato after milestone', await clickText('Sindicato'));
 await sleep(100);
 sindicatoText = await evaluate('document.body.innerText');
@@ -113,14 +119,18 @@ await evaluate(`(() => {
   localStorage.setItem(key, JSON.stringify(s)); location.reload(); return true;
 })()`);
 await sleep(1200);
-record('prepared advanced run before prestige', (await evaluate('document.body.innerText')).includes('Auto-Convocar'));
+const preparedState = await getSave();
+record('prepared advanced run before prestige', (preparedState?.upgrades?.sindicato_auto_recruit || 0) === 1 && preparedState?.autoRecruitFallen === true, `level=${preparedState?.upgrades?.sindicato_auto_recruit||0}; auto=${preparedState?.autoRecruitFallen}`);
 record('open hegemony for reset test', await clickText('Hegemonia'));
 await sleep(80);
 record('perform hegemony reset', await clickText('Proclamar Hegemonia'));
 await sleep(250);
 const postPrestigeText = await evaluate('document.body.innerText');
-record('hegemony resets auto recruit progress', postPrestigeText.includes('Auto-Convocação: 0/100'));
-record('hegemony returns to territory 1', postPrestigeText.includes('Beco dos Descalços'));
+record('hegemony returns to territory 1', postPrestigeText.includes('Beco dos Descal\u00e7os'));
+await clickTitle('Salvamento'); await sleep(80); await clickText('Salvar Agora'); await sleep(80);
+const postPrestigeState = await getSave();
+record('hegemony resets auto recruit progress', (postPrestigeState?.upgrades?.sindicato_auto_recruit || 0) === 0 && postPrestigeState?.autoRecruitFallen === false && postPrestigeState?.runRivalsNeutralized === 0, `level=${postPrestigeState?.upgrades?.sindicato_auto_recruit||0}; auto=${postPrestigeState?.autoRecruitFallen}; neutralized=${postPrestigeState?.runRivalsNeutralized}`);
+await closeModal(); await sleep(80);
 record('open reset territory map', await clickText('Beco dos Descal'));
 await sleep(100);
 const resetZoneText = await evaluate('document.body.innerText');

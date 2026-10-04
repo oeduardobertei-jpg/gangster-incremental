@@ -1,21 +1,23 @@
 # HANDOFF — estado operacional
 
 ## Estado do produto
-Base ativa: **1.0.0 GOLD — campanha territorial física estabilizada**.
-A 1.0.0 consolida a captura física T1–T6, corrige QG Central/T5, preserva domínio in-place, fecha DOMÍNIO TOTAL e passa o Gold Gate: 19/19 suites RC + 66/66 smoke UI/save/Hegemonia.
+Base ativa: **1.1.0 GOLD — Definitive Polish T1–T6**.
+A 1.1.0 preserva a campanha territorial da 1.0 e reconstrói sua apresentação: T1→T6 reautorizados, movimento de massa, Câmera 2.0, HUD 2.0, combate audiovisual, pipeline de render e performance estabilizados. Gold Gate final: **32/32 suites RC + 66/66 smoke**, exit code 0.
 
-## Gate 1.0 GOLD
+## Gate 1.1 GOLD
 - `npm run qa:gold` é o gate canônico de release.
-- 36/36 pontos de captura T1–T6 comprovadamente ocupáveis.
-- QG Central legado migra automaticamente para âncora acessível.
-- Consolidação 6/6 não empurra mais tropas para a borda norte.
-- RC: 19/19 suites; smoke: 66/66; layout: 69/69.
+- Anchors T1–T6: **43/43 PASS**.
+- Campanha transversal 1.1P: **37/37 PASS**.
+- T5/T6 polish: **15/15 + 15/15 PASS**.
+- Performance 1.1J: **16/16 PASS**; LOD de massa preserva especiais/chefes.
+- RC: **32/32**; smoke UI/save/Hegemonia: **66/66**.
+- Bundle final: **243,3 KiB JS gzip / 275 KiB**; CSS **13,1 KiB / 20 KiB**.
 
 ## Ambiente correto
-- Projeto: `C:\Users\Eduardo Bertei\Downloads\gangster-incremental-0.9.3b\gangster-incremental-0.9.5T-final`
-- Dev server atual: `http://127.0.0.1:3000/`.
-- Capturas atuais do rollback: `docs/screenshots/t1-pre0910a/`; checkpoints T2/T4 permanecem preservados.
-- Layer CLI autenticada no workspace `eduardo-b-workspace`; saldo observado: 0 Creative Units.
+- Working tree de release: `C:\Users\Eduardo Bertei\Downloads\gangster-incremental-1.0.0-github`.
+- Branch de desenvolvimento: `dev/1.1-definitive-polish`.
+- Dev server de validação 1.1: `http://127.0.0.1:3001/`.
+- Chrome de QA isolado: perfil descartável `C:\Temp\chrome-debug-9237`, CDP `9237`; o runner o reinicia entre blocos pesados.
 
 ## Regras críticas preservadas
 - Novo território começa com 0 aliados, exceto Hegemonia de tropa inicial.
