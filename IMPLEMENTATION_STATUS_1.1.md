@@ -121,3 +121,10 @@ Nenhum território passa de fase até responder **sim** Ã  pergunta: “está 
 - volumes secund?rios passam a ter pap?is visuais distintos e os landmarks principais recebem acabamento pr?prio;
 - gate T5 15/15, organic pathing 6/6 e anchors 43/43 PASS;
 - refer?ncia: `docs/1.1N_T5_POLISH.md`.
+
+## 1.1O conclu?da
+- T6 recomposto como complexo de comando com setores funcionais e hierarquia central clara;
+- portais, paredes, checkpoints e anchors f?sicos foram preservados sem altera??o;
+- QG Central e os demais landmarks recebem identidade arquitet?nica pr?pria;
+- gates: T6 15/15, organic 6/6, anchors 43/43, captura cr?tica 8/8 e live domination 8/8 PASS;
+- refer?ncia: `docs/1.1O_T6_POLISH.md`.

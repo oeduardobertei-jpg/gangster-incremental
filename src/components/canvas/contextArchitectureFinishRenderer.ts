@@ -203,12 +203,28 @@ const finishT5=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlCo
   }
   if(renderZoom>=.95){rect(ctx,right?b.x+b.w-16:b.x+6,facadeY+height-17,10,6,'#334155','#cbd5e1');}
 };
-const finishT6=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a;
+const finishT6=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a,n=norm(a.role);
+  const right=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0)%2===0;
   rect(ctx,b.x+5,facadeY+height-6,b.w-10,3,'rgba(15,23,42,.52)');
-  const trunkX=b.x+7;line(ctx,trunkX,roofY+6,trunkX,facadeY+height-5,'#58636c',2);
-  const right=[...b.id].reduce((a,c)=>a+c.charCodeAt(0),0)%2===0;rect(ctx,right?b.x+b.w-17:b.x+7,facadeY+7,10,10,'#171d22','#7a8286');
-  if(renderZoom>=.95){for(let y=facadeY+9;y<facadeY+15;y+=3)line(ctx,b.x+b.w-15,y,b.x+b.w-9,y,'#64748b');
-    rect(ctx,b.x+10,roofY+7,12,5,'#202833','#64748b');ctx.fillStyle=controlColor;ctx.globalAlpha=.42;ctx.fillRect(b.x+12,roofY+9,5,2);ctx.globalAlpha=1;}
+  if(n.includes('operacoes')){
+    rect(ctx,b.x+6,facadeY+7,b.w-12,11,'#17232c','#657681');
+    for(let x=b.x+10;x<b.x+b.w-10;x+=11)rect(ctx,x,facadeY+10,6,4,'rgba(96,165,250,.30)');
+  }else if(n.includes('comunicacoes')){
+    const mx=right?b.x+b.w-8:b.x+8;line(ctx,mx,roofY+6,mx,roofY-10,'#7c8992',1.5);
+    rect(ctx,b.x+7,facadeY+8,b.w-14,9,'#17202a','#62717a');
+    rect(ctx,mx-3,roofY-12,6,3,controlColor);
+  }else if(n.includes('logistico')){
+    rect(ctx,b.x+6,facadeY+height-17,b.w-12,11,'#30363b','#69737a');
+    for(let x=b.x+10;x<b.x+b.w-8;x+=9)line(ctx,x,facadeY+height-16,x,facadeY+height-7,'rgba(203,213,225,.16)',.7);
+  }else if(n.includes('guarda interna')){
+    rect(ctx,b.x+7,facadeY+7,b.w-14,10,'#141b21','#5f6b73');
+    rect(ctx,b.x+10,facadeY+10,b.w-20,4,'rgba(113,131,138,.55)');
+    rect(ctx,b.x+7,facadeY+7,b.w-14,2,controlColor);
+  }else{
+    const trunkX=b.x+7;line(ctx,trunkX,roofY+6,trunkX,facadeY+height-5,'#58636c',2);
+    rect(ctx,right?b.x+b.w-17:b.x+7,facadeY+7,10,10,'#171d22','#7a8286');
+  }
+  if(renderZoom>=.95){rect(ctx,b.x+10,roofY+7,12,5,'#202833','#64748b');ctx.fillStyle=controlColor;ctx.globalAlpha=.38;ctx.fillRect(b.x+12,roofY+9,5,2);ctx.globalAlpha=1;}
 };
 
 export function drawContextArchitectureFinish(args:Args){

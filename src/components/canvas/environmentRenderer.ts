@@ -8,6 +8,7 @@ import { drawT2ReauthoredSurface } from './t2RailGroundReauthorRenderer';
 import { drawT3ReauthoredSurface } from './t3IndustrialGroundReauthorRenderer';
 import { drawT4ReauthoredSurface } from './t4GroundReauthorRenderer';
 import { drawT5ReauthoredSurface } from './t5GatedGroundReauthorRenderer';
+import { drawT6ReauthoredSurface } from './t6CentralGroundReauthorRenderer';
 
 type ReservedFootprint = { x:number; y:number; w:number; h:number };
 
@@ -473,65 +474,12 @@ function drawGatedDistrictScene(ctx: CanvasRenderingContext2D, width: number, he
 function drawCentralHqScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(6);
   drawLivingGroundFoundation(ctx, width, height, 6, controlColor);
-
-  // Eixo axial, checkpoint e pÃƒÂ¡tio interno.
-  scene.paths.forEach((path,index) => { drawScenePath(ctx, path, width, height); drawScenePathWear(ctx, path, width, height, 6, index); });
-  ctx.fillStyle='rgba(63,68,74,.16)';
-  ctx.fillRect(width*.325,height*.06,width*.35,height*.88);
-  ctx.strokeStyle='rgba(148,163,184,.10)';ctx.strokeRect(width*.335,height*.07,width*.33,height*.86);
-  // Perimetro segmentado: dois portais laterais impedem tropas prensadas fora do QG.
-  for(const x of [.325,.657]){
-    const px=width*x;
-    for(const [yRatio,hRatio] of [[.06,.30],[.46,.16],[.72,.22]] as const){
-      const py=height*yRatio, ph=height*hRatio;
-      ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(px+6,py+6,16,ph);
-      ctx.fillStyle='#30333a';ctx.fillRect(px,py,16,ph);
-      ctx.fillStyle=colorWithAlpha(controlColor,.30);ctx.fillRect(px,py,2,ph);
-      for(let y=py+20;y<py+ph;y+=48){ctx.fillStyle='#111827';ctx.fillRect(px-3,y,22,6);}
-    }
-    for(const gateY of [.41,.67]){
-      ctx.strokeStyle=colorWithAlpha(controlColor,.55);ctx.lineWidth=2;
-      ctx.strokeRect(px-5,height*gateY-18,26,36);
-    }
-  }
-
-  // Checkpoints sucessivos: duas barreiras sÃƒÂ³lidas com corredor central deliberado.
-  for(const y of [.78,.54,.31]){
-    for(const [x,w] of [[.34,.11],[.55,.11]] as const){
-      const bx=width*x, by=height*y, bw=width*w;
-      ctx.fillStyle='rgba(0,0,0,.42)';ctx.fillRect(bx+5,by+7,bw,16);
-      ctx.fillStyle='#343036';ctx.fillRect(bx,by,bw,16);
-      ctx.fillStyle='rgba(226,232,240,.26)';ctx.fillRect(bx,by,bw,3);
-      for(let xx=bx+8;xx<bx+bw-5;xx+=22){ctx.fillStyle=colorWithAlpha(controlColor,.45);ctx.fillRect(xx,by+6,6,3);}
-    }
-    ctx.strokeStyle='rgba(148,163,184,.10)';
-    ctx.strokeRect(width*.45,height*y,width*.10,16);
-  }
-
-  // 0.5.6B.1: the old HQ mass becomes a ground command apron when a physical QG owns this footprint.
-  const hqY=height*.11, hqX=width*.39, hqW=width*.22, hqH=112;
-  if (!overlapsReserved(hqX,hqY,hqW,hqH,reserved,34)) {
-    ctx.fillStyle='rgba(0,0,0,.42)';ctx.fillRect(hqX+12,hqY+14,hqW,122);
-    ctx.fillStyle='#18202b';ctx.fillRect(hqX,hqY,hqW,hqH);
-    ctx.fillStyle='#222c38';ctx.fillRect(width*.34,hqY+34,width*.08,74);ctx.fillRect(width*.58,hqY+34,width*.08,74);
-    ctx.strokeStyle=controlColor;ctx.lineWidth=3;ctx.strokeRect(hqX,hqY,hqW,hqH);
-    ctx.fillStyle='#242029';ctx.fillRect(width*.47,hqY+58,width*.06,54);
-  } else {
-    ctx.fillStyle='rgba(38,45,52,.20)';ctx.fillRect(width*.36,hqY,width*.28,126);
-    ctx.strokeStyle='rgba(148,163,184,.14)';ctx.strokeRect(width*.36,hqY,width*.28,126);
-    ctx.fillStyle=colorWithAlpha(controlColor,.16);ctx.fillRect(width*.475,hqY+112,width*.05,4);
-  }
-
-  // 0.9.1D: decorative ghost towers retired; all architecture now shares physical/context pipeline.
-
-  // Gold pass: only short physical floor joints remain; no schematic guide lines.
-  ctx.strokeStyle='rgba(226,232,240,.07)';ctx.lineWidth=1;
-  for(const [x1,y,x2] of [[.40,.40,.47],[.53,.68,.60]] as const){ctx.beginPath();ctx.moveTo(width*x1,height*y);ctx.lineTo(width*x2,height*y);ctx.stroke();}
+  // 1.1O: visual command hierarchy is reauthored without changing validated T6 collider geometry.
+  drawT6ReauthoredSurface(ctx, width, height, scene.paths, reserved, controlColor);
   drawLivingGroundOverlay(ctx, width, height, 6, controlColor);
   drawPurposefulGroundTexture(ctx, width, height, 6, controlColor);
   drawDistrictGroundStory(ctx, width, height, 6, controlColor);
-
-  drawSceneTitle(ctx,width,height,`COMPLEXO CENTRAL Ã¢â‚¬Â¢ QUARTEL-GENERAL Ã‚Â· ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`COMPLEXO CENTRAL ? QUARTEL-GENERAL ? ${controlTag}`,scene.subtitle,controlColor);
 }
 export function drawCityVivaMinimapFoundation(
   ctx: CanvasRenderingContext2D,

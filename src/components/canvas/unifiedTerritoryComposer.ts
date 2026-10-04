@@ -315,6 +315,12 @@ const contextualRole=(territoryId:number,p:UnifiedSupportSolid,index:number)=>{
     return p.w>58?'Condominio Norte':'Mansao Reservada';
   }
   if(territoryId===6){
+    const id=p.id;
+    if(/:m1$/.test(id)) return 'N? de Opera??es';
+    if(/:m2$/.test(id)) return 'Apoio Log?stico';
+    if(/:m3$/.test(id)) return 'N? de Comunica??es';
+    if(/:m4$/.test(id)) return 'Guarda Interna';
+    if(id.includes('module')) return index%2?'Anexo T?cnico':'Posto Blindado';
     if(compact) return index%2?'Anexo do QG':'Posto Blindado';
     return p.w>58?'Centro Operacional':'Alojamento Central';
   }

@@ -1,0 +1,81 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "T6 portal visuals retain validated portal levels",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 checkpoint hierarchy retains validated rows",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 command sectors and operational courts authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 command apron authored without collider mutation",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 environment uses dedicated command surface",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 QG and security tower have distinct finishes",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 operations and lodging landmarks vary",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 contextual modules vary by function",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 HUD identity preserved",
+      "detail": "T6Complexo Central (Quartel-General)|Aliados 0/15Rivais 30COMANDO • SEGURANÇA • COMPLEXO CENTRALCOMANDO ·"
+    },
+    {
+      "ok": true,
+      "label": "paused T6 physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T6 mass fixture active",
+      "detail": "allies=42; rivals=31"
+    },
+    {
+      "ok": true,
+      "label": "T6 combat presentation active",
+      "detail": "bullets=23; particles=218"
+    },
+    {
+      "ok": true,
+      "label": "T6 mass combat remains physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T6 heavy fixture keeps performance floor",
+      "detail": "fps=48.2"
+    },
+    {
+      "ok": true,
+      "label": "T6 runtime has no browser errors",
+      "detail": "[]"
+    }
+  ]
+}

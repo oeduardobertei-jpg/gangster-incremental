@@ -1,0 +1,63 @@
+{
+  "hud": {
+    "perf": {
+      "avgFrameMs": 17.835087719298244,
+      "p95FrameMs": 33.30000000000018,
+      "sampledAt": 4250.7,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 358.51063829787233,
+        "zoom": 1.572
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 56.069250442651985,
+      "avgSimulationMs": 0,
+      "avgRenderMs": 3.389473684148438,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.587719298212936,
+      "avgEntityRenderMs": 2.685964912249658,
+      "avgEffectsRenderMs": 0.00701754386618472,
+      "allies": 0,
+      "rivals": 30,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 31,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 703.3231774193517,
+      "rivalCentroidY": 296.5685808089582
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "text": "T6Complexo Central (Quartel-General)|Aliados 0/15Rivais 30COMANDO • SEGURANÇA • COMPLEXO CENTRALCOMANDO · PRESSÃO0/200POSIÇÕES 0/6ALVOCentro Operacional0%"
+  },
+  "runtimeErrors": []
+}
