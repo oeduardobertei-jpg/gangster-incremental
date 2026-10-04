@@ -1,0 +1,86 @@
+{
+  "passed": 16,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "operational floor zones authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "freight connections authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "utility/service runs authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "fake-solid ground fixtures retired",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "legacy dashed avenue marking retired",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T3 landmark identity pass present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T3 identity wired into building renderer",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "warehouse gate and tower have distinct authored branches",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "new yard density uses physical PurposeProps",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T3 physical prop vocabulary expanded",
+      "detail": "props=13"
+    },
+    {
+      "ok": true,
+      "label": "monolithic industrial biome slab retired",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T3 HUD identity preserved",
+      "detail": "T3Avenida das Oficinas & Galpões|Aliados 0/15Rivais 18OFICINAS • GALPÕES • ZONA INDUSTRIALRUPTU"
+    },
+    {
+      "ok": true,
+      "label": "T3 runtime physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T3 physical world exposes authored cover",
+      "detail": "colliders=25"
+    },
+    {
+      "ok": true,
+      "label": "T3 battlefield remains readable",
+      "detail": "canvas=1130x672"
+    },
+    {
+      "ok": true,
+      "label": "T3 runtime has no browser errors",
+      "detail": "[]"
+    }
+  ]
+}

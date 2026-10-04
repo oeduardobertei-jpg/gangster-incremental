@@ -19,8 +19,10 @@ const drawIndustrialField=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
 };
 
 const drawMainRoad=(ctx:CanvasRenderingContext2D,p:ScenePath,W:number,H:number)=>{
-  const w=Math.max(76,p.width*.76);strokePath(ctx,p,W,H,'#191d20',w+16,.62);strokePath(ctx,p,W,H,'#303438',w+8,.96);strokePath(ctx,p,W,H,'#424447',w,1);
-  strokePath(ctx,p,W,H,'rgba(99,102,105,.24)',Math.max(18,w-30),1);ctx.save();pathLine(ctx,p,W,H);ctx.setLineDash([19,24]);ctx.strokeStyle='rgba(214,169,61,.38)';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);ctx.restore();
+  const w=Math.max(76,p.width*.76);strokePath(ctx,p,W,H,'#191d20',w+16,.62);strokePath(ctx,p,W,H,'#303438',w+8,.96);strokePath(ctx,p,W,H,'#44484b',w,1);
+  strokePath(ctx,p,W,H,'rgba(103,108,110,.22)',Math.max(18,w-30),1);
+  // 1.1L: the old orange/yellow dashed prototype line is retired. A faint asphalt seam keeps direction without reading as a debug route.
+  strokePath(ctx,p,W,H,'rgba(183,180,163,.11)',1.25,1);
 };
 const drawSlabJoints=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();ctx.strokeStyle='rgba(151,151,145,.095)';ctx.lineWidth=1;
@@ -61,6 +63,79 @@ const drawBuildingGrounding=(ctx:CanvasRenderingContext2D,items:readonly GroundF
   const torre=find(items,'torre');if(torre){ctx.fillStyle='rgba(48,54,57,.20)';ctx.beginPath();ctx.ellipse(torre.x+torre.w*.5,torre.y+torre.h+8,torre.w*.32,6,0,0,Math.PI*2);ctx.fill();}
 };
 
+const overlapsFootprint=(x:number,y:number,w:number,h:number,items:readonly GroundFootprint[],pad=9)=>
+  items.some(b=>x<b.x+b.w+pad&&x+w>b.x-pad&&y<b.y+b.h+pad&&y+h>b.y-pad);
+
+const drawOperationalFloorZones=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const zone=(nx:number,ny:number,nw:number,nh:number,code:string,tone:string)=>{
+    const x=W*nx,y=H*ny,w=W*nw,h=H*nh;
+    ctx.fillStyle=tone;ctx.beginPath();ctx.roundRect(x,y,w,h,7);ctx.fill();
+    ctx.strokeStyle='rgba(161,167,168,.10)';ctx.lineWidth=1;ctx.stroke();
+    // Solid corner paint, not lane dashes: gives each work pad a readable boundary.
+    ctx.strokeStyle='rgba(202,207,203,.16)';ctx.lineWidth=2;
+    const c=18;for(const [sx,sy,dx,dy] of [[x+5,y+5,1,1],[x+w-5,y+5,-1,1],[x+5,y+h-5,1,-1],[x+w-5,y+h-5,-1,-1]] as const){ctx.beginPath();ctx.moveTo(sx+dx*c,sy);ctx.lineTo(sx,sy);ctx.lineTo(sx,sy+dy*c);ctx.stroke();}
+    ctx.font='700 9px "JetBrains Mono", monospace';ctx.textAlign='left';ctx.fillStyle='rgba(202,207,203,.13)';ctx.fillText(code,x+10,y+h-10);
+  };
+  zone(.055,.205,.31,.245,'A · PEÇAS','rgba(75,78,78,.19)');
+  zone(.635,.205,.31,.245,'B · OFICINAS','rgba(70,76,77,.18)');
+  zone(.055,.565,.31,.255,'C · CARGA','rgba(72,70,68,.17)');
+  zone(.635,.565,.31,.255,'D · DEPÓSITO','rgba(67,74,75,.18)');
+
+  // Embedded cable/service trenches add scale while remaining flat gameplay surfaces.
+  ctx.strokeStyle='rgba(12,16,18,.34)';ctx.lineWidth=5;ctx.lineCap='round';
+  for(const [x1,y1,x2,y2] of [[.06,.455,.35,.455],[.65,.455,.94,.455],[.08,.835,.37,.835],[.63,.835,.92,.835]] as const){ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();}
+  ctx.strokeStyle='rgba(148,157,158,.13)';ctx.lineWidth=1;
+  for(const [x1,y1,x2,y2] of [[.06,.451,.35,.451],[.65,.451,.94,.451],[.08,.831,.37,.831],[.63,.831,.92,.831]] as const){ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();}
+  ctx.restore();
+};
+
+const drawFunctionalYards=(ctx:CanvasRenderingContext2D,W:number,H:number,items:readonly GroundFootprint[])=>{
+  ctx.save();
+  const yard=(pts:readonly (readonly [number,number])[],fill:string,edge:string)=>{
+    blob(ctx,W,H,pts,fill);ctx.strokeStyle=edge;ctx.lineWidth=1.2;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.closePath();ctx.stroke();
+  };
+  yard([[.035,.19],[.34,.17],[.405,.24],[.39,.48],[.08,.50],[.03,.42]],'rgba(63,65,66,.30)','rgba(135,139,138,.10)');
+  yard([[.61,.18],[.93,.19],[.97,.29],[.93,.49],[.61,.48],[.585,.32]],'rgba(58,63,65,.29)','rgba(132,142,143,.10)');
+  yard([[.035,.55],[.37,.54],[.405,.64],[.37,.86],[.08,.86],[.03,.78]],'rgba(59,59,58,.25)','rgba(132,128,119,.09)');
+  yard([[.62,.55],[.94,.54],[.97,.66],[.92,.85],[.62,.86],[.59,.72]],'rgba(56,62,63,.26)','rgba(128,137,137,.09)');
+
+  // Solid loading edge language: readable as industrial safety, never as the old dashed orange map marks.
+  ctx.lineWidth=3;ctx.lineCap='butt';
+  for(const [x1,y1,x2,y2] of [[.08,.49,.34,.49],[.65,.49,.91,.49],[.09,.855,.34,.855],[.66,.855,.91,.855]] as const){
+    ctx.strokeStyle='rgba(207,191,139,.17)';ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();
+    ctx.strokeStyle='rgba(32,36,38,.42)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*x1,H*(y1+.007));ctx.lineTo(W*x2,H*(y2+.007));ctx.stroke();ctx.lineWidth=3;
+  }
+  ctx.restore();
+};
+
+const drawFreightConnections=(ctx:CanvasRenderingContext2D,W:number,H:number,items:readonly GroundFootprint[])=>{
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  const terms=['galpao','serralheria','deposito','oficina 01','oficina leste'] as const;
+  for(const term of terms){
+    const b=find(items,term);if(!b) continue;
+    const bx=b.x+b.w*.5,by=b.y+b.h+10;
+    const roadX=bx<W*.5?W*.405:W*.595;
+    ctx.strokeStyle='rgba(8,11,13,.18)';ctx.lineWidth=17;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo((bx+roadX)*.5,by+8);ctx.lineTo(roadX,Math.min(H*.82,Math.max(H*.22,by+12)));ctx.stroke();
+    ctx.strokeStyle='rgba(103,99,91,.16)';ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo((bx+roadX)*.5,by+8);ctx.lineTo(roadX,Math.min(H*.82,Math.max(H*.22,by+12)));ctx.stroke();
+  }
+  ctx.restore();
+};
+
+const drawUtilityRuns=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  // Perimeter service pipes and cable trays keep detail away from the combat avenue.
+  for(const [x1,y,x2] of [[.055,.145,.37],[.63,.145,.945],[.06,.885,.35],[.65,.885,.94]] as const){
+    ctx.strokeStyle='rgba(77,88,94,.48)';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(W*x1,H*y);ctx.lineTo(W*x2,H*y);ctx.stroke();
+    ctx.strokeStyle='rgba(181,101,55,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*x1,H*(y-.006));ctx.lineTo(W*x2,H*(y-.006));ctx.stroke();
+    for(let x=x1+.025;x<x2;x+=.055){ctx.strokeStyle='rgba(145,154,158,.20)';ctx.beginPath();ctx.moveTo(W*x,H*(y-.012));ctx.lineTo(W*x,H*(y+.012));ctx.stroke();}
+  }
+  // A few solid bay numbers replace abstract lane markings.
+  ctx.fillStyle='rgba(203,213,225,.14)';ctx.font='700 8px "JetBrains Mono", monospace';ctx.textAlign='center';
+  [['A1',.18,.52],['A2',.33,.52],['B1',.68,.52],['B2',.83,.52],['C1',.22,.88],['C2',.77,.88]].forEach(([t,x,y])=>ctx.fillText(t as string,W*(x as number),H*(y as number)));
+  ctx.restore();
+};
+
 const drawIndustrialMicro=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();
   for(let i=0;i<96;i++){const nx=.045+seeded(3301+i*29)*.91,ny=.17+seeded(4401+i*37)*.68;if(nx>.42&&nx<.58)continue;const x=nx*W,y=ny*H,s=.5+seeded(5501+i*17)*1.6;ctx.fillStyle=i%5===0?'rgba(164,82,42,.19)':i%5===1?'rgba(101,111,103,.18)':'rgba(118,111,100,.12)';ctx.save();ctx.translate(x,y);ctx.rotate((seeded(6601+i*23)-.5)*1.4);ctx.fillRect(-s,-.55,s*2,1.1);ctx.restore();}
@@ -76,11 +151,15 @@ const drawRustRunoff=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
 export function drawT3ReauthoredSurface(ctx:CanvasRenderingContext2D,W:number,H:number,paths:readonly ScenePath[],footprints:readonly GroundFootprint[]=[]){
   ctx.save();
   drawIndustrialField(ctx,W,H);
+  drawOperationalFloorZones(ctx,W,H);
+  drawFunctionalYards(ctx,W,H,footprints);
   drawSlabJoints(ctx,W,H);
   paths.forEach(path=>drawMainRoad(ctx,path,W,H));
+  drawFreightConnections(ctx,W,H,footprints);
   drawServiceDrainage(ctx,W,H);
   drawTyreOilWear(ctx,W,H);
   drawBuildingGrounding(ctx,footprints);
+  drawUtilityRuns(ctx,W,H);
   drawRustRunoff(ctx,W,H);
   drawIndustrialMicro(ctx,W,H);
   ctx.restore();

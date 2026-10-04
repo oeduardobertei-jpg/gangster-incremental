@@ -66,15 +66,19 @@ export const TERRITORY_BIOMES: Record<number, TerritoryBiomeProfile> = {
   3: {
     id: 3,
     codename: 'patio-industrial',
-    baseTop: '#1a1a1b', baseMid: '#242526', baseBottom: '#161718',
-    dust: '#766d63', dirt: '#4d433d', concrete: '#55585a', edge: '#8e9396',
+    baseTop: '#202124', baseMid: '#292b2d', baseBottom: '#191b1d',
+    dust: '#766d63', dirt: '#4d433d', concrete: '#5c6062', edge: '#969c9f',
     crack: '#0c0d0e', damp: '#11181a', vegetation: '#30493b', accent: '#f97316',
     noiseDensity: .86, crackDensity: 1.0, seamDensity: 1.35, wetness: .78,
     patches: [
-      { kind:'industrial', x:.08,y:.15,w:.84,h:.70,alpha:.80 },
-      { kind:'concrete', x:.13,y:.20,w:.26,h:.23,alpha:.48 },
-      { kind:'mud', x:.58,y:.56,w:.28,h:.20,rotation:-.04,alpha:.54 },
-      { kind:'dirt', x:.02,y:.72,w:.18,h:.20,rotation:.08,alpha:.44 }
+      { kind:'industrial', x:.045,y:.145,w:.37,h:.34,rotation:-.006,alpha:.62 },
+      { kind:'industrial', x:.585,y:.145,w:.37,h:.34,rotation:.006,alpha:.60 },
+      { kind:'industrial', x:.055,y:.535,w:.36,h:.31,rotation:.008,alpha:.54 },
+      { kind:'industrial', x:.595,y:.535,w:.35,h:.31,rotation:-.008,alpha:.56 },
+      { kind:'concrete', x:.11,y:.20,w:.22,h:.18,rotation:-.01,alpha:.34 },
+      { kind:'concrete', x:.67,y:.18,w:.21,h:.18,rotation:.012,alpha:.32 },
+      { kind:'mud', x:.69,y:.62,w:.17,h:.13,rotation:-.04,alpha:.34 },
+      { kind:'dirt', x:.025,y:.72,w:.14,h:.16,rotation:.08,alpha:.32 }
     ]
   },
   4: {

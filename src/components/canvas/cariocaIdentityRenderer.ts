@@ -118,6 +118,45 @@ const drawT2=(a:Args)=>{
   }
 };
 
+const drawT3=(a:Args)=>{
+  const {ctx,b,roofY,facadeY,height,controlColor}=a;
+  const roller=(x:number,y:number,w:number,h:number)=>{rect(ctx,x,y,w,h,'#27323a','#65727b');ctx.strokeStyle='rgba(203,213,225,.15)';for(let yy=y+4;yy<y+h-2;yy+=5)line(ctx,x+2,yy,x+w-2,yy,'rgba(203,213,225,.15)',.8);};
+  const ventBox=(x:number,y:number,w=16)=>{rect(ctx,x,y,w,8,'#3a454d','#69757e');for(let xx=x+3;xx<x+w-2;xx+=4)line(ctx,xx,y+2,xx,y+6,'#182128',.8);};
+  if(b.id==='beco_01'){
+    // Oficina 01: shallow service canopy + two roller bays.
+    zinc(ctx,b.x-8,roofY-9,b.w+16,11,-2);roller(b.x+7,facadeY+height-23,b.w*.34,20);roller(b.x+b.w*.53,facadeY+height-19,b.w*.30,16);
+    rect(ctx,b.x+b.w*.40,facadeY+7,b.w*.20,8,'#5c3b2b','#9b5c32');ventBox(b.x+b.w-27,roofY+7,17);
+  } else if(b.id==='laje_ponto'){
+    // Galpão de Peças: saw-tooth industrial roof + broad loading frontage.
+    const seg=b.w/4;for(let i=0;i<4;i++)poly(ctx,[[b.x+i*seg-2,roofY+4],[b.x+i*seg+seg*.62,roofY-15],[b.x+(i+1)*seg+2,roofY+4]],i%2?'#505c64':'#455159','#8a959d');
+    roller(b.x+8,facadeY+height-27,b.w*.42,24);ctx.fillStyle='rgba(154,83,45,.18)';ctx.fillRect(b.x+7,facadeY+height-31,b.w*.43,3);roller(b.x+b.w*.55,facadeY+height-23,b.w*.32,20);ventBox(b.x+b.w*.72,roofY+8,18);
+    ctx.strokeStyle='#91613c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(b.x+4,facadeY+height-3);ctx.lineTo(b.x+b.w-4,facadeY+height-3);ctx.stroke();
+  } else if(b.id==='barraquinha'){
+    // Serralheria: open metal shed with stock rack silhouette.
+    zinc(ctx,b.x-10,roofY-13,b.w+20,13,1);for(const x of [b.x-4,b.x+b.w*.48,b.x+b.w+4])line(ctx,x,roofY,x,facadeY+height,'#66727a',2);
+    rect(ctx,b.x+5,facadeY+height-15,b.w-10,11,'#26343a','#5d6870');
+    for(let yy=facadeY+height-12;yy<facadeY+height-4;yy+=4)line(ctx,b.x+9,yy,b.x+b.w-9,yy,yy%8===0?'#9a5b36':'#6e777c',1.4);
+  } else if(b.id==='esconderijo'){
+    // Depósito Industrial: closed volume, roof vents and deep loading bay.
+    rect(ctx,b.x-4,roofY-10,b.w+8,12,'#4d5961','#808b93');ventBox(b.x+12,roofY-18,17);ventBox(b.x+b.w-30,roofY-18,17);
+    roller(b.x+9,facadeY+height-28,b.w*.48,25);rect(ctx,b.x+b.w*.64,facadeY+height-18,b.w*.22,15,'#3f3127','#815a3b');
+  } else if(b.id==='boca_leste'){
+    // Oficina Leste: larger repair shop with side canopy and service signage.
+    zinc(ctx,b.x-7,roofY-10,b.w+14,12,-1);roller(b.x+7,facadeY+height-25,b.w*.38,22);roller(b.x+b.w*.51,facadeY+height-20,b.w*.31,17);
+    rect(ctx,b.x+b.w*.24,facadeY+6,b.w*.52,10,'#5b3b2c','#a35d32');ctx.fillStyle='#d7b06a';ctx.globalAlpha=.45;ctx.fillRect(b.x+b.w*.32,facadeY+9,b.w*.14,3);ctx.globalAlpha=1;
+  } else if(b.id==='torre_guarda'){
+    // Portaria do Pátio: glazed control booth + boom gate.
+    rect(ctx,b.x+8,roofY-12,b.w-16,20,'#35434d','#87949d');for(let x=b.x+14;x<b.x+b.w-14;x+=16)rect(ctx,x,roofY-7,11,8,'#183140','#708691');
+    const armY=facadeY+height-9;line(ctx,b.x+b.w*.60,armY,b.x+b.w+39,armY,'#d8d4c6',4);line(ctx,b.x+b.w*.72,armY,b.x+b.w*.84,armY,'#b95b35',4);rect(ctx,b.x+b.w*.54,armY-6,7,12,'#4d555b','#8d969c');
+  } else if(b.id==='mirante'){
+    // Torre da Fábrica: lattice tower + elevated service tank and warning mast.
+    const cx=b.x+b.w*.5;for(const dx of [-18,18])line(ctx,cx+dx,facadeY+height,cx+dx,roofY-38,'#68747c',2.2);
+    for(let y=facadeY+height-7;y>roofY-34;y-=11){line(ctx,cx-18,y,cx+18,y-9,'rgba(148,163,184,.42)',1);line(ctx,cx+18,y,cx-18,y-9,'rgba(148,163,184,.35)',1);}
+    rect(ctx,cx-24,roofY-45,48,13,'#39464f','#8b979f');ctx.fillStyle='#475760';ctx.beginPath();ctx.ellipse(cx,roofY-45,24,6,0,0,Math.PI*2);ctx.fill();
+    line(ctx,cx,roofY-51,cx,roofY-72,'#879098',1.5);ctx.fillStyle=controlColor;ctx.globalAlpha=.65;ctx.beginPath();ctx.arc(cx,roofY-74,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  }
+};
+
 const sandbag=(ctx:CanvasRenderingContext2D,x:number,y:number,w=12)=>{
   ctx.fillStyle='#71675e';ctx.beginPath();ctx.ellipse(x,y,w*.5,3.2,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(226,232,240,.12)';ctx.stroke();
 };
@@ -143,10 +182,11 @@ const drawT4=(a:Args)=>{
 };
 
 export function drawCariocaBuildingIdentity(args:Args){
-  if(![1,2,4,5,6].includes(args.territoryId)) return;
+  if(![1,2,3,4,5,6].includes(args.territoryId)) return;
   args.ctx.save();
   if(args.territoryId===1) drawT1(args);
   else if(args.territoryId===2) drawT2(args);
+  else if(args.territoryId===3) drawT3(args);
   else if(args.territoryId===4) drawT4(args);
   else if(args.territoryId===5) drawT5(args);
   else drawT6(args);

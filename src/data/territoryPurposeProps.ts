@@ -50,7 +50,14 @@ const T3: PurposeProp[] = [
   { id:'t3-pallets-b', kind:'pallets', x:.69,y:.39,w:.045,h:.032,solid:true,blocksProjectiles:true,material:'mixed' },
   { id:'t3-barricade', kind:'barricade', x:.46,y:.53,w:.085,h:.022,solid:true,blocksProjectiles:true,material:'metal',accent:'#f97316' },
   { id:'t3-service', kind:'service_unit', x:.52,y:.23,w:.035,h:.035,solid:true,blocksProjectiles:true,occludes:true,material:'metal',label:'GERADOR' },
-  { id:'t3-dumpster', kind:'dumpster', x:.36,y:.72,w:.042,h:.030,solid:true,blocksProjectiles:true,material:'metal' }
+  { id:'t3-dumpster', kind:'dumpster', x:.36,y:.72,w:.042,h:.030,solid:true,blocksProjectiles:true,material:'metal' },
+  // 1.1L: physical yard density. These replace decorative fake containers from the ground pass.
+  { id:'t3-container-c', kind:'container', x:.095,y:.62,w:.064,h:.047,solid:true,blocksProjectiles:true,occludes:true,material:'metal',accent:'#3f5962' },
+  { id:'t3-container-d', kind:'container', x:.805,y:.61,w:.064,h:.047,solid:true,blocksProjectiles:true,occludes:true,material:'metal',accent:'#704731' },
+  { id:'t3-pallets-c', kind:'pallets', x:.235,y:.735,w:.042,h:.030,solid:true,blocksProjectiles:true,material:'mixed' },
+  { id:'t3-pallets-d', kind:'pallets', x:.765,y:.745,w:.042,h:.030,solid:true,blocksProjectiles:true,material:'mixed' },
+  { id:'t3-dumpster-east', kind:'dumpster', x:.875,y:.52,w:.040,h:.030,solid:true,blocksProjectiles:true,material:'metal' },
+  { id:'t3-service-north', kind:'service_unit', x:.835,y:.155,w:.036,h:.033,solid:true,blocksProjectiles:true,occludes:true,material:'metal',label:'FORÇA' }
 ];
 const T4: PurposeProp[] = [
   { id:'t4-sandbags-a', kind:'sandbags', x:.28,y:.33,w:.075,h:.025,solid:true,blocksProjectiles:true,material:'mixed' },

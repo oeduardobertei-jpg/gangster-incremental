@@ -1,0 +1,63 @@
+{
+  "hud": {
+    "perf": {
+      "avgFrameMs": 16.949152542372882,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 4221.8,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 360,
+        "zoom": 1.572
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 59,
+      "avgSimulationMs": 0.005084745763501121,
+      "avgRenderMs": 2.506779661019317,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.46271186440954204,
+      "avgEntityRenderMs": 1.9745762711864407,
+      "avgEffectsRenderMs": 0.00338983050768532,
+      "allies": 0,
+      "rivals": 18,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 19,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 649.1915470648273,
+      "rivalCentroidY": 266.279344766428
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "text": "T3Avenida das Oficinas & Galpões|Aliados 0/15Rivais 18OFICINAS • GALPÕES • ZONA INDUSTRIALRUPTURA · PRESSÃO0/60POSIÇÕES 0/6ALVOGalpão de Peças0%"
+  },
+  "runtimeErrors": []
+}

@@ -1,0 +1,33 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { openTestSession, sleep } from './cdp-session.mjs';
+let passed=0,failed=0;const results=[];
+const check=(ok,label,detail='')=>{results.push({ok,label,detail});console.log(`${ok?'PASS':'FAIL'} | ${label}${detail?` | ${detail}`:''}`);ok?passed++:failed++;};
+const surface=readFileSync('src/components/canvas/t3IndustrialGroundReauthorRenderer.ts','utf8');
+const identity=readFileSync('src/components/canvas/cariocaIdentityRenderer.ts','utf8');
+const props=readFileSync('src/data/territoryPurposeProps.ts','utf8');
+const biome=readFileSync('src/data/territoryBiomes.ts','utf8');
+check(surface.includes('drawOperationalFloorZones'),'operational floor zones authored');
+check(surface.includes('drawFreightConnections'),'freight connections authored');
+check(surface.includes('drawUtilityRuns'),'utility/service runs authored');
+check(!surface.includes('drawIndustrialFixtures'),'fake-solid ground fixtures retired');
+check(!surface.includes('setLineDash([19,24])'),'legacy dashed avenue marking retired');
+check(identity.includes('const drawT3=(a:Args)=>'),'T3 landmark identity pass present');
+check(identity.includes('args.territoryId===3) drawT3(args)'),'T3 identity wired into building renderer');
+check(identity.includes("b.id==='laje_ponto'")&&identity.includes("b.id==='torre_guarda'")&&identity.includes("b.id==='mirante'"),'warehouse gate and tower have distinct authored branches');
+check(props.includes("t3-container-c")&&props.includes("t3-container-d")&&props.includes("t3-service-north"),'new yard density uses physical PurposeProps');
+check((props.match(/id:'t3-/g)||[]).length>=13,'T3 physical prop vocabulary expanded',`props=${(props.match(/id:'t3-/g)||[]).length}`);
+check(!biome.includes("{ kind:'industrial', x:.08,y:.15,w:.84,h:.70,alpha:.80 }"),'monolithic industrial biome slab retired');
+const baseUrl=process.env.BASE_URL||'http://127.0.0.1:3001';
+const s=await openTestSession({url:baseUrl,width:1536,height:864});
+try{
+ await s.evaluate(`(async()=>{const {createDefaultState}=await import('/src/state/defaultGameState.ts');const g=createDefaultState();g.currentTerritoryId=3;g.runHighestTerritoryReached=3;g.stats.highestTerritoryReached=3;g.gameSpeed=0;g.soundMuted=true;g.battleSnapshot=undefined;localStorage.setItem('factions_war_pt_br_save_v2',JSON.stringify(g));location.reload();return true;})()`);
+ await sleep(2200);
+ const state=await s.evaluate(`(()=>({text:document.querySelector('.battle-hud')?.textContent||'',perf:window.__GAME_PERF__,canvas:document.querySelector('canvas')?.getBoundingClientRect().toJSON()}))()`);
+ check(/Avenida das Oficinas|Galpões/.test(state.text),'T3 HUD identity preserved',state.text.replace(/\s+/g,' ').slice(0,95));
+ check((state.perf?.solidWorldViolations??0)===0,'T3 runtime physically clean',`violations=${state.perf?.solidWorldViolations??0}`);
+ check((state.perf?.worldColliders??0)>=20,'T3 physical world exposes authored cover',`colliders=${state.perf?.worldColliders??0}`);
+ check((state.canvas?.height??0)>500,'T3 battlefield remains readable',`canvas=${Math.round(state.canvas?.width||0)}x${Math.round(state.canvas?.height||0)}`);
+ check(s.errors.length===0,'T3 runtime has no browser errors',JSON.stringify(s.errors));
+}finally{await s.close();}
+writeFileSync('docs/acceptance-110l-t3-polish.json',JSON.stringify({passed,failed,results},null,2));
+console.log(`T3_POLISH_11L ${passed}/${passed+failed} PASS`);if(failed)process.exitCode=1;
