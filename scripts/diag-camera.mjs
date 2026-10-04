@@ -1,0 +1,14 @@
+const endpoint=process.env.CDP_ENDPOINT||'http://127.0.0.1:9233/json';
+const targets=await (await fetch(endpoint)).json();
+const target=targets.find(t=>t.type==='page'&&t.url.includes('localhost:3000'));
+if(!target) throw new Error('page missing');
+const ws=new WebSocket(target.webSocketDebuggerUrl);
+await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});
+let seq=0; const pending=new Map();
+ws.onmessage=e=>{const m=JSON.parse(e.data);if(!m.id||!pending.has(m.id))return;const p=pending.get(m.id);pending.delete(m.id);m.error?p.j(m.error):p.r(m.result)};
+const send=(method,params={})=>new Promise((r,j)=>{const id=++seq;pending.set(id,{r,j});ws.send(JSON.stringify({id,method,params}))});
+await send('Runtime.enable');
+const ev=async expression=>(await send('Runtime.evaluate',{expression,returnByValue:true})).result.value;
+const info=await ev(`(()=>{const c=document.querySelector('canvas');const r=c.getBoundingClientRect();const bottom=Math.min(r.bottom,innerHeight-8);const vh=Math.max(80,bottom-r.y);const x=r.x+r.width*.42,y=r.y+vh*.55;const e=document.elementFromPoint(x,y);return{rect:{x:r.x,y:r.y,w:r.width,h:r.height,b:r.bottom},inner:{w:innerWidth,h:innerHeight,scrollY},p:{x,y},tag:e?.tagName,cls:String(e?.className||''),same:e===c,parent:e?.parentElement?.className||''}})()`);
+console.log(JSON.stringify(info,null,2));
+ws.close();

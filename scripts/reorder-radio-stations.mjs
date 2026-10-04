@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+const path='src/audio/radioEngine.ts';
+let s=readFileSync(path,'utf8');
+const block=`  {\n    id:'central', frequency:'89.5', name:'Brazilian Gangsta',\n    tagline:'Rap brasileiro de rua · instrumentais autorizados · rádio principal',\n    source:'youtube-tracks',\n    tracks:[T('brazilian-gangsta','Brazilian Gangsta',0,0,'dark',[0],[0])]\n  }`;
+const withComma=block+',';
+if(!s.includes(block)) throw new Error('central block missing');
+s=s.replace(block,'');
+s=s.replace('export const RADIO_STATIONS: readonly RadioStation[] = [\n','export const RADIO_STATIONS: readonly RadioStation[] = [\n'+withComma+'\n');
+s=s.replace(',\n\n];','\n];');
+writeFileSync(path,s,'utf8');
+console.log('Brazilian Gangsta moved to first station');

@@ -1,0 +1,18 @@
+{
+  "playerFaction": "vermelha",
+  "intel": 60,
+  "cash": 50,
+  "ammo": 10,
+  "respect": 0,
+  "contacts": 0,
+  "hegemonyEmblems": 0,
+  "currentTerritoryId": 1,
+  "territoryTakes": 0,
+  "upgrades": {},
+  "talents": {},
+  "gameSpeed": 1,
+  "stats": {
+    "totalRespectEarned": 0,
+    "highestTerritoryReached": 1
+  }
+}

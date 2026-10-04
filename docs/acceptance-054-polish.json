@@ -1,0 +1,72 @@
+[
+  {
+    "name": "T1 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T1 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "T2 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T2 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "T3 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T3 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "T4 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=22"
+  },
+  {
+    "name": "T4 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "T5 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T5 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "T6 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=23"
+  },
+  {
+    "name": "T6 visual polish changed frame",
+    "passed": true,
+    "detail": "new 0.5.4 frame"
+  },
+  {
+    "name": "six distinct polished territories",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

@@ -339,35 +339,39 @@ export const GddViewer: React.FC<GddViewerProps> = ({ onClose }) => {
                 <div className="h-0.5 bg-gradient-to-r from-rose-500 to-transparent mt-2" />
               </div>
 
+              <div className="mb-3 p-3 bg-slate-950/70 border border-slate-800 rounded-xl text-xs text-slate-300 leading-relaxed">
+                A campanha 0.6 transforma cada distrito em uma operação própria: doutrinas de reforço, marcos de contra-ataque, rotas externas e fases de chefe mudam conforme o território e o progresso da ofensiva.
+              </div>
+
               <div className="space-y-3 text-xs">
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-emerald-400">Território 1: Beco dos Descalços (Periferia)</div>
-                  <div className="text-slate-400 mt-1">Requer 20 abates. Vielas estreitas com olheiros e soldados novatos.</div>
+                  <div className="text-slate-400 mt-1">Operação Varredura — 20 neutralizações. Pressão curta, vielas e resposta local na metade da ofensiva.</div>
                 </div>
 
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-amber-400">Território 2: Praça da Feira & Linha do Trem</div>
-                  <div className="text-slate-400 mt-1">Requer 40 abates. Zona movimentada com motos e pistoleiros automáticos.</div>
+                  <div className="text-slate-400 mt-1">Operação Linha Cortada — 40 neutralizações. Flancos da feira e reserva da estação reagem em estágios.</div>
                 </div>
 
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-orange-400">Território 3: Avenida das Oficinas & Galpões</div>
-                  <div className="text-slate-400 mt-1">Requer 60 abates. Zona industrial com estoques de munição pesada.</div>
+                  <div className="text-slate-400 mt-1">Operação Pátio de Aço — 60 neutralizações. Corredores industriais e reserva blindada das oficinas.</div>
                 </div>
 
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-rose-400">Território 4: Morro Alto (Reduto Fortificado)</div>
-                  <div className="text-slate-400 mt-1">Requer 80 abates. Encosta com fuzileiros e blindados de choque.</div>
+                  <div className="text-slate-400 mt-1">Operação Quebra-Reduto — 80 neutralizações. Cerco progressivo com linha fortificada e pesados.</div>
                 </div>
 
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-purple-400">Território 5: Mansões da Orla & Condomínios</div>
-                  <div className="text-slate-400 mt-1">Requer 120 abates. Base financeira protegida por mercenários de elite.</div>
+                  <div className="text-slate-400 mt-1">Operação Cerco da Orla — 120 neutralizações. Segurança privada mobiliza flancos conforme o cerco fecha.</div>
                 </div>
 
                 <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
                   <div className="font-semibold text-slate-100">Território 6: Complexo Central (Quartel-General)</div>
-                  <div className="text-slate-400 mt-1">Requer 200 abates. Confronto final contra o Grande Chefe do Morro.</div>
+                  <div className="text-slate-400 mt-1">Operação Decapitação — 200 neutralizações. Reserva de comando em três estágios e Chefe com fases de combate.</div>
                 </div>
               </div>
             </div>

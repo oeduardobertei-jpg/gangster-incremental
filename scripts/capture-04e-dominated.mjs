@@ -1,0 +1,13 @@
+import { writeFileSync } from 'node:fs';
+const endpoint=process.env.CDP_ENDPOINT||'http://127.0.0.1:9237/json';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const targets=await (await fetch(endpoint)).json();
+const target=targets.find(t=>t.type==='page'&&t.url.includes('localhost:3000'));
+if(!target) throw new Error('Game page not found');
+const ws=new WebSocket(target.webSocketDebuggerUrl);
+await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
+let seq=0;const pending=new Map();
+ws.onmessage=e=>{const m=JSON.parse(e.data);const p=pending.get(m.id);if(!p)return;pending.delete(m.id);m.error?p.reject(new Error(m.error.message)):p.resolve(m.result);};
+const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));});
+const evalJs=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text||'eval failed');return r.result.value;};
+await send('Runtime.enable');await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});

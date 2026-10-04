@@ -1,0 +1,37 @@
+[
+  {
+    "name": "T4 changes when CV conquers",
+    "passed": true,
+    "detail": "rival PCC -> jogador CV"
+  },
+  {
+    "name": "T4 inverts with PCC campaign",
+    "passed": true,
+    "detail": "rival CV vs rival PCC"
+  },
+  {
+    "name": "T5 changes when CV conquers",
+    "passed": true,
+    "detail": "rival PCC -> jogador CV"
+  },
+  {
+    "name": "T5 inverts with PCC campaign",
+    "passed": true,
+    "detail": "rival CV vs rival PCC"
+  },
+  {
+    "name": "T6 changes when CV conquers",
+    "passed": true,
+    "detail": "rival PCC -> jogador CV"
+  },
+  {
+    "name": "T6 inverts with PCC campaign",
+    "passed": true,
+    "detail": "rival CV vs rival PCC"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

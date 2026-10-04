@@ -1,0 +1,38 @@
+[
+  {
+    "territory": 1,
+    "metric": {
+      "frames": 240,
+      "seconds": 5.008700000000001,
+      "fps": 47.91662507237406,
+      "avg": 20.832500000000003,
+      "p95": 33.399999999999636,
+      "hud": "T1\nBeco dos Descalços (Periferia)\n|\nAliados 15/15\nRivais 11\nVIELAS • LAJES • COMÉRCIO LOCAL\nNEUTRALIZAÇÕES\n3/40"
+    },
+    "errors": []
+  },
+  {
+    "territory": 3,
+    "metric": {
+      "frames": 279,
+      "seconds": 5.013899999998883,
+      "fps": 55.64530604919567,
+      "avg": 17.920430107526883,
+      "p95": 33.30000000000109,
+      "hud": "T3\nAvenida das Oficinas & Galpões\n|\nAliados 30/30\nRivais 8\nOFICINAS • GALPÕES • ZONA INDUSTRIAL\nNEUTRALIZAÇÕES\n18/80"
+    },
+    "errors": []
+  },
+  {
+    "territory": 6,
+    "metric": {
+      "frames": 276,
+      "seconds": 5.0138999999996265,
+      "fps": 55.0469694250026,
+      "avg": 18.115217391304345,
+      "p95": 33.29999999999927,
+      "hud": "T6\nComplexo Central (Quartel-General)\n|\nAliados 46/60\nRivais 28\nCOMANDO • SEGURANÇA • COMPLEXO CENTRAL\nNEUTRALIZAÇÕES\n12/200"
+    },
+    "errors": []
+  }
+]

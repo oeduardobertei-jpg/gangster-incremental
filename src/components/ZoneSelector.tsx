@@ -39,7 +39,8 @@ export const ZoneSelector: React.FC<ZoneSelectorProps> = ({
           {TERRITORIES.map((territory) => {
             const isUnlocked = territory.id <= highestTerritoryReached;
             const isCurrent = territory.id === currentTerritoryId;
-            const nextRequired = territory.requiredTakes;
+            const previousTerritory = TERRITORIES.find(item => item.id === territory.id - 1);
+            const unlockNeutralizations = previousTerritory?.requiredNeutralizations ?? territory.requiredNeutralizations;
 
             return (
               <div
@@ -79,7 +80,11 @@ export const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                         </span>
                       </div>
                       <span className="text-slate-600">·</span>
-                      <span className="text-emerald-400 font-mono-numbers">Recompensa: {territory.bountyMultiplier}x</span>
+                      <span className="text-rose-300 font-mono-numbers">Vida: {territory.healthMultiplier}x</span>
+                      <span className="text-slate-600">·</span>
+                      <span className="text-orange-300 font-mono-numbers">Dano: {territory.damageMultiplier}x</span>
+                      <span className="text-slate-600">·</span>
+                      <span className="text-emerald-400 font-mono-numbers">Grana/Suprimentos: {territory.rewardMultiplier}x</span>
                     </div>
                   </div>
 
@@ -102,7 +107,7 @@ export const ZoneSelector: React.FC<ZoneSelectorProps> = ({
                     ) : (
                       <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
                         <Lock className="w-3.5 h-3.5" />
-                        <span>Requer {nextRequired} Neutralizações</span>
+                        <span>Conclua T{previousTerritory?.id ?? territory.id} · {unlockNeutralizations} neutralizações + domínio</span>
                       </div>
                     )}
                   </div>

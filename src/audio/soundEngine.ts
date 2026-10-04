@@ -3,6 +3,11 @@ class SoundEngine {
   private ctx: AudioContext | null = null;
   private volume: number = 0.3;
   private muted: boolean = false;
+  private gunNoiseBuffer: AudioBuffer | null = null;
+  private lastGunfireAt: Record<'pistol' | 'fuzil' | 'moto' | 'rival', number> = {
+    pistol: -Infinity, fuzil: -Infinity, moto: -Infinity, rival: -Infinity
+  };
+  private lastImpactAt = -Infinity;
 
   private initContext() {
     if (!this.ctx && typeof window !== 'undefined') {
@@ -14,6 +19,19 @@ class SoundEngine {
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume().catch(() => {});
     }
+  }
+
+  private getGunNoiseBuffer() {
+    if (!this.ctx) return null;
+    if (this.gunNoiseBuffer && this.gunNoiseBuffer.sampleRate === this.ctx.sampleRate) return this.gunNoiseBuffer;
+    const bufferSize = Math.floor(this.ctx.sampleRate * 0.05);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+    }
+    this.gunNoiseBuffer = buffer;
+    return buffer;
   }
 
   public setVolume(v: number) {
@@ -86,14 +104,13 @@ class SoundEngine {
 
     try {
       const now = this.ctx.currentTime;
+      const minGap = type === 'fuzil' ? 0.035 : type === 'moto' ? 0.03 : 0.024;
+      if (now - this.lastGunfireAt[type] < minGap) return;
+      this.lastGunfireAt[type] = now;
 
-      // 1. Transient Click / Percussive blast (Noise)
-      const bufferSize = Math.floor(this.ctx.sampleRate * 0.05);
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const output = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
-      }
+      // Shared transient noise buffer: no per-shot sample generation/allocation.
+      const buffer = this.getGunNoiseBuffer();
+      if (!buffer) return;
       const whiteNoise = this.ctx.createBufferSource();
       whiteNoise.buffer = buffer;
 
@@ -156,6 +173,8 @@ class SoundEngine {
 
     try {
       const now = this.ctx.currentTime;
+      if (now - this.lastImpactAt < 0.016) return;
+      this.lastImpactAt = now;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "T1 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T1 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "T2 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T2 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "T3 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=21"
+  },
+  {
+    "name": "T3 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "T4 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=22"
+  },
+  {
+    "name": "T4 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "T5 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=24"
+  },
+  {
+    "name": "T5 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "T6 physics",
+    "passed": true,
+    "detail": "violations=0; colliders=23"
+  },
+  {
+    "name": "T6 legacy footprint cleanup changed frame",
+    "passed": true,
+    "detail": "0.5.6b1 differs from 0.5.6"
+  },
+  {
+    "name": "six distinct clean-footprint territories",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

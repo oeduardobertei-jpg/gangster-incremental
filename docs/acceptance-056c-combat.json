@@ -1,0 +1,52 @@
+[
+  {
+    "name": "T1 perf ready",
+    "passed": true,
+    "detail": "ready"
+  },
+  {
+    "name": "T1 combat active",
+    "passed": true,
+    "detail": "bullets=3; particles=60"
+  },
+  {
+    "name": "T1 combat physics",
+    "passed": true,
+    "detail": "violations=0; fps=50.0"
+  },
+  {
+    "name": "T3 perf ready",
+    "passed": true,
+    "detail": "ready"
+  },
+  {
+    "name": "T3 combat active",
+    "passed": true,
+    "detail": "bullets=12; particles=133"
+  },
+  {
+    "name": "T3 combat physics",
+    "passed": true,
+    "detail": "violations=0; fps=41.0"
+  },
+  {
+    "name": "T6 perf ready",
+    "passed": true,
+    "detail": "ready"
+  },
+  {
+    "name": "T6 combat active",
+    "passed": true,
+    "detail": "bullets=12; particles=129"
+  },
+  {
+    "name": "T6 combat physics",
+    "passed": true,
+    "detail": "violations=0; fps=54.9"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

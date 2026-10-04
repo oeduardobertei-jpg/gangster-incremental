@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+const root='C:/Users/eduardo.bertei/organizacao/IA/prototipos/fac incremental/gangster-incremental-0.8l-full/gangster-incremental';
+const p=`${root}/src/components/canvas/buildingSkins.ts`;let s=fs.readFileSync(p,'utf8');
+s=s.replace(/playerTag: string\r?\n\): boolean \{  const controlColor/,"playerTag: string,\n  renderZoom = 1\n): boolean {  const controlColor");
+s=s.replace(/playerTag: string\r?\n\) => \{\r?\n  const theme/,"playerTag: string,\n  renderZoom = 1\n) => {\n  const theme");
+s=s.replace(/const controlTag = capturedByPlayer \? playerTag : b\.graffiti;\r?\n  const wall =/,"const controlTag = capturedByPlayer ? playerTag : b.graffiti;\n  const detailLod = renderZoom >= .82;\n  const microLod = renderZoom >= .94;\n  const wall =");
+s=s.replace(/const controlTag = capturedByPlayer \? playerTag : b\.graffiti;\r?\n  const height =/,"const controlTag = capturedByPlayer ? playerTag : b.graffiti;\n  const detailLod = renderZoom >= .82;\n  const microLod = renderZoom >= .94;\n  const height =");
+fs.writeFileSync(p,s,'utf8');s=fs.readFileSync(p,'utf8');
+s=s.replace(/playerTag: string\r?\n\) \{\r?\n  if \(territoryId === 1\) return drawPeripheryBuildingSkin\(ctx,b,time,capturedByPlayer,playerColor,playerTag\);\r?\n  drawGenericCityVivaBuilding\(ctx,b,time,territoryId,capturedByPlayer,playerColor,playerTag\);/,"playerTag: string,\n  renderZoom = 1\n) {\n  if (territoryId === 1) return drawPeripheryBuildingSkin(ctx,b,time,capturedByPlayer,playerColor,playerTag,renderZoom);\n  drawGenericCityVivaBuilding(ctx,b,time,territoryId,capturedByPlayer,playerColor,playerTag,renderZoom);");
+fs.writeFileSync(p,s,'utf8');console.log('0.8V signatures fixed');

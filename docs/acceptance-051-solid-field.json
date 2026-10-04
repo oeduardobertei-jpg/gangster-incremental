@@ -1,0 +1,32 @@
+[
+  {
+    "name": "world collision stops a moving unit before a wall",
+    "passed": true,
+    "detail": "{\"x\":90,\"y\":140,\"hitX\":true,\"hitY\":false}"
+  },
+  {
+    "name": "world collision catches projectiles before they cross a wall",
+    "passed": true,
+    "detail": "{\"t\":0.2823529411764706,\"id\":\"wall\"}"
+  },
+  {
+    "name": "opponents cannot shoot through a solid neighborhood building",
+    "passed": true,
+    "detail": "ally=55, rival=500"
+  },
+  {
+    "name": "T1 units remain outside the solid decorative lot",
+    "passed": true,
+    "detail": "{\"a\":{\"x\":281.6230830671796,\"y\":170.06225819881513},\"r\":{\"x\":545,\"y\":115}}"
+  },
+  {
+    "name": "legacy/save entities embedded in new geometry are pushed outside safely",
+    "passed": true,
+    "detail": "{\"x\":243.4,\"y\":239.60159449849064}"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

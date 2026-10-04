@@ -1,0 +1,14 @@
+const endpoint = process.env.CDP_ENDPOINT || 'http://127.0.0.1:9237/json';
+const targets = await (await fetch(endpoint)).json();
+const target = targets.find(t => t.type === 'page' && t.url.includes('localhost:3000'));
+if (!target) throw new Error('Game page not found');
+const ws = new WebSocket(target.webSocketDebuggerUrl);
+await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject; });
+let seq = 0;
+const pending = new Map();
+ws.onmessage = e => { const m = JSON.parse(e.data); const p = pending.get(m.id); if (!p) return; pending.delete(m.id); p.resolve(m.result); };
+const send = (method, params={}) => new Promise(resolve => { const id=++seq; pending.set(id,{resolve}); ws.send(JSON.stringify({id,method,params})); });
+await send('Runtime.enable');
+await send('Runtime.evaluate', { expression: `localStorage.clear(); location.href='http://localhost:3000/?smoke=04d-clean'; true`, returnByValue: true });
+console.log('RESET_OK');
+ws.close();

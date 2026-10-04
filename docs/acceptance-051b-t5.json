@@ -1,0 +1,342 @@
+{
+  "first": {
+    "avgFrameMs": 31.550000000186266,
+    "p95FrameMs": 83.5,
+    "sampledAt": 1352.2,
+    "speed": 5,
+    "camera": {
+      "centerX": 640,
+      "centerY": 376.6640625,
+      "zoom": 1
+    },
+    "viewport": {
+      "width": 1036,
+      "height": 686.671875,
+      "dpr": 1
+    },
+    "loot": 0,
+    "fps": 31.69572107746739,
+    "avgSimulationMs": 2.1874999995343387,
+    "avgRenderMs": 5.059375000651926,
+    "avgSteps": 6.34375,
+    "avgTargetSearches": 5.84375,
+    "avgProjectileChecks": 0.75,
+    "avgRivalAiMs": 0.5906249955296516,
+    "avgAllyAiMs": 1.4281250052154064,
+    "avgProjectileMs": 0.06875000009313226,
+    "allies": 40,
+    "rivals": 15,
+    "bullets": 0,
+    "particles": 0,
+    "worldColliders": 24,
+    "solidWorldViolations": 0,
+    "unstuckTriggers": 0,
+    "unstuckActive": 0,
+    "stuckPressure": 0,
+    "allyCentroidX": 190.25193978241808,
+    "allyCentroidY": 326.2391796025429
+  },
+  "samples": [
+    {
+      "avgFrameMs": 23.667441860465118,
+      "p95FrameMs": 50.100000000000136,
+      "sampledAt": 2369.9,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 3,
+      "fps": 42.25213717205463,
+      "avgSimulationMs": 2.858139535022336,
+      "avgRenderMs": 3.4209302327660627,
+      "avgSteps": 5.953488372093023,
+      "avgTargetSearches": 5.604651162790698,
+      "avgProjectileChecks": 4.023255813953488,
+      "avgRivalAiMs": 0.6116279062143591,
+      "avgAllyAiMs": 1.867441863861195,
+      "avgProjectileMs": 0.29767441784226617,
+      "allies": 40,
+      "rivals": 16,
+      "bullets": 11,
+      "particles": 55,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 1,
+      "unstuckActive": 1,
+      "stuckPressure": 0,
+      "allyCentroidX": 243.55292639441973,
+      "allyCentroidY": 290.2293397945167
+    },
+    {
+      "avgFrameMs": 22.244444444444444,
+      "p95FrameMs": 50.09999999999991,
+      "sampledAt": 3370.9,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 3,
+      "fps": 44.955044955044954,
+      "avgSimulationMs": 2.639999998609225,
+      "avgRenderMs": 2.895555556482739,
+      "avgSteps": 5.622222222222222,
+      "avgTargetSearches": 4.266666666666667,
+      "avgProjectileChecks": 6.155555555555556,
+      "avgRivalAiMs": 0.7444444484180874,
+      "avgAllyAiMs": 1.2911111066738765,
+      "avgProjectileMs": 0.47555555601914723,
+      "allies": 40,
+      "rivals": 19,
+      "bullets": 16,
+      "particles": 98,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 1,
+      "unstuckActive": 1,
+      "stuckPressure": 0,
+      "allyCentroidX": 266.99241319326677,
+      "allyCentroidY": 278.5727707608554
+    },
+    {
+      "avgFrameMs": 21.76304347826087,
+      "p95FrameMs": 50.09999999999991,
+      "sampledAt": 4372,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 4,
+      "fps": 45.949455598841276,
+      "avgSimulationMs": 1.8804347822847574,
+      "avgRenderMs": 3.760869565217391,
+      "avgSteps": 5.782608695652174,
+      "avgTargetSearches": 4.630434782608695,
+      "avgProjectileChecks": 7.608695652173913,
+      "avgRivalAiMs": 0.5000000003239383,
+      "avgAllyAiMs": 1.0108695652173914,
+      "avgProjectileMs": 0.297826085401618,
+      "allies": 40,
+      "rivals": 20,
+      "bullets": 14,
+      "particles": 148,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 1,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "allyCentroidX": 299.4067930347304,
+      "allyCentroidY": 263.47458905795753
+    },
+    {
+      "avgFrameMs": 20.42653061224489,
+      "p95FrameMs": 33.400000000000546,
+      "sampledAt": 5372.9,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 4,
+      "fps": 48.95593965431114,
+      "avgSimulationMs": 2.4510204086498337,
+      "avgRenderMs": 3.324489794823588,
+      "avgSteps": 5.63265306122449,
+      "avgTargetSearches": 4.142857142857143,
+      "avgProjectileChecks": 7.8979591836734695,
+      "avgRivalAiMs": 0.6877551021016374,
+      "avgAllyAiMs": 1.0653061243344326,
+      "avgProjectileMs": 0.622448977158994,
+      "allies": 40,
+      "rivals": 24,
+      "bullets": 19,
+      "particles": 170,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 1,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "allyCentroidX": 330.9095508364739,
+      "allyCentroidY": 270.93584472391694
+    },
+    {
+      "avgFrameMs": 21.29787234042553,
+      "p95FrameMs": 34.399999999999636,
+      "sampledAt": 6373.9,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 4,
+      "fps": 46.95304695304695,
+      "avgSimulationMs": 2.59361702172046,
+      "avgRenderMs": 4.217021277927338,
+      "avgSteps": 5.829787234042553,
+      "avgTargetSearches": 5.085106382978723,
+      "avgProjectileChecks": 10.936170212765957,
+      "avgRivalAiMs": 1.1042553180075707,
+      "avgAllyAiMs": 0.8255319173665757,
+      "avgProjectileMs": 0.561702126201163,
+      "allies": 38,
+      "rivals": 25,
+      "bullets": 13,
+      "particles": 160,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 1,
+      "unstuckActive": 1,
+      "stuckPressure": 0,
+      "allyCentroidX": 341.3735439698763,
+      "allyCentroidY": 284.36183365493537
+    },
+    {
+      "avgFrameMs": 23.276744186046525,
+      "p95FrameMs": 50,
+      "sampledAt": 7374.8,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 4,
+      "fps": 42.961334798681165,
+      "avgSimulationMs": 2.4790697669567066,
+      "avgRenderMs": 3.2837209306484043,
+      "avgSteps": 5.976744186046512,
+      "avgTargetSearches": 5.069767441860465,
+      "avgProjectileChecks": 10.418604651162791,
+      "avgRivalAiMs": 0.7209302290927532,
+      "avgAllyAiMs": 1.1488372108270957,
+      "avgProjectileMs": 0.5000000024257705,
+      "allies": 34,
+      "rivals": 27,
+      "bullets": 15,
+      "particles": 145,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 3,
+      "unstuckActive": 3,
+      "stuckPressure": 0,
+      "allyCentroidX": 345.0255425613964,
+      "allyCentroidY": 295.94431073880486
+    },
+    {
+      "avgFrameMs": 21.763043478260858,
+      "p95FrameMs": 33.400000000000546,
+      "sampledAt": 8375.9,
+      "speed": 5,
+      "camera": {
+        "centerX": 640,
+        "centerY": 376.6640625,
+        "zoom": 1
+      },
+      "viewport": {
+        "width": 1036,
+        "height": 686.671875,
+        "dpr": 1
+      },
+      "loot": 7,
+      "fps": 45.9494555988413,
+      "avgSimulationMs": 1.6347826094083164,
+      "avgRenderMs": 3.6130434770299042,
+      "avgSteps": 6,
+      "avgTargetSearches": 5.3478260869565215,
+      "avgProjectileChecks": 8.91304347826087,
+      "avgRivalAiMs": 0.6543478262813195,
+      "avgAllyAiMs": 0.5804347839692364,
+      "avgProjectileMs": 0.2869565214799798,
+      "allies": 32,
+      "rivals": 27,
+      "bullets": 16,
+      "particles": 161,
+      "worldColliders": 24,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 1,
+      "allyCentroidX": 341.1558698390356,
+      "allyCentroidY": 299.9824770508318
+    }
+  ],
+  "results": [
+    {
+      "name": "T5 jam fixture starts solid",
+      "passed": true,
+      "detail": "{\"avgFrameMs\":31.550000000186266,\"p95FrameMs\":83.5,\"sampledAt\":1352.2,\"speed\":5,\"camera\":{\"centerX\":640,\"centerY\":376.6640625,\"zoom\":1},\"viewport\":{\"width\":1036,\"height\":686.671875,\"dpr\":1},\"loot\":0,\"fps\":31.69572107746739,\"avgSimulationMs\":2.1874999995343387,\"avgRenderMs\":5.059375000651926,\"avgSteps\":6.34375,\"avgTargetSearches\":5.84375,\"avgProjectileChecks\":0.75,\"avgRivalAiMs\":0.5906249955296516,\"avgAllyAiMs\":1.4281250052154064,\"avgProjectileMs\":0.06875000009313226,\"allies\":40,\"rivals\":15,\"bullets\":0,\"particles\":0,\"worldColliders\":24,\"solidWorldViolations\":0,\"unstuckTriggers\":0,\"unstuckActive\":0,\"stuckPressure\":0,\"allyCentroidX\":190.25193978241808,\"allyCentroidY\":326.2391796025429}"
+    },
+    {
+      "name": "anti-stuck resolver is exercised in crowded T5",
+      "passed": true,
+      "detail": "triggers=8"
+    },
+    {
+      "name": "T5 crowded flow never penetrates solids",
+      "passed": true,
+      "detail": "maxViolations=0"
+    },
+    {
+      "name": "T5 crowd makes measurable progress out of the west-side choke",
+      "passed": true,
+      "detail": "centroidGain=150.9"
+    },
+    {
+      "name": "T5 anti-stuck does not thrash indefinitely",
+      "passed": true,
+      "detail": "triggers=8"
+    },
+    {
+      "name": "T5 final stuck pressure is controlled",
+      "passed": true,
+      "detail": "final=1, max=1"
+    },
+    {
+      "name": "T5 hotfix stays above 30 FPS",
+      "passed": true,
+      "detail": "minFPS=42.3"
+    },
+    {
+      "name": "no browser runtime errors",
+      "passed": true,
+      "detail": "[]"
+    }
+  ]
+}

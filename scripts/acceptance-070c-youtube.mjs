@@ -1,0 +1,34 @@
+import { openTestSession, sleep } from './cdp-session.mjs';
+const session=await openTestSession({url:'http://localhost:3000',width:1536,height:900});
+const {evaluate}=session;
+const checks=[];
+const check=(name,ok,detail='')=>{checks.push(Boolean(ok));console.log(`${ok?'PASS':'FAIL'} | ${name} | ${detail}`)};
+try {
+  await sleep(500);
+  const selected=await evaluate(`(()=>{const s=document.querySelector('select[aria-label="Escolher estação de rádio"]');if(!s)return null;s.value='baile';s.dispatchEvent(new Event('change',{bubbles:true}));return s.value})()`);
+  check('YouTube station selectable',selected==='baile',selected);
+  await sleep(2500);
+  const stationText=await evaluate(`document.querySelector('select[aria-label="Escolher estação de rádio"]')?.parentElement?.textContent||''`);
+  check('26 chapter identity visible',stationText.includes('26 faixas/capítulos'),stationText);
+  const iframe=await evaluate(`(()=>{const f=document.querySelector('iframe[src*="2LfG9LlqyWw"]');return f?.getAttribute('src')||''})()`);
+  check('YouTube player created',iframe.includes('2LfG9LlqyWw'),iframe.slice(0,100));
+  const before=stationText;
+  await evaluate(`(()=>{document.querySelector('button[title="Próximo capítulo"]')?.click();return true})()`);
+  await sleep(250);
+  const after=await evaluate(`document.querySelector('select[aria-label="Escolher estação de rádio"]')?.parentElement?.textContent||''`);
+  check('next jumps to chapter 2',after.includes('vai voltar') && before!==after,after);
+  await evaluate(`(()=>{document.querySelector('button[title="Capítulo anterior"]')?.click();return true})()`);
+  await sleep(200);
+  const back=await evaluate(`document.querySelector('select[aria-label="Escolher estação de rádio"]')?.parentElement?.textContent||''`);
+  check('previous returns chapter 1',back.includes('tudo que existe'),back);
+  await evaluate(`(()=>{document.querySelector('button[title="Tocar música"]')?.click();document.querySelector('button[title="Aumentar música"]')?.click();return true})()`);
+  await sleep(700);
+  const playing=await evaluate(`!!document.querySelector('button[title="Pausar música"]')`);
+  check('play control remains integrated',playing,'pause button visible');
+  const ytState=await evaluate(`window.__GDF_YOUTUBE_RADIO_STATE__ || null`);
+  check('YouTube playback advances',ytState.playing && ytState.currentTime>0.2,JSON.stringify(ytState));
+  check('no runtime errors',session.errors.length===0,JSON.stringify(session.errors));
+  const failed=checks.filter(ok=>!ok).length;
+  console.log(`ACCEPTANCE_070C_YOUTUBE passed=${checks.length-failed} failed=${failed}`);
+  if(failed)process.exitCode=1;
+} finally { await session.close(); }

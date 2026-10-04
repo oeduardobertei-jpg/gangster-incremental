@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { GameState } from '../types/game';
 import { Settings, Volume2, VolumeX, Save, RotateCcw, Wrench, X, Copy, Check, Upload } from 'lucide-react';
 import { soundEngine } from '../audio/soundEngine';
+import BaseCommandVisualPreview from './dev/BaseCommandVisualPreview';
+import type { BaseCommandPreviewSelection } from '../rules/baseCommandVisualProgression';
 
 interface SettingsModalProps {
   gameState: GameState;
@@ -11,6 +13,8 @@ interface SettingsModalProps {
   onImportSave: (saveData: string) => boolean;
   onHardReset: () => void;
   onDevAddResources: (res: { cash?: number; ammo?: number; respect?: number; contacts?: number; emblems?: number; intel?: number }) => void;
+  basePreviewSelection: BaseCommandPreviewSelection | null;
+  onDevBasePreviewChange: (selection: BaseCommandPreviewSelection | null) => void;
   onClose: () => void;
 }
 
@@ -22,6 +26,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onImportSave,
   onHardReset,
   onDevAddResources,
+  basePreviewSelection,
+  onDevBasePreviewChange,
   onClose
 }) => {
   const [saveString, setSaveString] = useState<string>('');
@@ -265,6 +271,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </button>
             </div>
           </div>
+
+          {import.meta.env.DEV && (
+            <BaseCommandVisualPreview
+              gameState={gameState}
+              selection={basePreviewSelection}
+              onChange={onDevBasePreviewChange}
+            />
+          )}
 
           {/* Hard Reset */}
           <div className="pt-3 border-t border-slate-800/80">

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "smoke functional",
+    "passed": true,
+    "detail": "passed=66/66"
+  },
+  {
+    "name": "docs/acceptance-056d-atmosphere.json",
+    "passed": true,
+    "detail": "passed=14/14; expected=14"
+  },
+  {
+    "name": "docs/acceptance-056c-combat.json",
+    "passed": true,
+    "detail": "passed=10/10; expected=10"
+  },
+  {
+    "name": "docs/acceptance-053b-control.json",
+    "passed": true,
+    "detail": "passed=7/7; expected=7"
+  },
+  {
+    "name": "T5 anti-stuck",
+    "passed": true,
+    "detail": "passed=8/8"
+  },
+  {
+    "name": "0.5.6D static gallery",
+    "passed": true,
+    "detail": "6/6 screenshots"
+  },
+  {
+    "name": "0.5.6D combat gallery",
+    "passed": true,
+    "detail": "3/3 screenshots"
+  },
+  {
+    "name": "visual revision locked",
+    "passed": true,
+    "detail": "0.5.6d-atmosphere-v1"
+  }
+]

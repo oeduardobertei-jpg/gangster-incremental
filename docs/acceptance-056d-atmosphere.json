@@ -1,0 +1,72 @@
+[
+  {
+    "name": "T1 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=50.4"
+  },
+  {
+    "name": "T1 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "T2 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=51.4"
+  },
+  {
+    "name": "T2 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "T3 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=54.8"
+  },
+  {
+    "name": "T3 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "T4 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=51.9"
+  },
+  {
+    "name": "T4 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "T5 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=54.8"
+  },
+  {
+    "name": "T5 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "T6 atmosphere physics",
+    "passed": true,
+    "detail": "violations=0; fps=50.7"
+  },
+  {
+    "name": "T6 atmosphere changed frame",
+    "passed": true,
+    "detail": "differs from 0.5.6b1"
+  },
+  {
+    "name": "six distinct atmosphere territories",
+    "passed": true,
+    "detail": "images=6"
+  },
+  {
+    "name": "no browser runtime errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]
