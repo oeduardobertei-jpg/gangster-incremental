@@ -1,4 +1,4 @@
-﻿import type { FactionConfig } from '../../types/game';
+import type { FactionConfig } from '../../types/game';
 import type { TacticalBuilding } from './favelaRenderer';
 import { drawFavelaTileset } from './favelaRenderer';
 import { drawCityVivaAmbientOverlay, drawTerritorySceneFoundation } from './environmentRenderer';

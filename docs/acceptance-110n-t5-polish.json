@@ -60,7 +60,7 @@
     {
       "ok": true,
       "label": "T5 combat presentation active",
-      "detail": "bullets=16; particles=161"
+      "detail": "bullets=22; particles=178"
     },
     {
       "ok": true,
@@ -69,8 +69,8 @@
     },
     {
       "ok": true,
-      "label": "T5 heavy fixture keeps performance floor",
-      "detail": "fps=48.2"
+      "label": "T5 heavy fixture keeps performance budget",
+      "detail": "fps=33.9; render=4.49ms; sim=1.27ms; samples=28.1/33.9/37.4"
     },
     {
       "ok": true,

@@ -144,7 +144,7 @@ const drawDecorativeLot = (
     ctx.globalAlpha = 1;
   }
 
-  // Fachada legÃƒÂ­vel em zoom normal: porta, duas aberturas e infraestrutura de laje.
+  // Fachada leg?vel em zoom normal: porta, duas aberturas e infraestrutura de laje.
   ctx.fillStyle = '#14202b';
   ctx.fillRect(x + 8, y + h - 21, 11, 19);
   const windowY = y + h - 29;
@@ -156,7 +156,7 @@ const drawDecorativeLot = (
     ctx.strokeStyle = 'rgba(15,23,42,.65)';
     ctx.strokeRect(wx, windowY, 10, 8);
   }
-  // RodapÃƒÂ©/AO amarra o volume ao chÃƒÂ£o e evita aparÃƒÂªncia de "adesivo".
+  // Rodap?/AO amarra o volume ao ch?o e evita apar?ncia de "adesivo".
   ctx.fillStyle = 'rgba(0,0,0,.26)';
   ctx.fillRect(x + 2, y + h - 4, w - 4, 4);
   if (heightClass === 'mid') {
@@ -243,7 +243,7 @@ const drawPeripheryMicroDetails = (
     ctx.fillStyle='#f3d486';ctx.fillRect(px-2,py-34,4,3);
   }
 
-  // Muros baixos, degraus e remendos junto ÃƒÂ s casas: detalhe visual, sem virar collider fantasma.
+  // Muros baixos, degraus e remendos junto ?s casas: detalhe visual, sem virar collider fantasma.
   ctx.fillStyle='rgba(111,87,66,.48)';
   for(const [x,y,w] of [[.055,.295,.11],[.80,.405,.12],[.08,.675,.10],[.72,.865,.12]] as const){
     ctx.fillRect(width*x,height*y,width*w,5);ctx.fillStyle='rgba(203,213,225,.08)';ctx.fillRect(width*x,height*y,width*w,1);ctx.fillStyle='rgba(111,87,66,.48)';
@@ -251,7 +251,7 @@ const drawPeripheryMicroDetails = (
   ctx.fillStyle='rgba(71,85,105,.28)';
   for(const [x,y] of [[.18,.47],[.79,.63],[.33,.83]] as const){for(let i=0;i<3;i++)ctx.fillRect(width*x+i*8,height*y+i*3,22-i*5,3);}
 
-  // Pequenos sinais de uso: sacos, latas e vegetaÃƒÂ§ÃƒÂ£o espontÃƒÂ¢nea nas bordas.
+  // Pequenos sinais de uso: sacos, latas e vegeta??o espont?nea nas bordas.
   for(const [x,y] of [[.10,.60],[.86,.70],[.19,.88],[.91,.32]] as const){
     ctx.fillStyle='rgba(40,54,45,.64)';ctx.beginPath();ctx.arc(width*x,height*y,5,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='rgba(139,116,82,.55)';ctx.fillRect(width*x+5,height*y+3,5,4);
@@ -443,7 +443,7 @@ function drawMarketRailScene(ctx: CanvasRenderingContext2D, width: number, heigh
   drawLivingGroundFoundation(ctx, width, height, 2, controlColor);
   // 0.9.8A: one authored rail/market surface replaces stacked generic road, rail-board and plaza overlays.
   drawT2ReauthoredSurface(ctx, width, height, scene.paths, reserved);
-  drawSceneTitle(ctx, width, height, `FEIRA â€¢ LINHA DO TREM Â· `, scene.subtitle, controlColor);
+  drawSceneTitle(ctx, width, height, `FEIRA • LINHA DO TREM · ${controlTag}`, scene.subtitle, controlColor);
 }
 function drawIndustrialScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(3);
@@ -453,13 +453,13 @@ function drawIndustrialScene(ctx: CanvasRenderingContext2D, width: number, heigh
   drawLivingGroundOverlay(ctx, width, height, 3, controlColor);
   drawPurposefulGroundTexture(ctx, width, height, 3, controlColor);
   drawDistrictGroundStory(ctx, width, height, 3, controlColor);
-  drawSceneTitle(ctx,width,height,`AVENIDA DAS OFICINAS â€¢ GALPÃ•ES Â· ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`AVENIDA DAS OFICINAS • GALPÕES · ${controlTag}`,scene.subtitle,controlColor);
 }function drawFortifiedHillScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(4);
   drawLivingGroundFoundation(ctx, width, height, 4, controlColor);
   // 0.9.7A: one authored hillside surface replaces stacked terraces, generic road and repeated ground overlays.
   drawT4ReauthoredSurface(ctx, width, height, scene.paths, reserved);
-  drawSceneTitle(ctx,width,height,`MORRO ALTO â€¢ REDUTO FORTIFICADO Â· ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`MORRO ALTO • REDUTO FORTIFICADO · ${controlTag}`,scene.subtitle,controlColor);
 }
 function drawGatedDistrictScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(5);

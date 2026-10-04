@@ -55,12 +55,12 @@
     {
       "ok": true,
       "label": "T6 mass fixture active",
-      "detail": "allies=42; rivals=31"
+      "detail": "allies=42; rivals=32"
     },
     {
       "ok": true,
       "label": "T6 combat presentation active",
-      "detail": "bullets=23; particles=218"
+      "detail": "bullets=17; particles=198"
     },
     {
       "ok": true,
@@ -69,8 +69,8 @@
     },
     {
       "ok": true,
-      "label": "T6 heavy fixture keeps performance floor",
-      "detail": "fps=48.2"
+      "label": "T6 heavy fixture keeps performance budget",
+      "detail": "fps=42.9; render=3.72ms; sim=1.50ms; samples=42.9/38.4/46.0"
     },
     {
       "ok": true,

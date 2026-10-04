@@ -1,0 +1,191 @@
+{
+  "passed": 37,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "T1 identity visible",
+      "detail": "T1Beco dos Descalços (Periferia)|Aliados 26/24Rivais 18VIELAS • LAJES • COMÉRCIO LOCALVARREDURA"
+    },
+    {
+      "ok": true,
+      "label": "T1 faction mass active",
+      "detail": "allies=26; rivals=18"
+    },
+    {
+      "ok": true,
+      "label": "T1 combat presentation active",
+      "detail": "bullets=12; particles=136"
+    },
+    {
+      "ok": true,
+      "label": "T1 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T1 performance budget",
+      "detail": "fps=36.4; render=5.52ms; sim=1.24ms; samples=30.5/38.0/36.4"
+    },
+    {
+      "ok": true,
+      "label": "T1 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T2 identity visible",
+      "detail": "T2Praça da Feira & Linha do Trem|Aliados 26/24Rivais 18FEIRA • TRILHOS • COMÉRCIO LOCALINTERDIÇ"
+    },
+    {
+      "ok": true,
+      "label": "T2 faction mass active",
+      "detail": "allies=26; rivals=18"
+    },
+    {
+      "ok": true,
+      "label": "T2 combat presentation active",
+      "detail": "bullets=12; particles=151"
+    },
+    {
+      "ok": true,
+      "label": "T2 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T2 performance budget",
+      "detail": "fps=50.0; render=3.17ms; sim=0.75ms; samples=51.2/48.2/50.0"
+    },
+    {
+      "ok": true,
+      "label": "T2 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T3 identity visible",
+      "detail": "T3Avenida das Oficinas & Galpões|Aliados 32/30Rivais 22OFICINAS • GALPÕES • ZONA INDUSTRIALRUPT"
+    },
+    {
+      "ok": true,
+      "label": "T3 faction mass active",
+      "detail": "allies=32; rivals=22"
+    },
+    {
+      "ok": true,
+      "label": "T3 combat presentation active",
+      "detail": "bullets=19; particles=156"
+    },
+    {
+      "ok": true,
+      "label": "T3 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T3 performance budget",
+      "detail": "fps=43.6; render=3.83ms; sim=0.92ms; samples=43.0/45.2/43.6"
+    },
+    {
+      "ok": true,
+      "label": "T3 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T4 identity visible",
+      "detail": "T4Morro Alto (Reduto Fortificado)|Aliados 32/30Rivais 24MORRO • LAJES • ACESSOS FORTIFICADOSCER"
+    },
+    {
+      "ok": true,
+      "label": "T4 faction mass active",
+      "detail": "allies=32; rivals=24"
+    },
+    {
+      "ok": true,
+      "label": "T4 combat presentation active",
+      "detail": "bullets=9; particles=122"
+    },
+    {
+      "ok": true,
+      "label": "T4 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T4 performance budget",
+      "detail": "fps=36.4; render=4.77ms; sim=1.33ms; samples=33.3/36.4/38.0"
+    },
+    {
+      "ok": true,
+      "label": "T4 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 identity visible",
+      "detail": "T5Mansões da Orla & Condomínios|Aliados 38/36Rivais 28AVENIDAS • MUROS • PORTARIASENCURRALAR · "
+    },
+    {
+      "ok": true,
+      "label": "T5 faction mass active",
+      "detail": "allies=38; rivals=28"
+    },
+    {
+      "ok": true,
+      "label": "T5 combat presentation active",
+      "detail": "bullets=19; particles=183"
+    },
+    {
+      "ok": true,
+      "label": "T5 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T5 performance budget",
+      "detail": "fps=37.0; render=3.94ms; sim=1.33ms; samples=34.0/38.1/37.0"
+    },
+    {
+      "ok": true,
+      "label": "T5 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T6 identity visible",
+      "detail": "T6Complexo Central (Quartel-General)|Aliados 38/36Rivais 31COMANDO • SEGURANÇA • COMPLEXO CENTR"
+    },
+    {
+      "ok": true,
+      "label": "T6 faction mass active",
+      "detail": "allies=38; rivals=31"
+    },
+    {
+      "ok": true,
+      "label": "T6 combat presentation active",
+      "detail": "bullets=20; particles=187"
+    },
+    {
+      "ok": true,
+      "label": "T6 physical integrity",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T6 performance budget",
+      "detail": "fps=46.0; render=3.61ms; sim=1.15ms; samples=46.0/42.3/46.0"
+    },
+    {
+      "ok": true,
+      "label": "T6 no visible mojibake",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "campaign battle audit has no browser runtime errors",
+      "detail": "[]"
+    }
+  ]
+}

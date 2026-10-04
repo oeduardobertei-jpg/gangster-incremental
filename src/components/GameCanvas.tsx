@@ -3090,8 +3090,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         drawBulletProjectile(ctx, b);
       });
 
-      // 9. Combat Particles (Muzzle flashes, sparks, bullet casings, blood, smoke, shockwaves)
-      const particleBudget = battleEntityCount >= 110 ? 240 : battleEntityCount >= 70 ? 360 : MAX_COMBAT_PARTICLES;
+      // 9. Combat Particles ? 1.1P keeps recent feedback dense but caps redundant overlap in faction-scale battles.
+      const particleBudget = battleEntityCount >= 110 ? 140 : battleEntityCount >= 80 ? 170 : battleEntityCount >= 60 ? 200 : MAX_COMBAT_PARTICLES;
       if (particlesRef.current.length > particleBudget) {
         particlesRef.current.splice(0, particlesRef.current.length - particleBudget);
       }

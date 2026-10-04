@@ -126,6 +126,7 @@ export function drawTerritoryAtmosphereUnderlay(
   controlColor: string,
   visible: AtmosphereVisibleRect
 ) {
+  if (territoryId === 1) return; // 1.1P: T1 living detail is authored statically; redundant drifting dust retired for frame stability.
   const profile = getTerritoryAtmosphereProfile(territoryId);
   const count = Math.min(24, Math.max(4, Math.round(5 + profile.particleDensity * 13)));
   ctx.save();

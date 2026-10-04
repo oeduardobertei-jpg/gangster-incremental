@@ -156,12 +156,7 @@ export function drawTerritoryPolishOverlay(
   ctx.save();
   const pulse=.45+.55*(.5+.5*Math.sin(time*.004));
   if(territoryId===1){
-    for(const [x,y,r] of [[.17,.20,18],[.31,.37,14],[.68,.28,15],[.83,.51,14],[.30,.72,13],[.67,.76,17]] as const){
-      ctx.fillStyle=`rgba(251,191,36,${.018+.018*pulse})`;ctx.beginPath();ctx.arc(w*x,h*y,r,0,Math.PI*2);ctx.fill();
-    }
-    ctx.fillStyle=`rgba(245,158,11,${.018*pulse})`;
-    ctx.beginPath();ctx.moveTo(w*.135,h*.39);ctx.lineTo(w*.205,h*.39);ctx.lineTo(w*.225,h*.47);ctx.lineTo(w*.115,h*.47);ctx.closePath();ctx.fill();
-    ctx.fillStyle=`rgba(56,189,248,${.010+.008*pulse})`;ctx.fillRect(w*.44,0,w*.12,h);
+    // 1.1P: redundant pulse layer retired; authored local lighting already carries T1 readability.
   } else if(territoryId===2){
     ctx.fillStyle=`rgba(253,224,71,${.04*pulse})`;ctx.fillRect(w*.445,h*.198,w*.11,3);
   } else if(territoryId===3){

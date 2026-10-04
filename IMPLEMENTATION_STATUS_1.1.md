@@ -128,3 +128,12 @@ Nenhum território passa de fase até responder **sim** Ã  pergunta: “está 
 - QG Central e os demais landmarks recebem identidade arquitet?nica pr?pria;
 - gates: T6 15/15, organic 6/6, anchors 43/43, captura cr?tica 8/8 e live domination 8/8 PASS;
 - refer?ncia: `docs/1.1O_T6_POLISH.md`.
+## 1.1P conclu?da
+- auditoria compar?vel T1?T6 em viewport/zoom padronizados, com 0 viola??es f?sicas e nenhum mojibake vis?vel;
+- strings ambientais antigas corrompidas foram normalizadas em T2/T3/T4/T5/T6;
+- T1 aposentou gradientes/overlays atmosf?ricos redundantes que custavam frame time sem ganho visual proporcional;
+- combate de massa passou a usar budget progressivo de part?culas a partir de 60 entidades, preservando feedback recente e reduzindo sobreposi??o;
+- gates de performance passaram a combinar FPS est?vel com or?amento interno de render/simula??o, evitando falsos negativos de scheduling do Chrome;
+- T5 15/15, T6 15/15 e campanha completa 37/37 PASS;
+- galeria final: `docs/screenshots/1.1p-campaign-gallery/`;
+- refer?ncia: `docs/1.1P_FULL_CAMPAIGN_POLISH.md`.

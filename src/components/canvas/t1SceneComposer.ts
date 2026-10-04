@@ -7,9 +7,9 @@ import {
   drawT1ForegroundFraming,
   drawT1CharacterGrounding,
   drawT1LandmarkReadability,
-  drawT1AtmosphericContrast,
   drawT1MicroBeauty
 } from './t1FinalPolishRenderer';
+
 
 /**
  * 1.1A compositor boundary for T1.
@@ -56,7 +56,6 @@ export function drawT1ReadabilityOverlay(
   renderZoom: number
 ) {
   if (territoryId !== 1) return;
-  drawT1AtmosphericContrast(ctx, width, height, territoryId, renderZoom);
   drawT1LandmarkReadability(ctx, width, height, territoryId, buildings, renderZoom);
   drawT1MicroBeauty(ctx, width, height, territoryId, time, renderZoom);
 }

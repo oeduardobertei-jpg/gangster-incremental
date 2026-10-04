@@ -56,43 +56,16 @@ export function drawT1LandmarkReadability(
   ctx:CanvasRenderingContext2D,w:number,h:number,territoryId:number,
   buildings:readonly TacticalBuilding[],zoom:number
 ){
-  if(territoryId!==1) return;
+  if(territoryId!==1||zoom<1.45) return;
   ctx.save();
-  // 0.9.5R: landmarks receive small contrast pockets instead of floating UI markers.
-  const ids=['barraquinha','boca_leste','esconderijo'] as const;
-  for(const id of ids){
-    const b=find(buildings,id);if(!b) continue;
-    const cx=b.x+b.w*.5,cy=b.y+b.h*.54;
-    const g=ctx.createRadialGradient(cx,cy,4,cx,cy,Math.max(b.w,b.h)*.82);
-    g.addColorStop(0,'rgba(255,183,92,.022)');g.addColorStop(.58,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(2,6,10,.055)');
-    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(cx,cy,b.w*.80,b.h*.76,0,0,Math.PI*2);ctx.fill();
-  }
-  if(zoom>=1.45){
-    // Thin edge highlights make landmark materials survive close zoom without bright outlines.
-    for(const id of ['barraquinha','boca_leste'] as const){const b=find(buildings,id);if(!b)continue;
-      line(ctx,b.x+4,b.y-2,b.x+b.w-5,b.y-2,'rgba(255,189,125,.09)',.8);
-    }
+  // Close-zoom edge accents remain dynamic; large contrast gradients moved to the static cache in 1.1P.
+  for(const id of ['barraquinha','boca_leste'] as const){
+    const b=find(buildings,id);if(!b)continue;
+    line(ctx,b.x+4,b.y-2,b.x+b.w-5,b.y-2,'rgba(255,189,125,.09)',.8);
   }
   ctx.restore();
 }
 
-export function drawT1AtmosphericContrast(
-  ctx:CanvasRenderingContext2D,w:number,h:number,territoryId:number,zoom:number
-){
-  if(territoryId!==1) return;
-  ctx.save();
-  // 0.9.5S: crisp center, atmospheric edges. No global fog over units.
-  const center=ctx.createRadialGradient(w*.51,h*.53,Math.min(w,h)*.11,w*.51,h*.53,Math.min(w,h)*.52);
-  center.addColorStop(0,'rgba(12,19,25,0)');
-  center.addColorStop(.70,'rgba(7,14,20,.009)');center.addColorStop(1,'rgba(4,10,16,.038)');
-  ctx.fillStyle=center;ctx.fillRect(0,0,w,h);
-  if(zoom<1.35){
-    const horizon=ctx.createLinearGradient(0,h*.08,0,h*.34);
-    horizon.addColorStop(0,'rgba(113,143,160,.020)');horizon.addColorStop(1,'rgba(113,143,160,0)');
-    ctx.fillStyle=horizon;ctx.fillRect(0,h*.06,w,h*.30);
-  }
-  ctx.restore();
-}
 export function drawT1MicroBeauty(
   ctx:CanvasRenderingContext2D,w:number,h:number,territoryId:number,time:number,zoom:number
 ){

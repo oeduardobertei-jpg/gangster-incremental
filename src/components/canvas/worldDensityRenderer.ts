@@ -123,11 +123,11 @@ const drawT3=(ctx:CanvasRenderingContext2D,W:number,H:number,b:readonly Tactical
   for(const [x,y] of [[.08,.22],[.18,.60],[.82,.24],[.90,.66],[.35,.18],[.67,.80]] as const) utilityBox(ctx,W*x,H*y,18,22,'#f97316');
   for(const [x,y,w] of [[.12,.46,.13],[.72,.36,.14],[.38,.72,.15]] as const) hazard(ctx,W*x,H*y,W*w);
   for(const [x,y] of [[.14,.53],[.28,.18],[.76,.55],[.86,.31]] as const) manhole(ctx,W*x,H*y,7);
-  stencil(ctx,'ZONA INDUSTRIAL',W*.50,H*.16,'rgba(249,115,22,.13)',10);stencil(ctx,'ACESSO TÃƒâ€°CNICO',W*.50,H*.86,'rgba(226,232,240,.10)',8);
+  stencil(ctx,'ZONA INDUSTRIAL',W*.50,H*.16,'rgba(249,115,22,.13)',10);stencil(ctx,'ACESSO TÉCNICO',W*.50,H*.86,'rgba(226,232,240,.10)',8);
   drums(ctx,W*.16,H*.72);drums(ctx,W*.76,H*.29);drums(ctx,W*.82,H*.70);
   ctx.strokeStyle='rgba(100,116,139,.11)';ctx.lineWidth=2;for(const y of [.20,.82]){ctx.beginPath();ctx.moveTo(W*.08,H*y);ctx.lineTo(W*.92,H*y);ctx.stroke();for(let x=.12;x<.9;x+=.12){ctx.beginPath();ctx.arc(W*x,H*y,4,0,Math.PI*2);ctx.stroke();}}
   groundZone(ctx,W*.10,H*.32,W*.20,H*.12,'rgba(55,65,81,.13)','rgba(249,115,22,.15)','OFICINA');
-  groundZone(ctx,W*.70,H*.57,W*.20,H*.12,'rgba(55,65,81,.13)','rgba(148,163,184,.13)','SERVIÃƒâ€¡O');
+  groundZone(ctx,W*.70,H*.57,W*.20,H*.12,'rgba(55,65,81,.13)','rgba(148,163,184,.13)','SERVIÇO');
   parkingBays(ctx,W*.33,H*.25,W*.16,H*.08,4);parkingBays(ctx,W*.54,H*.67,W*.15,H*.08,4);
 };
 const drawT4=(ctx:CanvasRenderingContext2D,W:number,H:number,b:readonly TacticalBuilding[],_control:string)=>{
@@ -157,7 +157,7 @@ const drawT6=(ctx:CanvasRenderingContext2D,W:number,H:number,b:readonly Tactical
   scatterMicro(ctx,W,H,606,46,b,'secure');
   for(const [x,y] of [[.31,.17],[.69,.17],[.31,.47],[.69,.47],[.31,.77],[.69,.77]] as const){pole(ctx,W*x,H*y,30,'#e5e7eb');ctx.strokeStyle='rgba(148,153,156,.30)';ctx.strokeRect(W*x-5,H*y-34,10,7);}
   for(const [x,y] of [[.39,.24],[.61,.24],[.39,.58],[.61,.58],[.50,.73]] as const) utilityBox(ctx,W*x,H*y,14,18,'#777d80');
-  stencil(ctx,'PERÃƒÂMETRO RESTRITO',W*.50,H*.12,'rgba(203,213,225,.13)',9);stencil(ctx,'EIXO DE COMANDO',W*.50,H*.90,'rgba(226,232,240,.11)',8);
+  stencil(ctx,'PERÍMETRO RESTRITO',W*.50,H*.12,'rgba(203,213,225,.13)',9);stencil(ctx,'EIXO DE COMANDO',W*.50,H*.90,'rgba(226,232,240,.11)',8);
   drain(ctx,W*.43,H*.52,22);drain(ctx,W*.55,H*.52,22);
   groundZone(ctx,W*.38,H*.19,W*.24,H*.085,'rgba(120,124,126,.020)','rgba(180,184,186,.060)');
   groundZone(ctx,W*.38,H*.73,W*.24,H*.085,'rgba(62,64,65,.040)','rgba(184,188,190,.055)');
@@ -166,6 +166,11 @@ const drawT6=(ctx:CanvasRenderingContext2D,W:number,H:number,b:readonly Tactical
   for(const [x,y] of [[.285,.30],[.715,.30],[.285,.61],[.715,.61],[.285,.86],[.715,.86]] as const) cameraPole(ctx,W*x,H*y,'#777d80');
   stencil(ctx,'SETOR A',W*.39,H*.36,'rgba(203,213,225,.055)',7);stencil(ctx,'SETOR B',W*.61,H*.74,'rgba(203,213,225,.055)',7);
 };
+const liveGlow=(ctx:CanvasRenderingContext2D,x:number,y:number,r:number,color:string,alpha:number)=>{
+  const g=ctx.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,rgba(color,alpha));g.addColorStop(1,rgba(color,0));
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+};
+
 export function drawWorldDensityFoundation(
   ctx:CanvasRenderingContext2D,W:number,H:number,territoryId:number,controlColor:string,
   buildings:readonly TacticalBuilding[]
@@ -179,17 +184,14 @@ export function drawWorldDensityFoundation(
   else if(territoryId===6) drawT6(ctx,W,H,buildings,controlColor);
   ctx.restore();
 }
-const liveGlow=(ctx:CanvasRenderingContext2D,x:number,y:number,r:number,color:string,alpha:number)=>{
-  const g=ctx.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,rgba(color,alpha));g.addColorStop(1,rgba(color,0));
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-};
-
 export function drawWorldDensityOverlay(
   ctx:CanvasRenderingContext2D,W:number,H:number,territoryId:number,time:number,controlColor:string
 ){
   const pulse=.5+.5*Math.sin(time*.0042);ctx.save();
   if(territoryId===1){
-    liveGlow(ctx,W*.255,H*.585,24,'#f59e0b',.035+.025*pulse);liveGlow(ctx,W*.69,H*.36,18,'#fbbf24',.025+.02*pulse);
+    // Keep only cheap emissive cores animated; the expensive radial falloff is cached above.
+    ctx.fillStyle=`rgba(251,191,36,${.11+.05*pulse})`;ctx.beginPath();ctx.arc(W*.255,H*.585,2.2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=`rgba(251,191,36,${.09+.04*(1-pulse)})`;ctx.beginPath();ctx.arc(W*.69,H*.36,1.8,0,Math.PI*2);ctx.fill();
   } else if(territoryId===2){
     const green=Math.sin(time*.002)>0;for(const x of [.18,.42,.62,.84]){ctx.fillStyle=green?'rgba(34,197,94,.55)':'rgba(239,68,68,.52)';ctx.beginPath();ctx.arc(W*x,H*.14,2.6,0,Math.PI*2);ctx.fill();}
   } else if(territoryId===3){
