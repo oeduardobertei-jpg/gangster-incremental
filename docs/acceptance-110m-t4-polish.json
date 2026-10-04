@@ -1,0 +1,81 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "authored hillside terraces present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "organic hillside footpaths present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "curved path/erosion language used",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "terrace faces authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "vegetation follows drainage and terraces",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T4 contextual facades vary by role",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "physical T4 retaining walls have hillside finish",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T4 purpose props carry no fixed red ownership accent",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T4 ownership props use runtime control color",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T4 HUD identity preserved",
+      "detail": "T4Morro Alto (Reduto Fortificado)|Aliados 0/15Rivais 22MORRO • LAJES • ACESSOS FORTIFICADOSCERC"
+    },
+    {
+      "ok": true,
+      "label": "paused T4 physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T4 mass fixture active",
+      "detail": "allies=26; rivals=21"
+    },
+    {
+      "ok": true,
+      "label": "T4 combat presentation active",
+      "detail": "bullets=14; particles=122"
+    },
+    {
+      "ok": true,
+      "label": "T4 mass combat remains physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T4 runtime has no browser errors",
+      "detail": "[]"
+    }
+  ]
+}

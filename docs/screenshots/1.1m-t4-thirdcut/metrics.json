@@ -1,0 +1,63 @@
+{
+  "hud": {
+    "perf": {
+      "avgFrameMs": 17.23050847457627,
+      "p95FrameMs": 16.800000000000182,
+      "sampledAt": 4275,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 360,
+        "zoom": 1.572
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 58.03659256344679,
+      "avgSimulationMs": 0.00338983050768532,
+      "avgRenderMs": 3.7644067796468104,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.46610169491130793,
+      "avgEntityRenderMs": 3.2423728813409363,
+      "avgEffectsRenderMs": 0.005084745763501121,
+      "allies": 0,
+      "rivals": 22,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 51,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 0,
+      "rightEdgePopulation": 0,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 662.1686088680489,
+      "rivalCentroidY": 345.3596813543923
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "text": "T4Morro Alto (Reduto Fortificado)|Aliados 0/15Rivais 22MORRO • LAJES • ACESSOS FORTIFICADOSCERCO · PRESSÃO0/80POSIÇÕES 0/6ALVOLaje Fortificada0%"
+  },
+  "runtimeErrors": []
+}

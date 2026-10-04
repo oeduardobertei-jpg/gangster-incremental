@@ -161,8 +161,9 @@ const sandbag=(ctx:CanvasRenderingContext2D,x:number,y:number,w=12)=>{
   ctx.fillStyle='#71675e';ctx.beginPath();ctx.ellipse(x,y,w*.5,3.2,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(226,232,240,.12)';ctx.stroke();
 };
 const drawT4=(a:Args)=>{
-  const {ctx,b,roofY,facadeY,height,controlColor}=a;const tone=buildingTone(b);
-  patchFacade(ctx,b,facadeY,height,tone);
+  const {ctx,b,roofY,facadeY,height,controlColor}=a;
+  const tones:Record<string,string>={beco_01:'#74503f',laje_ponto:'#706353',barraquinha:'#765447',esconderijo:'#62564d',boca_leste:'#6e5042',torre_guarda:'#5f5b55',mirante:'#695d50'};
+  patchFacade(ctx,b,facadeY,height,tones[b.id]??buildingTone(b));
   if(b.id==='beco_01'){
     rect(ctx,b.x+5,roofY-13,b.w*.50,23,'#6b5244','#8b6e5c');stair(ctx,b.x+b.w-23,facadeY+height-29,23,29,-1);zinc(ctx,b.x+2,roofY-15,b.w*.55,10,2);
   } else if(b.id==='laje_ponto'){

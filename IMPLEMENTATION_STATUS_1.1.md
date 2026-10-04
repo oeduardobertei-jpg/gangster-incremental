@@ -18,7 +18,7 @@ Ordem de prioridade: **visual → movimento/IA → HUD/interface → câmera →
 - [x] 1.1J — Performance
 - [x] 1.1K — T2
 - [x] 1.1L — T3
-- [ ] 1.1M — T4
+- [x] 1.1M — T4
 - [ ] 1.1N — T5
 - [ ] 1.1O — T6
 - [ ] 1.1P — Full Campaign Polish
@@ -107,3 +107,10 @@ Nenhum território passa de fase até responder **sim** Ã  pergunta: “está 
 - densidade industrial adicional usa `PurposeProps` físicos, não obstáculos visuais falsos;
 - gate T3 16/16, combate 10/10 e anchors 43/43 PASS;
 - referência: `docs/1.1L_T3_POLISH.md`.
+
+## 1.1M concluída
+- T4 recomposto como morro em patamares, com trilhas, drenagem, contenções e vegetação localizada;
+- arquitetura contextual varia por função e perde repetição de blocos;
+- props de controle deixam de carregar cor fixa e usam `controlColor` em runtime;
+- gate T4 15/15 e anchors 43/43 PASS;
+- referência: `docs/1.1M_T4_POLISH.md`.

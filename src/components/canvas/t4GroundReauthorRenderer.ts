@@ -13,6 +13,124 @@ const blob=(ctx:CanvasRenderingContext2D,W:number,H:number,pts:readonly (readonl
   if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}
 };
 
+const drawTerracePlatforms=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const terraces=[
+    {pts:[[.015,.085],[.315,.070],[.365,.145],[.315,.225],[.055,.235],[.010,.185]],fill:'rgba(116,88,66,.17)'},
+    {pts:[[.665,.075],[.980,.085],[.995,.205],[.915,.250],[.700,.225],[.635,.155]],fill:'rgba(100,78,61,.16)'},
+    {pts:[[.010,.315],[.325,.300],[.375,.395],[.325,.510],[.055,.520],[.005,.455]],fill:'rgba(108,80,59,.15)'},
+    {pts:[[.645,.310],[.985,.325],[.995,.480],[.925,.530],[.690,.505],[.625,.410]],fill:'rgba(95,74,58,.15)'},
+    {pts:[[.010,.585],[.315,.570],[.375,.685],[.315,.825],[.055,.825],[.005,.755]],fill:'rgba(102,74,53,.16)'},
+    {pts:[[.650,.580],[.985,.595],[.995,.785],[.920,.835],[.700,.815],[.625,.690]],fill:'rgba(92,70,55,.15)'}
+  ] as const;
+  for(const t of terraces){blob(ctx,W,H,t.pts,t.fill,'rgba(181,145,108,.075)');}
+  // Light earth lips on the uphill edge make the level changes readable without becoming walls/collision.
+  ctx.strokeStyle='rgba(190,151,111,.11)';ctx.lineWidth=2;ctx.lineCap='round';
+  for(const [x1,y1,x2,y2] of [[.04,.233,.31,.220],[.68,.220,.94,.242],[.04,.515,.32,.500],[.68,.500,.94,.522],[.05,.818,.31,.810],[.69,.808,.92,.828]] as const){ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();}
+  ctx.restore();
+};
+
+const drawHillsideFootpaths=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  const paths=[
+    [.08,.20,.21,.29,.39,.34],[.09,.46,.23,.42,.39,.49],[.10,.75,.24,.67,.40,.62],
+    [.92,.20,.79,.29,.61,.34],[.91,.46,.77,.42,.61,.49],[.90,.75,.76,.67,.60,.62]
+  ] as const;
+  for(const [x1,y1,cx,cy,x2,y2] of paths){
+    const draw=(color:string,w:number)=>{ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.quadraticCurveTo(W*cx,H*cy,W*x2,H*y2);ctx.stroke();};
+    draw('rgba(41,31,25,.18)',12);draw('rgba(127,100,75,.24)',7);draw('rgba(194,156,115,.065)',1);
+    // Worn inner edge varies by curve side, avoiding road-like straight bands.
+    ctx.strokeStyle='rgba(59,43,33,.10)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*(x1+.005),H*(y1+.004));ctx.quadraticCurveTo(W*(cx-.006),H*(cy+.006),W*(x2+.003),H*(y2+.004));ctx.stroke();
+  }
+  ctx.restore();
+};
+
+const drawTerraceFaces=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const faces=[
+    [.055,.245,.31,.258],[.685,.247,.93,.242],
+    [.065,.505,.33,.520],[.665,.507,.94,.506],
+    [.075,.748,.31,.760],[.685,.751,.92,.754]
+  ] as const;
+  for(const [x1,y1,x2,y2] of faces){
+    const x=W*x1,y=H*y1,w=W*(x2-x1),h=Math.max(5,H*Math.abs(y2-y1)+8);
+    ctx.fillStyle='rgba(62,45,34,.16)';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w,H*y2);ctx.lineTo(x+w,H*y2+h);ctx.lineTo(x,y+h);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(153,119,86,.15)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w,H*y2);ctx.stroke();
+    // Embedded stones read as exposed terrace face, not a freestanding wall.
+    for(let i=0;i<6;i++){const t=(i+.5)/6,px=x+w*t,py=y+(H*y2-y)*t+h*.58;ctx.fillStyle=i%2?'rgba(133,112,91,.18)':'rgba(103,89,75,.17)';ctx.beginPath();ctx.ellipse(px,py,4+(i%3),2.1,.08,0,Math.PI*2);ctx.fill();}
+  }
+  ctx.restore();
+};
+
+const drawHillsideDrainage=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();ctx.lineCap='round';
+  const drains=[
+    [.365,.17,.405,.26],[.355,.45,.405,.52],[.365,.72,.415,.79],
+    [.635,.17,.595,.26],[.645,.45,.595,.52],[.635,.72,.585,.79]
+  ] as const;
+  for(const [x1,y1,x2,y2] of drains){
+    ctx.strokeStyle='rgba(28,24,22,.30)';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(W*x1,H*y1);ctx.lineTo(W*x2,H*y2);ctx.stroke();
+    ctx.strokeStyle='rgba(125,120,105,.15)';ctx.lineWidth=1;ctx.stroke();
+  }
+  // Flat grate marks at the road edge.
+  ctx.strokeStyle='rgba(130,135,130,.19)';ctx.lineWidth=1;
+  for(const [x,y] of [[.405,.26],[.405,.52],[.415,.79],[.595,.26],[.595,.52],[.585,.79]] as const){
+    const px=W*x,py=H*y;ctx.strokeRect(px-8,py-3,16,6);for(let i=-5;i<=5;i+=5){ctx.beginPath();ctx.moveTo(px+i,py-2);ctx.lineTo(px+i,py+2);ctx.stroke();}
+  }
+  ctx.restore();
+};
+
+const drawDrainageGreen=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const bands=[
+    [.37,.25,.405,.30],[.36,.51,.405,.56],[.38,.77,.415,.82],
+    [.63,.25,.595,.30],[.64,.51,.595,.56],[.62,.77,.585,.82]
+  ] as const;
+  for(const [x1,y1,x2,y2] of bands){
+    for(let i=0;i<5;i++){
+      const t=(i+.5)/5,seed=Math.round((x1+y1+x2+y2)*1000)+i*37;
+      const x=(x1+(x2-x1)*t)*W+(seeded(seed)-.5)*9;
+      const y=(y1+(y2-y1)*t)*H+(seeded(seed+17)-.5)*5;
+      const r=2.4+seeded(seed+31)*3.3;
+      ctx.fillStyle=i%3===0?'rgba(48,91,58,.42)':i%3===1?'rgba(67,105,61,.36)':'rgba(92,108,62,.30)';
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    }
+  }
+  ctx.restore();
+};
+
+const drawTerraceGardenBeds=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const beds=[
+    [[.11,.235],[.18,.228],[.205,.244],[.18,.263],[.105,.260]],
+    [[.76,.225],[.84,.230],[.87,.249],[.83,.266],[.755,.258]],
+    [[.13,.505],[.20,.497],[.225,.516],[.195,.540],[.125,.536]],
+    [[.76,.495],[.84,.503],[.865,.524],[.835,.545],[.755,.535]],
+    [[.14,.802],[.21,.795],[.235,.815],[.205,.838],[.135,.833]],
+    [[.75,.795],[.83,.802],[.855,.821],[.825,.842],[.745,.834]]
+  ] as const;
+  for(let j=0;j<beds.length;j++){
+    const pts=beds[j];blob(ctx,W,H,pts,'rgba(46,74,45,.13)','rgba(103,111,69,.12)');
+    const cx=pts.reduce((a,p)=>a+p[0],0)/pts.length,cy=pts.reduce((a,p)=>a+p[1],0)/pts.length;
+    for(let i=0;i<5;i++){const seed=1900+j*97+i*17,x=(cx+(seeded(seed)-.5)*.055)*W,y=(cy+(seeded(seed+9)-.5)*.025)*H;
+      ctx.fillStyle=i%2?'rgba(72,104,56,.38)':'rgba(91,112,60,.34)';ctx.beginPath();ctx.arc(x,y,2.5+seeded(seed+19)*2.2,0,Math.PI*2);ctx.fill();}
+  }
+  ctx.restore();
+};
+
+const drawTerraceVegetationPockets=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
+  ctx.save();
+  const pockets=[[.05,.27,1601],[.29,.24,1611],[.08,.54,1621],[.30,.53,1631],[.08,.85,1641],[.30,.82,1651],
+                 [.95,.27,1661],[.71,.24,1671],[.92,.54,1681],[.70,.53,1691],[.92,.85,1701],[.70,.82,1711]] as const;
+  for(const [nx,ny,seed] of pockets){
+    for(let i=0;i<3;i++){const r=seeded(seed+i*31),a=seeded(seed+i*17)*Math.PI*2,d=3+seeded(seed+i*23)*10;
+      const x=nx*W+Math.cos(a)*d,y=ny*H+Math.sin(a)*d*.4,rr=2.5+r*3.5;
+      ctx.fillStyle=i%3===0?'rgba(70,98,54,.46)':i%3===1?'rgba(88,108,58,.40)':'rgba(117,110,61,.32)';ctx.beginPath();ctx.arc(x,y,rr,0,Math.PI*2);ctx.fill();
+    }
+  }
+  ctx.restore();
+};
+
 const drawSlopeFields=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();
   blob(ctx,W,H,[[0,.04],[.35,.03],[.38,.16],[.29,.24],[.08,.22],[0,.18]],'rgba(116,78,49,.10)');
@@ -185,7 +303,8 @@ const drawRockFragments=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.restore();
 };
 export function drawT4ReauthoredSurface(ctx:CanvasRenderingContext2D,W:number,H:number,paths:readonly ScenePath[],footprints:readonly GroundFootprint[]=[]){
-  ctx.save();drawSlopeFields(ctx,W,H);drawSlopeGrade(ctx,W,H);drawExposedEarthCuts(ctx,W,H);drawGroundContact(ctx,footprints);
+  ctx.save();drawSlopeFields(ctx,W,H);drawTerracePlatforms(ctx,W,H);drawSlopeGrade(ctx,W,H);drawExposedEarthCuts(ctx,W,H);drawGroundContact(ctx,footprints);
+  drawHillsideFootpaths(ctx,W,H);
   paths.forEach(path=>{if(path.surface==='asphalt')drawHillRoad(ctx,path,W,H);else strokePath(ctx,path,W,H,'#5c5043',path.width,.72);drawRoadDamage(ctx,path,W,H);});
-  drawRoadShoulderSpills(ctx,W,H);drawTerraceLips(ctx,W,H);drawRubbleFans(ctx,W,H);drawErosionRuns(ctx,W,H);drawErosionFans(ctx,W,H);drawSlopeSteps(ctx,W,H);drawConcreteLandings(ctx,W,H);drawRockFragments(ctx,W,H);drawDryNature(ctx,W,H);drawSlopeShrubs(ctx,W,H);drawSlopeMicroLife(ctx,W,H);ctx.restore();
+  drawHillsideDrainage(ctx,W,H);drawDrainageGreen(ctx,W,H);drawRoadShoulderSpills(ctx,W,H);drawTerraceFaces(ctx,W,H);drawTerraceLips(ctx,W,H);drawRubbleFans(ctx,W,H);drawErosionRuns(ctx,W,H);drawErosionFans(ctx,W,H);drawSlopeSteps(ctx,W,H);drawConcreteLandings(ctx,W,H);drawRockFragments(ctx,W,H);drawDryNature(ctx,W,H);drawSlopeShrubs(ctx,W,H);drawTerraceGardenBeds(ctx,W,H);drawTerraceVegetationPockets(ctx,W,H);drawSlopeMicroLife(ctx,W,H);ctx.restore();
 }

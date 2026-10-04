@@ -181,8 +181,15 @@ const drawDistrictContinuity=(ctx:CanvasRenderingContext2D,pieces:readonly Unifi
 
 const drawFavelaPiece=(ctx:CanvasRenderingContext2D,p:UnifiedSupportSolid,territoryId:number,index:number,accent:string)=>{
   if(p.kind==='wall'){
-    shadow(ctx,p,.28);rect(ctx,p,'#655b52','#8b8178');
-    ctx.fillStyle=accent;ctx.globalAlpha=.14;ctx.fillRect(p.x+5,p.y+2,p.w*.34,3);ctx.globalAlpha=1;return;
+    shadow(ctx,p,.28);
+    if(territoryId===4){
+      rect(ctx,p,'#6a5546','#92755e');ctx.fillStyle='rgba(190,151,112,.14)';ctx.fillRect(p.x+3,p.y+2,p.w-6,2);
+      ctx.fillStyle='rgba(55,43,35,.24)';for(let x=p.x+7;x<p.x+p.w-5;x+=14){ctx.beginPath();ctx.ellipse(x,p.y+p.h*.62,4.5,2.1,.08,0,Math.PI*2);ctx.fill();}
+      ctx.fillStyle=accent;ctx.globalAlpha=.10;ctx.fillRect(p.x+5,p.y+2,p.w*.26,2);ctx.globalAlpha=1;
+    }else{
+      rect(ctx,p,'#655b52','#8b8178');ctx.fillStyle=accent;ctx.globalAlpha=.14;ctx.fillRect(p.x+5,p.y+2,p.w*.34,3);ctx.globalAlpha=1;
+    }
+    return;
   }
   const warm=territoryId===4,variant=Math.abs(index)%4;
   const base=warm?['#774533','#8a543d','#6d493b','#816650'][variant]:['#9d7a5d','#b0a38c','#8b5b43','#938a74'][variant];

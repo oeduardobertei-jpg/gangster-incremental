@@ -142,12 +142,41 @@ const finishT3=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom}=a;
   if(renderZoom>=.95){for(let y=facadeY+9;y<facadeY+15;y+=3)line(ctx,b.x+b.w-14,y,b.x+b.w-10,y,'#111827');
     rect(ctx,b.x+7,roofY+6,10,5,'#59636d','#94a3b8');line(ctx,b.x+12,roofY+6,b.x+12,roofY-7,'#8b949d',1.4);}
 };
-const finishT4=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a;
+const finishT4=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a,n=norm(a.role);
+  const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0), right=hash%2===0;
+  const washes=n.includes('beco')?'rgba(111,72,52,.28)':n.includes('boca')?'rgba(91,72,57,.28)':n.includes('laje')?'rgba(106,91,72,.27)':'rgba(113,77,57,.25)';
+  ctx.fillStyle=washes;ctx.fillRect(b.x+3,facadeY+3,b.w-6,Math.max(8,height-8));
   rect(ctx,b.x+4,facadeY+height-5,b.w-8,3,'rgba(45,34,28,.48)');
-  ctx.fillStyle='rgba(154,126,99,.13)';ctx.fillRect(b.x+6,facadeY+5,b.w*.32,Math.max(6,height*.30));
-  const right=[...b.id].reduce((a,c)=>a+c.charCodeAt(0),0)%2===0;const px=right?b.x+b.w-7:b.x+7;line(ctx,px,roofY+7,px,facadeY+height-3,'#625a53',1.5);
+  const px=right?b.x+b.w-7:b.x+7;line(ctx,px,roofY+7,px,facadeY+height-3,'#625a53',1.5);
+  if(n.includes('beco')){
+    // External stair/readable ascent for compact hillside houses.
+    const sx=right?b.x+b.w-6:b.x+6;
+    for(let i=0;i<5;i++){const ww=8+i*3;rect(ctx,right?sx-ww:sx,facadeY+height-4-i*4,ww,3,'#71665d');}
+    rect(ctx,b.x+5,roofY+6,Math.max(20,b.w*.42),6,'#61574e','#8b8178');
+  } else if(n.includes('boca')){
+    // Small fortified frontage: canopy + barred service opening.
+    rect(ctx,b.x+6,facadeY+6,b.w-12,6,'#655044','#947766');
+    rect(ctx,b.x+9,facadeY+13,Math.max(15,b.w*.40),8,'#1d303a','#78858d');
+    for(let xx=b.x+12;xx<b.x+9+Math.max(15,b.w*.40);xx+=5) line(ctx,xx,facadeY+14,xx,facadeY+20,'rgba(226,232,240,.32)',.7);
+  } else if(n.includes('laje')){
+    // Terrace/parapet rhythm makes these read as stronger concrete homes.
+    line(ctx,b.x+5,roofY+5,b.x+b.w-5,roofY+5,'#8b8177',2);
+    for(let xx=b.x+8;xx<b.x+b.w-7;xx+=12) line(ctx,xx,roofY+5,xx,roofY+14,'rgba(203,213,225,.30)',1);
+    rect(ctx,right?b.x+7:b.x+b.w-25,roofY+16,18,5,'#5c5751','#817a73');
+  } else {
+    // Reduto: asymmetric balcony + exposed-brick wash.
+    const bx=right?b.x+b.w*.43:b.x+5,bw=Math.max(22,b.w*.45),by=facadeY+6;
+    rect(ctx,bx,by,bw,4,'#665347');line(ctx,bx,by+5,bx+bw,by+5,'#8c8f8e',1);
+    for(let xx=bx+3;xx<bx+bw;xx+=8)line(ctx,xx,by-1,xx,by+5,'rgba(203,213,225,.28)',.7);
+  }
+  if(hash%3===0){
+    ctx.fillStyle='#62584f';ctx.beginPath();ctx.moveTo(b.x+3,roofY+5);ctx.lineTo(b.x+b.w*.52,roofY-3);ctx.lineTo(b.x+b.w-3,roofY+4);ctx.lineTo(b.x+b.w-3,roofY+9);ctx.lineTo(b.x+3,roofY+10);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(199,185,169,.20)';ctx.stroke();
+  }else if(hash%3===1&&b.w>=44){
+    const aw=Math.max(19,b.w*.34);rect(ctx,right?b.x+b.w-aw-5:b.x+5,facadeY+8,aw,5,'#6e5544','#98745c');
+  }
   if(renderZoom>=.95) meter(ctx,right?px-10:px+3,facadeY+height-15,controlColor);
-  if(b.w>=46){for(let x=b.x+9;x<b.x+b.w-8;x+=13)line(ctx,x,roofY+1,x,roofY-8,'rgba(107,114,128,.70)',1);}
+  if(b.w>=46){for(let x=b.x+9;x<b.x+b.w-8;x+=13)line(ctx,x,roofY+1,x,roofY-8,'rgba(107,114,128,.55)',1);}
 };
 const finishT5=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom}=a;
   rect(ctx,b.x+5,facadeY+height-6,b.w-10,3,'rgba(51,65,85,.22)');

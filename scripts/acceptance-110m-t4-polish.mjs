@@ -1,0 +1,35 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { openTestSession, sleep } from './cdp-session.mjs';
+import { installFixture } from './fixture-04g.mjs';
+let passed=0,failed=0;const results=[];
+const check=(ok,label,detail='')=>{results.push({ok,label,detail});console.log(`${ok?'PASS':'FAIL'} | ${label}${detail?` | ${detail}`:''}`);ok?passed++:failed++;};
+const ground=readFileSync('src/components/canvas/t4GroundReauthorRenderer.ts','utf8');
+const context=readFileSync('src/components/canvas/contextArchitectureFinishRenderer.ts','utf8');
+const props=readFileSync('src/data/territoryPurposeProps.ts','utf8');
+const propRenderer=readFileSync('src/components/canvas/purposefulPropsRenderer.ts','utf8');
+const unified=readFileSync('src/components/canvas/unifiedTerritoryComposer.ts','utf8');
+const t4Block=props.slice(props.indexOf('const T4:'),props.indexOf('const T5:'));
+check(ground.includes('drawTerracePlatforms'),'authored hillside terraces present');
+check(ground.includes('drawHillsideFootpaths'),'organic hillside footpaths present');
+check(ground.includes('quadraticCurveTo'),'curved path/erosion language used');
+check(ground.includes('drawTerraceFaces'),'terrace faces authored');
+check(ground.includes('drawDrainageGreen')&&ground.includes('drawTerraceGardenBeds'),'vegetation follows drainage and terraces');
+check(context.includes("n.includes('beco')")&&context.includes("n.includes('boca')")&&context.includes("n.includes('laje')"),'T4 contextual facades vary by role');
+check(unified.includes("if(territoryId===4)")&&unified.includes("'#6a5546'"),'physical T4 retaining walls have hillside finish');
+check(!t4Block.includes("#ef4444"),'T4 purpose props carry no fixed red ownership accent');
+check(propRenderer.includes("territoryId===4 && (p.kind==='watch_post'||p.kind==='barricade')"),'T4 ownership props use runtime control color');
+const baseUrl=process.env.BASE_URL||'http://127.0.0.1:3001';
+const s=await openTestSession({url:baseUrl,width:1536,height:864});
+try{
+ await s.evaluate(`(async()=>{const {createDefaultState}=await import('/src/state/defaultGameState.ts');const g=createDefaultState();g.currentTerritoryId=4;g.runHighestTerritoryReached=4;g.stats.highestTerritoryReached=4;g.gameSpeed=0;g.soundMuted=true;g.battleSnapshot=undefined;localStorage.setItem('factions_war_pt_br_save_v2',JSON.stringify(g));location.reload();return true;})()`);
+ await sleep(2000);let state=await s.evaluate(`(()=>({text:document.querySelector('.battle-hud')?.textContent||'',perf:window.__GAME_PERF__}))()`);
+ check(/Morro Alto|Reduto Fortificado/.test(state.text),'T4 HUD identity preserved',state.text.replace(/\s+/g,' ').slice(0,95));
+ check((state.perf?.solidWorldViolations??0)===0,'paused T4 physically clean',`violations=${state.perf?.solidWorldViolations??0}`);
+ await installFixture(s,{territory:4,allies:26,rivals:20,speed:1});await sleep(3200);state=await s.evaluate(`(()=>({perf:window.__GAME_PERF__}))()`);
+ check((state.perf?.allies??0)>0&&(state.perf?.rivals??0)>0,'T4 mass fixture active',`allies=${state.perf?.allies}; rivals=${state.perf?.rivals}`);
+ check((state.perf?.bullets??0)+(state.perf?.particles??0)>0,'T4 combat presentation active',`bullets=${state.perf?.bullets}; particles=${state.perf?.particles}`);
+ check((state.perf?.solidWorldViolations??99)===0,'T4 mass combat remains physically clean',`violations=${state.perf?.solidWorldViolations}`);
+ check(s.errors.length===0,'T4 runtime has no browser errors',JSON.stringify(s.errors));
+}finally{await s.close();}
+writeFileSync('docs/acceptance-110m-t4-polish.json',JSON.stringify({passed,failed,results},null,2));
+console.log(`T4_POLISH_11M ${passed}/${passed+failed} PASS`);if(failed)process.exitCode=1;

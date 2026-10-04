@@ -62,9 +62,9 @@ const T3: PurposeProp[] = [
 const T4: PurposeProp[] = [
   { id:'t4-sandbags-a', kind:'sandbags', x:.28,y:.33,w:.075,h:.025,solid:true,blocksProjectiles:true,material:'mixed' },
   { id:'t4-sandbags-b', kind:'sandbags', x:.64,y:.60,w:.075,h:.025,solid:true,blocksProjectiles:true,material:'mixed' },
-  { id:'t4-watch-a', kind:'watch_post', x:.16,y:.18,w:.050,h:.055,solid:true,blocksProjectiles:true,occludes:true,material:'metal',accent:'#ef4444' },
-  { id:'t4-watch-b', kind:'watch_post', x:.90,y:.45,w:.050,h:.055,solid:true,blocksProjectiles:true,occludes:true,material:'metal',accent:'#ef4444' },
-  { id:'t4-barricade', kind:'barricade', x:.43,y:.74,w:.12,h:.022,solid:true,blocksProjectiles:true,material:'metal',accent:'#ef4444' },
+  { id:'t4-watch-a', kind:'watch_post', x:.16,y:.18,w:.050,h:.055,solid:true,blocksProjectiles:true,occludes:true,material:'metal' },
+  { id:'t4-watch-b', kind:'watch_post', x:.90,y:.45,w:.050,h:.055,solid:true,blocksProjectiles:true,occludes:true,material:'metal' },
+  { id:'t4-barricade', kind:'barricade', x:.43,y:.74,w:.12,h:.022,solid:true,blocksProjectiles:true,material:'metal' },
   { id:'t4-crates', kind:'crate_stack', x:.54,y:.27,w:.040,h:.034,solid:true,blocksProjectiles:true,material:'mixed' },
   { id:'t4-service', kind:'service_unit', x:.39,y:.48,w:.034,h:.032,solid:true,blocksProjectiles:true,material:'metal',label:'RÁDIO' }
 ];
