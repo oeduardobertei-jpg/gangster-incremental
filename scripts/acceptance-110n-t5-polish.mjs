@@ -1,0 +1,33 @@
+﻿import { readFileSync, writeFileSync } from 'node:fs';
+import { openTestSession, sleep } from './cdp-session.mjs';
+import { installFixture } from './fixture-04g.mjs';
+let passed=0,failed=0;const results=[];
+const check=(ok,label,detail='')=>{results.push({ok,label,detail});console.log(`${ok?'PASS':'FAIL'} | ${label}${detail?` | ${detail}`:''}`);ok?passed++:failed++;};
+const ground=readFileSync('src/components/canvas/t5GatedGroundReauthorRenderer.ts','utf8');
+const env=readFileSync('src/components/canvas/environmentRenderer.ts','utf8');
+const unified=readFileSync('src/components/canvas/unifiedTerritoryComposer.ts','utf8');
+const finish=readFileSync('src/components/canvas/contextArchitectureFinishRenderer.ts','utf8');
+const landmark=readFileSync('src/components/canvas/t5LandmarkRenderer.ts','utf8');
+check(ground.includes('drawEnclaves')&&ground.includes('drawBoulevard'),'T5 authored enclaves + boulevard present');
+check(ground.includes('drawLandscape')&&ground.includes('drawResidentUse'),'T5 landscape and resident-use pockets authored');
+check(ground.includes('drawPerimeter'),'T5 perimeter/gate authored in same surface');
+check(env.includes('drawT5ReauthoredSurface'),'T5 environment uses dedicated reauthor surface');
+check(unified.includes('const t5Homes=')&&unified.includes('Casa Costeira'),'T5 secondary physical fabric authored');
+check(finish.includes("n.includes('bloco residencial')")&&finish.includes("n.includes('garagem')"),'T5 contextual facades vary by role');
+check(landmark.includes("name.includes('cobertura')")&&landmark.includes("name.includes('mansao reservada')"),'T5 hero landmarks vary by role');
+check(landmark.includes("name.includes('portaria')||name.includes('guarita')"),'T5 security architecture authored');
+const s=await openTestSession({url:process.env.BASE_URL||'http://127.0.0.1:3001',width:1536,height:864});
+try{
+ await s.evaluate(`(async()=>{const {createDefaultState}=await import('/src/state/defaultGameState.ts');const g=createDefaultState();g.currentTerritoryId=5;g.runHighestTerritoryReached=5;g.stats.highestTerritoryReached=5;g.gameSpeed=0;g.soundMuted=true;g.battleSnapshot=undefined;localStorage.setItem('factions_war_pt_br_save_v2',JSON.stringify(g));location.reload();return true;})()`);
+ await sleep(2200);let state=await s.evaluate(`(()=>({text:document.querySelector('.battle-hud')?.textContent||'',perf:window.__GAME_PERF__}))()`);
+ check(/Mansões da Orla|Condomínios/.test(state.text),'T5 HUD identity preserved',state.text.replace(/\s+/g,' ').slice(0,100));
+ check((state.perf?.solidWorldViolations??0)===0,'paused T5 physically clean',`violations=${state.perf?.solidWorldViolations??0}`);
+ await installFixture(s,{territory:5,allies:34,rivals:24,speed:1});await sleep(3800);state=await s.evaluate(`(()=>({perf:window.__GAME_PERF__}))()`);
+ check((state.perf?.allies??0)>0&&(state.perf?.rivals??0)>0,'T5 mass fixture active',`allies=${state.perf?.allies}; rivals=${state.perf?.rivals}`);
+ check((state.perf?.bullets??0)+(state.perf?.particles??0)>0,'T5 combat presentation active',`bullets=${state.perf?.bullets}; particles=${state.perf?.particles}`);
+ check((state.perf?.solidWorldViolations??99)===0,'T5 mass combat remains physically clean',`violations=${state.perf?.solidWorldViolations}`);
+ check((state.perf?.fps??0)>=35,'T5 heavy fixture keeps performance floor',`fps=${state.perf?.fps?.toFixed?.(1)}`);
+ check(s.errors.length===0,'T5 runtime has no browser errors',JSON.stringify(s.errors));
+}finally{await s.close();}
+writeFileSync('docs/acceptance-110n-t5-polish.json',JSON.stringify({passed,failed,results},null,2));
+console.log(`T5_POLISH_11N ${passed}/${passed+failed} PASS`);if(failed)process.exitCode=1;

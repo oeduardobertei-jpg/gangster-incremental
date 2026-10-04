@@ -114,3 +114,10 @@ Nenhum território passa de fase até responder **sim** Ã  pergunta: “está 
 - props de controle deixam de carregar cor fixa e usam `controlColor` em runtime;
 - gate T4 15/15 e anchors 43/43 PASS;
 - referência: `docs/1.1M_T4_POLISH.md`.
+
+## 1.1N conclu?da
+- T5 recomposto como distrito residencial costeiro com enclaves assim?tricos e acessos curvos;
+- boulevard central preserva leitura e circula??o, enquanto a densidade f?sica cresce nas bordas;
+- volumes secund?rios passam a ter pap?is visuais distintos e os landmarks principais recebem acabamento pr?prio;
+- gate T5 15/15, organic pathing 6/6 e anchors 43/43 PASS;
+- refer?ncia: `docs/1.1N_T5_POLISH.md`.

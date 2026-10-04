@@ -1,4 +1,4 @@
-import type { FactionConfig } from '../../types/game';
+﻿import type { FactionConfig } from '../../types/game';
 import { getTerritoryScene, ScenePath } from '../../data/territoryScenes';
 import { getTerritoryPurposeProps } from '../../data/territoryPurposeProps';
 import { WORLD_LIGHTING, WORLD_MATERIALS } from '../../data/visualTokens';
@@ -7,6 +7,7 @@ import { drawT1ReauthoredSurface } from './t1GroundReauthorRenderer';
 import { drawT2ReauthoredSurface } from './t2RailGroundReauthorRenderer';
 import { drawT3ReauthoredSurface } from './t3IndustrialGroundReauthorRenderer';
 import { drawT4ReauthoredSurface } from './t4GroundReauthorRenderer';
+import { drawT5ReauthoredSurface } from './t5GatedGroundReauthorRenderer';
 
 type ReservedFootprint = { x:number; y:number; w:number; h:number };
 
@@ -142,7 +143,7 @@ const drawDecorativeLot = (
     ctx.globalAlpha = 1;
   }
 
-  // Fachada legÃ­vel em zoom normal: porta, duas aberturas e infraestrutura de laje.
+  // Fachada legÃƒÂ­vel em zoom normal: porta, duas aberturas e infraestrutura de laje.
   ctx.fillStyle = '#14202b';
   ctx.fillRect(x + 8, y + h - 21, 11, 19);
   const windowY = y + h - 29;
@@ -154,7 +155,7 @@ const drawDecorativeLot = (
     ctx.strokeStyle = 'rgba(15,23,42,.65)';
     ctx.strokeRect(wx, windowY, 10, 8);
   }
-  // RodapÃ©/AO amarra o volume ao chÃ£o e evita aparÃªncia de "adesivo".
+  // RodapÃƒÂ©/AO amarra o volume ao chÃƒÂ£o e evita aparÃƒÂªncia de "adesivo".
   ctx.fillStyle = 'rgba(0,0,0,.26)';
   ctx.fillRect(x + 2, y + h - 4, w - 4, 4);
   if (heightClass === 'mid') {
@@ -241,7 +242,7 @@ const drawPeripheryMicroDetails = (
     ctx.fillStyle='#f3d486';ctx.fillRect(px-2,py-34,4,3);
   }
 
-  // Muros baixos, degraus e remendos junto Ã s casas: detalhe visual, sem virar collider fantasma.
+  // Muros baixos, degraus e remendos junto ÃƒÂ s casas: detalhe visual, sem virar collider fantasma.
   ctx.fillStyle='rgba(111,87,66,.48)';
   for(const [x,y,w] of [[.055,.295,.11],[.80,.405,.12],[.08,.675,.10],[.72,.865,.12]] as const){
     ctx.fillRect(width*x,height*y,width*w,5);ctx.fillStyle='rgba(203,213,225,.08)';ctx.fillRect(width*x,height*y,width*w,1);ctx.fillStyle='rgba(111,87,66,.48)';
@@ -249,7 +250,7 @@ const drawPeripheryMicroDetails = (
   ctx.fillStyle='rgba(71,85,105,.28)';
   for(const [x,y] of [[.18,.47],[.79,.63],[.33,.83]] as const){for(let i=0;i<3;i++)ctx.fillRect(width*x+i*8,height*y+i*3,22-i*5,3);}
 
-  // Pequenos sinais de uso: sacos, latas e vegetaÃ§Ã£o espontÃ¢nea nas bordas.
+  // Pequenos sinais de uso: sacos, latas e vegetaÃƒÂ§ÃƒÂ£o espontÃƒÂ¢nea nas bordas.
   for(const [x,y] of [[.10,.60],[.86,.70],[.19,.88],[.91,.32]] as const){
     ctx.fillStyle='rgba(40,54,45,.64)';ctx.beginPath();ctx.arc(width*x,height*y,5,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='rgba(139,116,82,.55)';ctx.fillRect(width*x+5,height*y+3,5,4);
@@ -441,7 +442,7 @@ function drawMarketRailScene(ctx: CanvasRenderingContext2D, width: number, heigh
   drawLivingGroundFoundation(ctx, width, height, 2, controlColor);
   // 0.9.8A: one authored rail/market surface replaces stacked generic road, rail-board and plaza overlays.
   drawT2ReauthoredSurface(ctx, width, height, scene.paths, reserved);
-  drawSceneTitle(ctx, width, height, `FEIRA • LINHA DO TREM · `, scene.subtitle, controlColor);
+  drawSceneTitle(ctx, width, height, `FEIRA â€¢ LINHA DO TREM Â· `, scene.subtitle, controlColor);
 }
 function drawIndustrialScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(3);
@@ -451,81 +452,29 @@ function drawIndustrialScene(ctx: CanvasRenderingContext2D, width: number, heigh
   drawLivingGroundOverlay(ctx, width, height, 3, controlColor);
   drawPurposefulGroundTexture(ctx, width, height, 3, controlColor);
   drawDistrictGroundStory(ctx, width, height, 3, controlColor);
-  drawSceneTitle(ctx,width,height,`AVENIDA DAS OFICINAS • GALPÕES · ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`AVENIDA DAS OFICINAS â€¢ GALPÃ•ES Â· ${controlTag}`,scene.subtitle,controlColor);
 }function drawFortifiedHillScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(4);
   drawLivingGroundFoundation(ctx, width, height, 4, controlColor);
   // 0.9.7A: one authored hillside surface replaces stacked terraces, generic road and repeated ground overlays.
   drawT4ReauthoredSurface(ctx, width, height, scene.paths, reserved);
-  drawSceneTitle(ctx,width,height,`MORRO ALTO • REDUTO FORTIFICADO · ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`MORRO ALTO â€¢ REDUTO FORTIFICADO Â· ${controlTag}`,scene.subtitle,controlColor);
 }
-function drawGatedDistrictScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, _reserved: readonly ReservedFootprint[]) {
+function drawGatedDistrictScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(5);
   drawLivingGroundFoundation(ctx, width, height, 5, controlColor);
-
-  // Boulevard largo e limpo, contrastando com os territÃ³rios anteriores.
-  scene.paths.forEach((path,index) => { drawScenePath(ctx, path, width, height); drawScenePathWear(ctx, path, width, height, 5, index); });
-  ctx.strokeStyle='rgba(226,232,240,.22)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(width*.44,0);ctx.lineTo(width*.44,height);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(width*.56,0);ctx.lineTo(width*.56,height);ctx.stroke();
-
-  // Muros dos condomÃ­nios agora sÃ£o segmentados por portarias reais. AlÃ©m de melhorar
-  // a composiÃ§Ã£o, os vÃ£os visuais correspondem exatamente aos corredores da fÃ­sica.
-  const wallSegments = [
-    { x:.18, ranges:[[.19,.17],[.52,.16],[.84,.06]] as const },
-    { x:.82, ranges:[[.16,.19],[.47,.20],[.81,.09]] as const }
-  ];
-  for (const side of wallSegments) {
-    const wx=width*side.x;
-    for (const [yRatio,hRatio] of side.ranges) {
-      const wy=height*yRatio, wh=height*hRatio;
-      ctx.fillStyle='rgba(0,0,0,.38)';ctx.fillRect(wx+6,wy+5,14,wh);
-      ctx.fillStyle='#566372';ctx.fillRect(wx-8,wy,16,wh);
-      ctx.fillStyle='#cbd5e1';ctx.fillRect(wx-8,wy,16,3);
-      ctx.strokeStyle='rgba(226,232,240,.30)';ctx.lineWidth=1;
-      for(let y=wy+26;y<wy+wh;y+=54){ctx.beginPath();ctx.moveTo(wx-7,y);ctx.lineTo(wx+7,y);ctx.stroke();}
-      ctx.fillStyle='#111827';
-      for(let y=wy+40;y<wy+wh;y+=120){ctx.fillRect(wx-10,y,20,9);ctx.fillStyle='#38bdf8';ctx.fillRect(wx-4,y+2,8,3);ctx.fillStyle='#111827';}
-    }
-  }
-
-  // 0.9F: paisagismo assimÃ©trico de orla/condomÃ­nio, com jardins que seguem os lotes em vez de um espelho perfeito.
-  const gardens=[
-    [[.045,.15],[.155,.13],[.175,.27],[.08,.32]],[[.80,.18],[.93,.16],[.95,.29],[.84,.32]],
-    [[.055,.58],[.16,.55],[.18,.75],[.09,.81]],[[.79,.60],[.94,.58],[.93,.78],[.82,.82]]
-  ] as const;
-  for(const g of gardens){ctx.beginPath();g.forEach(([x,y],i)=>i?ctx.lineTo(width*x,height*y):ctx.moveTo(width*x,height*y));ctx.closePath();ctx.fillStyle='#183b2e';ctx.fill();ctx.strokeStyle='#315b46';ctx.stroke();}
-  // CalÃ§ada portuguesa discreta acompanha o boulevard sem dominar a leitura tÃ¡tica.
-  for(const x of [.425,.565]){ctx.fillStyle='rgba(211,214,207,.13)';ctx.fillRect(width*x,0,width*.018,height);ctx.strokeStyle='rgba(15,23,42,.18)';ctx.lineWidth=1;for(let y=8;y<height;y+=18){ctx.beginPath();ctx.moveTo(width*x,y);ctx.quadraticCurveTo(width*(x+.009),y+5,width*(x+.018),y);ctx.stroke();}}
-  // Palmeiras e massas podadas quebram a simetria e dÃ£o uma assinatura costeira brasileira.
-  for(const [x,y,s] of [[.12,.25,1],[.17,.47,.8],[.86,.24,.9],[.91,.52,.8],[.11,.70,.85],[.84,.72,1]] as const){const px=width*x,py=height*y;ctx.strokeStyle='#65543b';ctx.lineWidth=2*s;ctx.beginPath();ctx.moveTo(px,py+10*s);ctx.lineTo(px,py-9*s);ctx.stroke();ctx.strokeStyle='#2f6b4b';ctx.lineWidth=3*s;for(const a of [-2.6,-1.9,-1.2,-.5,.2,.9]){ctx.beginPath();ctx.moveTo(px,py-9*s);ctx.lineTo(px+Math.cos(a)*12*s,py-9*s+Math.sin(a)*6*s);ctx.stroke();}}
-
-  // Espelhos d'Ã¡gua / piscinas como assinatura fria.
-  ctx.fillStyle='rgba(56,189,248,.18)';ctx.strokeStyle='rgba(125,211,252,.50)';
-  ctx.fillRect(width*.24,height*.20,width*.15,height*.08);ctx.strokeRect(width*.24,height*.20,width*.15,height*.08);
-  ctx.fillRect(width*.62,height*.67,width*.14,height*.09);ctx.strokeRect(width*.62,height*.67,width*.14,height*.09);
-
-  // PortÃ£o monumental: folhas laterais sÃ³lidas e vÃ£o central livre, igual Ã  fÃ­sica.
-  const gateY=height*.84;
-  for(const [x,w] of [[.36,.10],[.54,.10]] as const){
-    ctx.fillStyle='rgba(0,0,0,.34)';ctx.fillRect(width*x+5,gateY+6,width*w,15);
-    ctx.fillStyle='#d8dde5';ctx.fillRect(width*x,gateY,width*w,13);
-    ctx.strokeStyle=controlColor;ctx.lineWidth=2;ctx.strokeRect(width*x,gateY,width*w,13);
-    for(let gx=width*x+8;gx<width*(x+w)-4;gx+=18){ctx.strokeStyle=colorWithAlpha(controlColor,.72);ctx.beginPath();ctx.moveTo(gx,gateY+2);ctx.lineTo(gx,gateY+11);ctx.stroke();}
-  }
-  ctx.fillStyle='#111827';ctx.fillRect(width*.465,height*.822,width*.07,26);
-  ctx.strokeStyle=controlColor;ctx.strokeRect(width*.465,height*.822,width*.07,26);
+  // 1.1N: authored residential/orla surface replaces the old mirrored CAD-like composition.
+  drawT5ReauthoredSurface(ctx, width, height, scene.paths, reserved, controlColor);
   drawLivingGroundOverlay(ctx, width, height, 5, controlColor);
   drawPurposefulGroundTexture(ctx, width, height, 5, controlColor);
   drawDistrictGroundStory(ctx, width, height, 5, controlColor);
-
-  drawSceneTitle(ctx,width,height,`ORLA â€¢ CONDOMÃNIOS Â· ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`ORLA • CONDOMÍNIOS · ${controlTag}`,scene.subtitle,controlColor);
 }
 function drawCentralHqScene(ctx: CanvasRenderingContext2D, width: number, height: number, controlColor: string, controlTag: string, reserved: readonly ReservedFootprint[]) {
   const scene = getTerritoryScene(6);
   drawLivingGroundFoundation(ctx, width, height, 6, controlColor);
 
-  // Eixo axial, checkpoint e pÃ¡tio interno.
+  // Eixo axial, checkpoint e pÃƒÂ¡tio interno.
   scene.paths.forEach((path,index) => { drawScenePath(ctx, path, width, height); drawScenePathWear(ctx, path, width, height, 6, index); });
   ctx.fillStyle='rgba(63,68,74,.16)';
   ctx.fillRect(width*.325,height*.06,width*.35,height*.88);
@@ -546,7 +495,7 @@ function drawCentralHqScene(ctx: CanvasRenderingContext2D, width: number, height
     }
   }
 
-  // Checkpoints sucessivos: duas barreiras sÃ³lidas com corredor central deliberado.
+  // Checkpoints sucessivos: duas barreiras sÃƒÂ³lidas com corredor central deliberado.
   for(const y of [.78,.54,.31]){
     for(const [x,w] of [[.34,.11],[.55,.11]] as const){
       const bx=width*x, by=height*y, bw=width*w;
@@ -582,7 +531,7 @@ function drawCentralHqScene(ctx: CanvasRenderingContext2D, width: number, height
   drawPurposefulGroundTexture(ctx, width, height, 6, controlColor);
   drawDistrictGroundStory(ctx, width, height, 6, controlColor);
 
-  drawSceneTitle(ctx,width,height,`COMPLEXO CENTRAL â€¢ QUARTEL-GENERAL Â· ${controlTag}`,scene.subtitle,controlColor);
+  drawSceneTitle(ctx,width,height,`COMPLEXO CENTRAL Ã¢â‚¬Â¢ QUARTEL-GENERAL Ã‚Â· ${controlTag}`,scene.subtitle,controlColor);
 }
 export function drawCityVivaMinimapFoundation(
   ctx: CanvasRenderingContext2D,

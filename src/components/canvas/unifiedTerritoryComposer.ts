@@ -94,7 +94,18 @@ const districtPiecesFor=(territoryId:number,W:number,H:number):UnifiedSupportSol
   } else if(territoryId===3){
     for(const [id,x,y] of [['s1',.18,.39],['s2',.24,.39],['s3',.64,.43],['s4',.69,.43]] as const)n(id,x,y,.050,.058,'building','metal');
   } else if(territoryId===5){
-    for(const [id,x,y] of [['w1',.25,.13],['w2',.30,.13],['w3',.65,.13],['w4',.70,.13]] as const)n(id,x,y,.042,.040,'building','concrete');
+    // 1.1N: asymmetrical residential fabric. Context masses stay on the gated edges,
+    // preserving the central boulevard and the authored entrances as readable lanes.
+    const t5Homes=[
+      ['w1',.235,.145,.046,.046,'concrete'],['w2',.292,.175,.050,.052,'concrete'],
+      ['w3',.205,.300,.044,.046,'concrete'],['w4',.292,.335,.048,.050,'mixed'],
+      ['w5',.225,.575,.052,.052,'concrete'],['w6',.302,.655,.044,.046,'mixed'],
+      ['w7',.260,.842,.050,.046,'concrete'],
+      ['e1',.665,.155,.048,.050,'concrete'],['e2',.730,.205,.044,.046,'mixed'],
+      ['e3',.650,.405,.050,.052,'concrete'],['e4',.716,.520,.046,.048,'concrete'],
+      ['e5',.655,.635,.044,.046,'mixed'],['e6',.742,.790,.050,.050,'concrete']
+    ] as const;
+    for(const [id,x,y,w,h,material] of t5Homes)n(id,x,y,w,h,'building',material);
   } else if(territoryId===6){
     for(const [id,x,y] of [['m1',.27,.31],['m2',.27,.61],['m3',.69,.31],['m4',.69,.61]] as const)n(id,x,y,.035,.045,'building','metal');
   }
@@ -295,6 +306,11 @@ const contextualRole=(territoryId:number,p:UnifiedSupportSolid,index:number)=>{
     return 'Reduto do Morro';
   }
   if(territoryId===5){
+    const id=p.id;
+    if(/:(w1|w5|e1|e5)$/.test(id)) return 'Casa Costeira';
+    if(/:(w2|w7|e3|e6)$/.test(id)) return 'Bloco Residencial';
+    if(/:(w3|w6|e2)$/.test(id)) return 'Garagem de Servi?o';
+    if(/:(w4|e4)$/.test(id)) return 'Portaria de Servi?o';
     if(compact) return index%2?'Casa da Orla':'Portaria Leste';
     return p.w>58?'Condominio Norte':'Mansao Reservada';
   }

@@ -178,11 +178,30 @@ const finishT4=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlCo
   if(renderZoom>=.95) meter(ctx,right?px-10:px+3,facadeY+height-15,controlColor);
   if(b.w>=46){for(let x=b.x+9;x<b.x+b.w-8;x+=13)line(ctx,x,roofY+1,x,roofY-8,'rgba(107,114,128,.55)',1);}
 };
-const finishT5=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom}=a;
+const finishT5=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a,n=norm(a.role);
+  const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0),right=hash%2===0;
   rect(ctx,b.x+5,facadeY+height-6,b.w-10,3,'rgba(51,65,85,.22)');
-  line(ctx,b.x+7,facadeY+5,b.x+b.w-7,facadeY+5,'rgba(226,232,240,.45)',1.2);
-  if(b.w>=42){line(ctx,b.x+10,roofY+8,b.x+b.w-10,roofY+8,'rgba(226,232,240,.48)');for(let x=b.x+10;x<=b.x+b.w-10;x+=12)line(ctx,x,roofY+8,x,roofY+15,'rgba(203,213,225,.40)');}
-  if(renderZoom>=.95){const right=[...b.id].reduce((a,c)=>a+c.charCodeAt(0),0)%2===0;rect(ctx,right?b.x+b.w-16:b.x+6,facadeY+height-17,10,6,'#334155','#cbd5e1');rect(ctx,right?b.x+6:b.x+b.w-20,facadeY+height-10,14,4,'#315b46');}
+  if(n.includes('casa costeira')){
+    rect(ctx,b.x+6,facadeY+5,b.w-12,4,'#d9d3c9');
+    rect(ctx,right?b.x+b.w-18:b.x+7,facadeY+11,11,7,'rgba(35,75,86,.72)','#cbd5e1');
+    rect(ctx,right?b.x+7:b.x+b.w-22,roofY+14,15,5,'#315b46');
+  }else if(n.includes('bloco residencial')){
+    line(ctx,b.x+7,facadeY+5,b.x+b.w-7,facadeY+5,'rgba(226,232,240,.48)',1.2);
+    for(let x=b.x+9;x<b.x+b.w-8;x+=13){rect(ctx,x,facadeY+11,6,7,'#244b57','#94a3b8');}
+    rect(ctx,b.x+7,roofY+8,Math.max(18,b.w*.34),5,'#c9c5bc','#e2e8f0');
+  }else if(n.includes('garagem')){
+    rect(ctx,b.x+6,facadeY+height-17,b.w-12,11,'#27333d','#71808a');
+    for(let x=b.x+10;x<b.x+b.w-9;x+=8) line(ctx,x,facadeY+height-16,x,facadeY+height-7,'rgba(203,213,225,.20)',.7);
+    rect(ctx,right?b.x+7:b.x+b.w-20,roofY+8,13,6,'#59636b','#9aa4aa');
+  }else if(n.includes('portaria de servico')){
+    rect(ctx,b.x+5,facadeY+7,b.w-10,10,'#17202a','#64748b');
+    rect(ctx,b.x+8,facadeY+10,b.w-16,4,'rgba(155,212,228,.40)');
+    rect(ctx,b.x+5,facadeY+7,b.w-10,2,controlColor);
+  }else{
+    line(ctx,b.x+7,facadeY+5,b.x+b.w-7,facadeY+5,'rgba(226,232,240,.45)',1.2);
+    if(b.w>=42){line(ctx,b.x+10,roofY+8,b.x+b.w-10,roofY+8,'rgba(226,232,240,.48)');for(let x=b.x+10;x<=b.x+b.w-10;x+=12)line(ctx,x,roofY+8,x,roofY+15,'rgba(203,213,225,.40)');}
+  }
+  if(renderZoom>=.95){rect(ctx,right?b.x+b.w-16:b.x+6,facadeY+height-17,10,6,'#334155','#cbd5e1');}
 };
 const finishT6=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a;
   rect(ctx,b.x+5,facadeY+height-6,b.w-10,3,'rgba(15,23,42,.52)');

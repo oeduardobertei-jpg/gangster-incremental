@@ -25,6 +25,7 @@ import { drawT1UnitGrounding } from './canvas/t1SceneComposer';
 import { getUnifiedSupportSolids, drawUnifiedContextArchitecture, type UnifiedSupportSolid } from './canvas/unifiedTerritoryComposer';
 import { drawCityVivaBuildingSkin } from './canvas/buildingSkins';
 import { drawCommandBaseProgression } from './canvas/worldProgressionVisuals';
+import { drawT5LandmarkFinish } from './canvas/t5LandmarkRenderer';
 import { getBaseCommandVisualProfile, type BaseCommandVisualProfile } from '../rules/baseCommandVisualProgression';
 import { CITY_VIVA_VISUAL_REVISION } from '../data/visualTokens';
 import { soundEngine } from '../audio/soundEngine';
@@ -3038,6 +3039,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
               ctx, building, currentTime, currentTerritory.id, captured,
               factionConfig.color, factionConfig.tag, visualLoadZoom
             );
+            if (currentTerritory.id === 5) drawT5LandmarkFinish(ctx, building, currentTime, captured ? factionConfig.color : factionConfig.rivalColor, visualLoadZoom);
             break;
           }
           case 'contextBuilding':

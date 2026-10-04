@@ -1,0 +1,63 @@
+{
+  "hud": {
+    "perf": {
+      "avgFrameMs": 17.52758620689655,
+      "p95FrameMs": 33.29999999999973,
+      "sampledAt": 4227.7,
+      "speed": 0,
+      "camera": {
+        "centerX": 640,
+        "centerY": 358.51063829787233,
+        "zoom": 1.572
+      },
+      "viewport": {
+        "width": 1132,
+        "height": 674,
+        "dpr": 1
+      },
+      "loot": 0,
+      "fps": 57.05292150304938,
+      "avgSimulationMs": 0.010344827579783982,
+      "avgRenderMs": 2.5431034482678334,
+      "avgSteps": 0,
+      "avgTargetSearches": 0,
+      "avgProjectileChecks": 0,
+      "avgRivalAiMs": 0,
+      "avgAllyAiMs": 0,
+      "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.5068965517305608,
+      "avgEntityRenderMs": 1.9810344827249005,
+      "avgEffectsRenderMs": 0.0017241379326402113,
+      "allies": 0,
+      "rivals": 26,
+      "bullets": 0,
+      "particles": 0,
+      "worldColliders": 28,
+      "solidWorldViolations": 0,
+      "unstuckTriggers": 0,
+      "unstuckActive": 0,
+      "stuckPressure": 0,
+      "flowLaneRedirects": 0,
+      "edgeRecoveries": 0,
+      "hardUnstuckTriggers": 0,
+      "leftEdgePopulation": 10,
+      "rightEdgePopulation": 12,
+      "allyCentroidX": 0,
+      "allyCentroidY": 0,
+      "rivalCentroidX": 674.8261140660535,
+      "rivalCentroidY": 251.55844311699232
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "text": "T5Mansões da Orla & Condomínios|Aliados 0/15Rivais 26AVENIDAS • MUROS • PORTARIASENCURRALAR · PRESSÃO0/120POSIÇÕES 0/6ALVOCondomínio Norte0%"
+  },
+  "runtimeErrors": []
+}

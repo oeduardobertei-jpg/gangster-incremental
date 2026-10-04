@@ -1,0 +1,81 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "T5 authored enclaves + boulevard present",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 landscape and resident-use pockets authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 perimeter/gate authored in same surface",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 environment uses dedicated reauthor surface",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 secondary physical fabric authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 contextual facades vary by role",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 hero landmarks vary by role",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 security architecture authored",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "T5 HUD identity preserved",
+      "detail": "T5Mansões da Orla & Condomínios|Aliados 0/15Rivais 26AVENIDAS • MUROS • PORTARIASENCURRALAR · PRESSÃ"
+    },
+    {
+      "ok": true,
+      "label": "paused T5 physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T5 mass fixture active",
+      "detail": "allies=34; rivals=26"
+    },
+    {
+      "ok": true,
+      "label": "T5 combat presentation active",
+      "detail": "bullets=16; particles=161"
+    },
+    {
+      "ok": true,
+      "label": "T5 mass combat remains physically clean",
+      "detail": "violations=0"
+    },
+    {
+      "ok": true,
+      "label": "T5 heavy fixture keeps performance floor",
+      "detail": "fps=48.2"
+    },
+    {
+      "ok": true,
+      "label": "T5 runtime has no browser errors",
+      "detail": "[]"
+    }
+  ]
+}
