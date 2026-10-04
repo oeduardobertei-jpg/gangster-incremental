@@ -1,0 +1,80 @@
+{
+  "desktop": {
+    "innerWidth": 1536,
+    "innerHeight": 864,
+    "bodyScrollWidth": 1536,
+    "docScrollWidth": 1536,
+    "command": {
+      "x": 0,
+      "y": 56,
+      "width": 1536,
+      "height": 53,
+      "top": 56,
+      "right": 1536,
+      "bottom": 109,
+      "left": 0
+    },
+    "action": {
+      "x": 0,
+      "y": 807,
+      "width": 1536,
+      "height": 57,
+      "top": 807,
+      "right": 1536,
+      "bottom": 864,
+      "left": 0
+    },
+    "canvas": {
+      "x": 13,
+      "y": 122,
+      "width": 1130,
+      "height": 672,
+      "top": 122,
+      "right": 1143,
+      "bottom": 794,
+      "left": 13
+    },
+    "operationText": "OPERAÇÃO ATIVA · T1Beco dos Descalços (Periferia)13/20",
+    "resourceText": "INTEL73/100+2.0/sGRANA$12.5kMUNIÇÃO87RESPEITO345CONTATOS12OPERAÇÃO ATIVA · T1Beco dos Descalços (Periferia)13/20",
+    "recruitText": "CONVOCAR REFORÇOESPAÇO10 intel·+2.0/s"
+  },
+  "mobile": {
+    "innerWidth": 390,
+    "innerHeight": 844,
+    "bodyScrollWidth": 390,
+    "docScrollWidth": 390,
+    "command": {
+      "x": 0,
+      "y": 56,
+      "width": 390,
+      "height": 53,
+      "top": 56,
+      "right": 390,
+      "bottom": 109,
+      "left": 0
+    },
+    "action": {
+      "x": 0,
+      "y": 787,
+      "width": 390,
+      "height": 57,
+      "top": 787,
+      "right": 390,
+      "bottom": 844,
+      "left": 0
+    },
+    "canvas": {
+      "x": 9,
+      "y": 118,
+      "width": 372,
+      "height": 660,
+      "top": 118,
+      "right": 381,
+      "bottom": 778,
+      "left": 9
+    },
+    "operationText": "OPERAÇÃO ATIVA · T1Beco dos Descalços (Periferia)13/20",
+    "resourceText": "INTEL73/100+2.0/sGRANA$12.5kMUNIÇÃO87RESPEITO345CONTATOS12OPERAÇÃO ATIVA · T1Beco dos Descalços (Periferia)13/20",
+    "recruitText": "CONVOCAR REFORÇOESPAÇO10 intel·+2.0/s"
+  }
+}

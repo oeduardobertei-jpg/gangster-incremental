@@ -83,3 +83,14 @@
 @media (prefers-reduced-motion: reduce) {
   [class*="hudEventIn"] { animation: none !important; }
 }
+
+/* 1.1F — HUD 2.0: less chrome, stronger operational hierarchy. */
+.hud-command-strip { min-height: 52px; }
+.hud-resource-chip,
+.hud-operation-card,
+.hud-recruit-command { backdrop-filter: blur(8px); }
+@media (max-width: 760px) {
+  .hud-command-strip { min-height: 48px; }
+  .hud-resource-chip { min-width: 84px; }
+  .hud-operation-card { min-width: 210px; }
+}
