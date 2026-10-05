@@ -456,10 +456,22 @@ const drawGenericCityVivaBuilding = (
   if (showFaction && (b.isRivalHub || capturedByPlayer)) drawFlag(ctx,b.x+8,roofY-24,controlColor,controlTag,time);
 
   if (showLabel && b.label) {
-    ctx.fillStyle='rgba(7,12,20,.90)';ctx.fillRect(b.x+7,roofY+5,Math.min(b.w-14,76),13);
-    ctx.strokeStyle=controlColor;ctx.strokeRect(b.x+7,roofY+5,Math.min(b.w-14,76),13);
-    ctx.fillStyle='#f8fafc';ctx.font='700 7px "Plus Jakarta Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText(b.label,b.x+7+Math.min(b.w-14,76)/2,roofY+11.5);
+    if(territoryId===2){
+      const labelScale=renderZoom>1?Math.max(.72,1/renderZoom):1;
+      const signW=Math.max(38,Math.min(b.w-12,74)*labelScale),signH=Math.max(8.5,10*labelScale);
+      const signX=b.x+(b.w-signW)/2,signY=roofY+6;
+      const railway=/estação|estacao|cabine|passarela|armazém|armazem/i.test(b.label);
+      ctx.fillStyle=railway?'rgba(42,48,50,.95)':'rgba(61,45,33,.95)';ctx.beginPath();ctx.roundRect(signX,signY,signW,signH,1.6);ctx.fill();
+      ctx.strokeStyle=railway?'rgba(195,168,94,.48)':'rgba(183,143,83,.52)';ctx.lineWidth=.9;ctx.stroke();
+      ctx.fillStyle=railway?'#ede6d4':'#f2dfc1';ctx.font=`700 ${Math.max(5.2,6.2*labelScale)}px "Plus Jakarta Sans",sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(b.label,b.x+b.w/2,signY+signH/2+.2,signW-6);
+      ctx.fillStyle=controlColor;ctx.globalAlpha=.55;ctx.fillRect(signX+4,signY+signH-1.4,signW-8,1);ctx.globalAlpha=1;
+    }else{
+      ctx.fillStyle='rgba(7,12,20,.90)';ctx.fillRect(b.x+7,roofY+5,Math.min(b.w-14,76),13);
+      ctx.strokeStyle=controlColor;ctx.strokeRect(b.x+7,roofY+5,Math.min(b.w-14,76),13);
+      ctx.fillStyle='#f8fafc';ctx.font='700 7px "Plus Jakarta Sans",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(b.label,b.x+7+Math.min(b.w-14,76)/2,roofY+11.5);
+    }
   }
   ctx.restore();
 };

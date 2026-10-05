@@ -125,7 +125,7 @@ export function drawCommandBaseProgression(
     }
   };
 
-  if (territoryId !== 1 || visual.supportPointOverride) drawSupportPointProgression(ctx, x, y, faction, supportVisual, time, territoryId, renderZoom);
+  // 1.2R: the legacy standalone support point is preview-only; public districts express progression through their authored landmarks.`r`n  if (visual.supportPointOverride) drawSupportPointProgression(ctx, x, y, faction, supportVisual, time, territoryId, renderZoom);
 
   ctx.save();
   if(stageCelebration>0){

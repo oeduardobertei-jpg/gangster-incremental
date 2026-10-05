@@ -184,7 +184,7 @@ export function getTacticalBuildings(width: number, height: number, factionConfi
     ],
     2: [
       {x:.10,y:.65,w:72,h:52,door:'right'},{x:.10,y:.20,w:102,h:62,door:'right'},{x:.31,y:.48,w:82,h:54,door:'bottom'},
-      {x:.74,y:.66,w:98,h:66,door:'left'},{x:.78,y:.145,w:108,h:70,door:'bottom'},{x:.63,y:.09,w:74,h:54,door:'bottom'},{x:.45,y:.055,w:88,h:46,door:'bottom'}
+      {x:.74,y:.66,w:98,h:66,door:'left'},{x:.78,y:.145,w:108,h:70,door:'bottom'},{x:.63,y:.09,w:74,h:54,door:'bottom'},{x:.45,y:.075,w:88,h:46,door:'bottom'}
     ],
     3: [
       {x:.075,y:.72,w:98,h:66,door:'right'},{x:.07,y:.28,w:122,h:82,door:'right'},{x:.31,y:.17,w:102,h:70,door:'bottom'},
