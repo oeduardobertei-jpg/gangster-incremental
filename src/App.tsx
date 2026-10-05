@@ -24,6 +24,7 @@ import { getHegemonyTalentCost } from './rules/hegemonyTalents';
 import { applyCampaignMilestones, AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS } from './rules/progression';
 import { createDefaultState } from './state/defaultGameState';
 import { describeBaseCommandPreview, getBaseCommandPreviewProfile, getBaseCommandVisualProfile, type BaseCommandPreviewSelection } from './rules/baseCommandVisualProgression';
+import { getSupportPointVisualProfile } from './rules/supportPointVisualProgression';
 import { BookOpen, Settings, BarChart2, Shield, FastForward, PanelRightClose, PanelRightOpen, Maximize2, Minimize2, Bell } from 'lucide-react';
 
 type BasePreviewDevApi = {
@@ -95,6 +96,7 @@ export default function App() {
   const [resetKey, setResetKey] = useState(0);
   const [basePreviewSelection, setBasePreviewSelection] = useState<BaseCommandPreviewSelection | null>(null);
   const baseStageRef = useRef(getBaseCommandVisualProfile(initialLoad.state).stage);
+  const supportStageRef = useRef(getSupportPointVisualProfile(initialLoad.state).stage);
   // 0.4F: battlefield-first layout controls. UI-only; does not affect simulation/save.
   const [isEvolutionPanelOpen, setIsEvolutionPanelOpen] = useState(true);
   const [isUpgradeFocusMode, setIsUpgradeFocusMode] = useState(false);
@@ -113,10 +115,15 @@ export default function App() {
 
   useEffect(() => {
     const nextStage = getBaseCommandVisualProfile(gameState).stage;
+    const nextSupportStage = getSupportPointVisualProfile(gameState).stage;
     if (nextStage > baseStageRef.current) {
       setSystemNotice(`Base de Comando evoluiu para o Estágio ${nextStage}.`);
     }
+    if (nextSupportStage > supportStageRef.current) {
+      setSystemNotice(`Ponto de Apoio evoluiu para o Estágio ${nextSupportStage}.`);
+    }
     baseStageRef.current = nextStage;
+    supportStageRef.current = nextSupportStage;
   }, [gameState.upgrades, setSystemNotice]);
 
   useEffect(() => {
@@ -847,7 +854,7 @@ export default function App() {
                 />
                 {import.meta.env.DEV && basePreviewSelection && (
                   <div className="pointer-events-auto absolute left-3 top-14 z-30 flex items-center gap-2 rounded-lg border border-cyan-700/60 bg-slate-950/92 px-2.5 py-1.5 text-[10px] font-semibold text-cyan-200 shadow-xl">
-                    <span>DEV · Base: {describeBaseCommandPreview(basePreviewSelection)}</span>
+                    <span>DEV · Visual: {describeBaseCommandPreview(basePreviewSelection)}</span>
                     <button onClick={() => setBasePreviewSelection(null)} className="rounded border border-emerald-700 px-1.5 py-0.5 text-emerald-300">REAL</button>
                   </div>
                 )}

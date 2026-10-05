@@ -8,6 +8,7 @@ const tests = [
   'scripts/acceptance-060-organic-pathing.mjs',
   'scripts/acceptance-0910-base-preview.mjs',
   'scripts/acceptance-0910-base-promotion.mjs',
+  'scripts/acceptance-111-support-point.mjs',
   'scripts/acceptance-0911-territories.mjs',
   'scripts/acceptance-0911-persistence.mjs',
   'scripts/acceptance-0911-core-loop.mjs',

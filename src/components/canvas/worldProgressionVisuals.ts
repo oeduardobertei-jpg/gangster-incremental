@@ -2,6 +2,8 @@ import type { FactionConfig, GameState } from '../../types/game';
 import { WORLD_MATERIALS } from '../../data/visualTokens';
 import { getBaseCommandVisualProfile, type BaseCommandVisualProfile } from '../../rules/baseCommandVisualProgression';
 import { getStageFeatureProgress } from '../../rules/incrementalBuildingVisuals';
+import { getSupportPointVisualProfile } from '../../rules/supportPointVisualProgression';
+import { drawSupportPointProgression } from './supportPointVisuals';
 
 const drawBarricade = (
   ctx: CanvasRenderingContext2D,
@@ -62,6 +64,7 @@ export function drawCommandBaseProgression(
   stageCelebration = 0
 ) {
   const visual = visualOverride ?? getBaseCommandVisualProfile(state);
+  const supportVisual = visual.supportPointOverride ?? getSupportPointVisualProfile(state);
   const { stage, stageProgress, maturity, tiers, hegemonyHonors } = visual;
   const fortTier = tiers.fortification;
   const barricadeTier = tiers.barricades;
@@ -121,6 +124,8 @@ export function drawCommandBaseProgression(
       for(let yy=gy+6;yy<gy+h-2;yy+=5){ctx.beginPath();ctx.moveTo(gx+2,yy);ctx.lineTo(gx+w-2,yy);ctx.stroke();}
     }
   };
+
+  drawSupportPointProgression(ctx, x, y, faction, supportVisual, time, territoryId, renderZoom);
 
   ctx.save();
   if(stageCelebration>0){

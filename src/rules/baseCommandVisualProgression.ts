@@ -8,6 +8,12 @@ import {
   sumIncrementalLevels,
   type IncrementalVisualSpec
 } from './incrementalBuildingVisuals';
+import {
+  describeSupportPointPreview,
+  getSupportPointPreviewProfile,
+  type SupportPointPreviewSelection,
+  type SupportPointVisualProfile
+} from './supportPointVisualProgression';
 
 export type BaseVisualStage = 0 | 1 | 2 | 3;
 export type BaseUpgradeVisualKey =
@@ -47,6 +53,7 @@ export interface BaseCommandVisualProfile {
   hegemonyHonors: number;
   stageProgress: number;
   maturity: number;
+  supportPointOverride?: SupportPointVisualProfile;
 }
 
 export type BaseCommandPreviewSelection =
@@ -54,7 +61,8 @@ export type BaseCommandPreviewSelection =
   | { kind: 'branch'; group: BaseUpgradeGroup }
   | { kind: 'tier'; key: BaseUpgradeVisualKey; tier: BaseVisualTier }
   | { kind: 'max' }
-  | { kind: 'honors'; count: number };
+  | { kind: 'honors'; count: number }
+  | SupportPointPreviewSelection;
 
 export const BASE_VISUAL_MAX_SCORE = getIncrementalMaxScore(BASE_UPGRADE_VISUAL_SPECS);
 export const getBaseVisualScore = (state: GameState): number =>
@@ -108,6 +116,12 @@ const tierToLevel = (tier: BaseVisualTier, max: number): number =>
 export const getBaseCommandPreviewProfile = (
   selection: BaseCommandPreviewSelection
 ): BaseCommandVisualProfile => {
+  if (selection.kind === 'support-stage' || selection.kind === 'support-tier' || selection.kind === 'support-max') {
+    return {
+      ...profileFromKeyLevels({}, 0, 0),
+      supportPointOverride: getSupportPointPreviewProfile(selection)
+    };
+  }
   if (selection.kind === 'stage') {
     return profileFromKeyLevels({}, 0, selection.stage);
   }
@@ -145,6 +159,7 @@ export const BASE_UPGRADE_GROUP_LABELS: Record<BaseUpgradeGroup, string> = {
 };
 
 export const describeBaseCommandPreview = (selection: BaseCommandPreviewSelection): string => {
+  if (selection.kind === 'support-stage' || selection.kind === 'support-tier' || selection.kind === 'support-max') return describeSupportPointPreview(selection);
   if (selection.kind === 'stage') return `Estágio ${selection.stage}`;
   if (selection.kind === 'branch') return BASE_UPGRADE_GROUP_LABELS[selection.group];
   if (selection.kind === 'tier') return `${BASE_UPGRADE_VISUAL_SPECS[selection.key].label} · T${selection.tier}`;

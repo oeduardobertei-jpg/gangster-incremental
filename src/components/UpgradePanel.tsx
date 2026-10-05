@@ -9,6 +9,7 @@ import { getHegemonyTalentCost, getHegemonyTalentEffectRows } from '../rules/heg
 import { AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS, getAutoRecruitMilestoneProgress } from '../rules/progression';
 import { getNextVisualTierLevel, getVisualTier } from '../data/visualTokens';
 import { BASE_STAGE_THRESHOLDS, BASE_VISUAL_MAX_SCORE, getBaseCommandVisualProfile } from '../rules/baseCommandVisualProgression';
+import { SUPPORT_POINT_STAGE_THRESHOLDS, SUPPORT_POINT_VISUAL_MAX_SCORE, getSupportPointVisualProfile } from '../rules/supportPointVisualProgression';
 
 interface UpgradePanelProps {
   gameState: GameState;
@@ -50,6 +51,9 @@ export const UpgradePanel: React.FC<UpgradePanelProps> = ({
   const baseVisual = getBaseCommandVisualProfile(gameState);
   const nextBaseThreshold = baseVisual.stage < 3 ? BASE_STAGE_THRESHOLDS[baseVisual.stage + 1] : BASE_VISUAL_MAX_SCORE;
   const baseProgressPct = Math.round(baseVisual.stageProgress * 100);
+  const supportVisual = getSupportPointVisualProfile(gameState);
+  const nextSupportThreshold = supportVisual.stage < 3 ? SUPPORT_POINT_STAGE_THRESHOLDS[supportVisual.stage + 1] : SUPPORT_POINT_VISUAL_MAX_SCORE;
+  const supportProgressPct = Math.round(supportVisual.stageProgress * 100);
   const workshopMeta = {
     armory: {
       eyebrow: 'OFICINA DE COMBATE', title: 'Arsenal da Organização',
@@ -160,6 +164,18 @@ export const UpgradePanel: React.FC<UpgradePanelProps> = ({
         </div>
         <div className="mt-1.5 h-1.5 overflow-hidden rounded-full border border-slate-800 bg-slate-900"><div className="h-full bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-500 transition-[width] duration-300" style={{ width: `${baseProgressPct}%` }} /></div>
         <div className="mt-1 flex items-center justify-between text-[9px] text-slate-500"><span>{baseVisual.stage < 3 ? `Próximo estágio: ${nextBaseThreshold} níveis totais` : 'Estágio dominante · maturidade em progresso'}</span>{baseVisual.hegemonyHonors > 0 && <span className="text-amber-400/80">Hegemonias: {baseVisual.hegemonyHonors}</span>}</div>
+        {activeTab === 'boca' && (
+          <div className="mt-2 border-t border-amber-900/35 pt-2">
+            <div className="flex items-center justify-between gap-2 text-[10px]">
+              <div className="font-semibold text-amber-300">Ponto de Apoio <span className="text-amber-200">· E{supportVisual.stage}</span></div>
+              <div className="font-mono-numbers text-slate-500">{supportVisual.score}/{nextSupportThreshold}</div>
+            </div>
+            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full border border-amber-950 bg-slate-900">
+              <div className="h-full bg-gradient-to-r from-amber-800 via-amber-500 to-yellow-300 transition-[width] duration-300" style={{ width: `${supportProgressPct}%` }} />
+            </div>
+            <div className="mt-1 text-[9px] text-slate-500">{supportVisual.stage < 3 ? `Próximo estágio físico: ${nextSupportThreshold} níveis de Bocas & Apoio` : 'Posto consolidado · módulos continuam amadurecendo'}</div>
+          </div>
+        )}
       </div>
 
       {/* Upgrades List Container */}

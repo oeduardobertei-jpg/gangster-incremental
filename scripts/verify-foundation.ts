@@ -23,6 +23,12 @@ import { applyCampaignMilestones, AUTO_RECRUIT_MILESTONE_NEUTRALIZATIONS, getAut
 import { getHegemonyTalentCost, getHegemonyTalentEffectRows } from '../src/rules/hegemonyTalents';
 import { BASE_VISUAL_MAX_SCORE, getBaseCommandPreviewProfile, getBaseCommandVisualProfile, getBaseStageProgress, getBaseVisualScore, getBaseVisualStage } from '../src/rules/baseCommandVisualProgression';
 import { allocateBalancedLevels, getIncrementalStageState, getStageFeatureProgress } from '../src/rules/incrementalBuildingVisuals';
+import {
+  SUPPORT_POINT_VISUAL_MAX_SCORE,
+  getSupportPointPreviewProfile,
+  getSupportPointVisualProfile
+} from '../src/rules/supportPointVisualProgression';
+import { SUPPORT_POINT_MIN_CENTER_GAP } from '../src/components/canvas/supportPointVisuals';
 import { getNextVisualTierLevel, getVisualTier } from '../src/data/visualTokens';
 import { clampCamera, createDefaultCamera, panCameraByScreenDelta, screenToWorld, worldToScreen, zoomCameraAtScreenPoint, WORLD_HEIGHT, WORLD_WIDTH } from '../src/components/canvas/camera2D';
 import { applySeparationToVelocity, computeAllySeparationVector, findOrganicSpawnPosition, getPreferredAllyDistance } from '../src/rules/troopMovement';
@@ -174,6 +180,23 @@ const fortPreview = getBaseCommandPreviewProfile({ kind: 'tier', key: 'fortifica
 assert.equal(fortPreview.stage, 2, 'preview isolado de tier deve usar a casca E2');
 assert.equal(fortPreview.tiers.fortification, 5, 'preview de tier deve chegar exatamente ao tier pedido');
 assert.equal(getBaseCommandPreviewProfile({ kind: 'honors', count: 5 }).hegemonyHonors, 5);
+assert.equal(SUPPORT_POINT_VISUAL_MAX_SCORE, 85, 'support point must use only the four Boca upgrades');
+assert.equal(getSupportPointVisualProfile({ ...defaults, upgrades: { boca_fortified_bunkers: 9 } }).stage, 0);
+assert.equal(getSupportPointVisualProfile({ ...defaults, upgrades: { boca_fortified_bunkers: 10 } }).stage, 1);
+assert.equal(getSupportPointVisualProfile({ ...defaults, upgrades: { boca_fortified_bunkers: 30 } }).stage, 2);
+assert.equal(getSupportPointVisualProfile({ ...defaults, upgrades: { boca_fortified_bunkers: 40, boca_barricades: 20 } }).stage, 3);
+for (const stage of [0, 1, 2, 3] as const) {
+  assert.equal(getSupportPointPreviewProfile({ kind: 'support-stage', stage }).stage, stage, `support point preview E${stage} must reproduce requested stage`);
+}
+const supportTierPreview = getSupportPointPreviewProfile({ kind: 'support-tier', key: 'ammoLogistics', tier: 5 });
+assert.equal(supportTierPreview.stage, 2, 'isolated support preview must use E2 shell');
+assert.equal(supportTierPreview.tiers.ammoLogistics, 5, 'isolated support preview must reach requested tier');
+const supportMaxPreview = getSupportPointPreviewProfile({ kind: 'support-max' });
+assert.equal(supportMaxPreview.stage, 3);
+assert.ok(Object.values(supportMaxPreview.tiers).every(tier => tier === 5), 'support max preview must complete all four modules');
+const routedSupportPreview = getBaseCommandPreviewProfile({ kind: 'support-tier', key: 'fortification', tier: 5 });
+assert.equal(routedSupportPreview.supportPointOverride?.tiers.fortification, 5, 'shared DEV API must route support preview');
+assert.ok(SUPPORT_POINT_MIN_CENTER_GAP >= 80, 'support point must preserve at least 80 world units from central spawn lane');
 assert.equal(getIncrementalStageState(69, [0,20,70,150], 350).stage, 1);
 assert.equal(getIncrementalStageState(70, [0,20,70,150], 350).stage, 2);
 const balanced = allocateBalancedLevels(37, { a:{id:'a',max:20}, b:{id:'b',max:30} });

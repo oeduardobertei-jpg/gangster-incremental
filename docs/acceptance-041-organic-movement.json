@@ -12,17 +12,17 @@
   {
     "name": "rapid keyboard recruitment avoids severe sprite stacking",
     "passed": true,
-    "detail": "{\"minDistance\":25.995739297810427,\"overlaps\":0,\"severeOverlaps\":0}"
+    "detail": "{\"minDistance\":25.289026383661113,\"overlaps\":0,\"severeOverlaps\":0}"
   },
   {
     "name": "rapid keyboard recruitment keeps ordinary overlaps rare",
     "passed": true,
-    "detail": "{\"minDistance\":25.995739297810427,\"overlaps\":0,\"severeOverlaps\":0}"
+    "detail": "{\"minDistance\":25.289026383661113,\"overlaps\":0,\"severeOverlaps\":0}"
   },
   {
     "name": "repeated map recruitment does not collapse troops into one point",
     "passed": true,
-    "detail": "{\"minDistance\":20.39640085138835,\"overlaps\":3,\"severeOverlaps\":0}"
+    "detail": "{\"minDistance\":21.81105631620296,\"overlaps\":4,\"severeOverlaps\":0}"
   },
   {
     "name": "no browser runtime errors",

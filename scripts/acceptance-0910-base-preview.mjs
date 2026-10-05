@@ -15,21 +15,31 @@ try {
 
   await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'stage',stage:3})`);
   await sleep(180);
-  check('stage preview badge reflects E3', await evaluate(`document.body.innerText.includes('DEV · Base: Estágio 3')`));
+  check('stage preview badge reflects E3', await evaluate(`document.body.innerText.includes('DEV · Visual: Estágio 3')`));
   await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'tier',key:'fortification',tier:5})`);
   await sleep(180);
   check('isolated tier preview badge reflects T5', await evaluate(`document.body.innerText.includes('Fortificação · T5')`));
 
   await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'max'})`);
   await sleep(180);
-  check('max preview badge is visible', await evaluate(`document.body.innerText.includes('DEV · Base: Tudo máximo')`));
+  check('max preview badge is visible', await evaluate(`document.body.innerText.includes('DEV · Visual: Tudo máximo')`));
+
+  await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'support-stage',stage:3})`);
+  await sleep(180);
+  check('support point stage preview reflects E3', await evaluate(`document.body.innerText.includes('DEV · Visual: Ponto de Apoio · Estágio 3')`));
+  await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'support-tier',key:'ammoLogistics',tier:5})`);
+  await sleep(180);
+  check('support point isolated tier reaches T5', await evaluate(`document.body.innerText.includes('Ponto de Apoio · Logística de munição · T5')`));
+  await evaluate(`window.__BASE_VISUAL_PREVIEW__.set({kind:'support-max'})`);
+  await sleep(180);
+  check('support point max preview is visible', await evaluate(`document.body.innerText.includes('DEV · Visual: Ponto de Apoio · Tudo máximo')`));
 
   const afterPreview = await evaluate(`localStorage.getItem('factions_war_pt_br_save_v2')`);
   check('preview does not mutate persisted save', before === afterPreview);
 
   await evaluate(`window.__BASE_VISUAL_PREVIEW__.clear()`);
   await sleep(180);
-  check('clear removes preview badge', !(await evaluate(`document.body.innerText.includes('DEV · Base:')`)));
+  check('clear removes preview badge', !(await evaluate(`document.body.innerText.includes('DEV · Visual:')`)));
   check('no browser runtime errors', session.errors.length===0, JSON.stringify(session.errors));
 
   const failed=results.filter(result=>!result.passed);
