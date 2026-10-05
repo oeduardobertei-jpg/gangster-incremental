@@ -16,7 +16,7 @@ export function drawUrbanMoodFoundation(ctx:CanvasRenderingContext2D,w:number,h:
     else if(territoryId===6){if(n.includes('qg')||n.includes('comando')||n.includes('centro operacional'))lightAt(ctx,b,'#e5e7eb',44,.052);else if(n.includes('posto blindado')||n.includes('torre'))lightAt(ctx,b,'#f59e0b',32,.042);}
   }
   if(territoryId===1){glow(ctx,w*.28,h*.57,62,'#f59e0b',.035);glow(ctx,w*.69,h*.58,48,'#fde68a',.025);}
-  else if(territoryId===2){glow(ctx,w*.50,h*.29,82,'#facc15',.022);glow(ctx,w*.25,h*.64,96,'#f59e0b',.040);glow(ctx,w*.76,h*.65,96,'#fde68a',.032);}
+  else if(territoryId===2){glow(ctx,w*.50,h*.29,82,'#facc15',.022);glow(ctx,w*.27,h*.45,58,'#f0bd68',.025);glow(ctx,w*.73,h*.45,58,'#d9c27a',.022);glow(ctx,w*.25,h*.64,96,'#f59e0b',.040);glow(ctx,w*.76,h*.65,96,'#fde68a',.032);}
   else if(territoryId===3)glow(ctx,w*.50,h*.47,105,'#94a3b8',.018);
   else if(territoryId===5)glow(ctx,w*.50,h*.82,74,'#fde68a',.022);
   else if(territoryId===6)glow(ctx,w*.50,h*.48,110,'#e5e7eb',.015);

@@ -52,7 +52,7 @@ export const TERRITORY_SCENES: Record<number, TerritorySceneBlueprint> = {
   },
   2: {
     id: 2, codename: 'feira-ferrovia', subtitle: 'Comércio comprimido pela linha do trem', accent: '#eab308',
-    paths: [{ surface: 'asphalt', width: 108, edge: true, points: [{x:.48,y:1.03},{x:.49,y:.65},{x:.51,y:.32},{x:.50,y:-.03}] }],
+    paths: [{ surface: 'asphalt', width: 96, edge: true, points: [{x:.49,y:1.03},{x:.475,y:.79},{x:.51,y:.61},{x:.485,y:.46},{x:.515,y:.32},{x:.50,y:-.03}] }],
     lots: [], lamps: [], plaza: { x:.08,y:.48,w:.84,h:.26 }
   },
   3: {

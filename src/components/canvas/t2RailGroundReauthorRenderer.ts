@@ -94,9 +94,17 @@ const drawMarketAisles=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
     ctx.strokeStyle='rgba(144,132,112,.13)';ctx.lineWidth=9;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.stroke();
     ctx.strokeStyle='rgba(210,190,151,.065)';ctx.lineWidth=1;ctx.setLineDash([7,11]);ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.stroke();ctx.setLineDash([]);
   }
-  // The central crossing becomes the pedestrian/freight spine instead of an empty road rectangle.
-  ctx.strokeStyle='rgba(74,72,68,.52)';ctx.lineWidth=22;ctx.beginPath();ctx.moveTo(W*.50,H*.39);ctx.lineTo(W*.50,H*.82);ctx.stroke();
-  ctx.strokeStyle='rgba(168,151,122,.11)';ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(W*.50,H*.39);ctx.lineTo(W*.50,H*.82);ctx.stroke();
+  // The central crossing becomes a gently bending freight/pedestrian spine.
+  const spine=[[.50,.38],[.485,.50],[.515,.63],[.50,.82]] as const;
+  ctx.strokeStyle='rgba(74,72,68,.46)';ctx.lineWidth=20;ctx.beginPath();spine.forEach(([x,y],i)=>i?ctx.lineTo(W*x,H*y):ctx.moveTo(W*x,H*y));ctx.stroke();
+  ctx.strokeStyle='rgba(168,151,122,.12)';ctx.lineWidth=11;ctx.beginPath();spine.forEach(([x,y],i)=>i?ctx.lineTo(W*x,H*y):ctx.moveTo(W*x,H*y));ctx.stroke();
+  // Two lateral market approaches physically explain how the rail edge feeds the feira.
+  for(const [x0,x1,side] of [[.285,.255,-1],[.715,.748,1]] as const){
+    ctx.strokeStyle='rgba(31,32,31,.24)';ctx.lineWidth=20;ctx.beginPath();ctx.moveTo(W*x0,H*.355);ctx.quadraticCurveTo(W*(x0+side*.018),H*.43,W*x1,H*.515);ctx.stroke();
+    ctx.strokeStyle='rgba(145,127,99,.22)';ctx.lineWidth=12;ctx.stroke();
+    ctx.strokeStyle='rgba(219,195,151,.11)';ctx.lineWidth=1;for(let t=.12;t<.94;t+=.16){const x=x0+(x1-x0)*t+side*.010*Math.sin(t*3.14),y=.355+(.515-.355)*t;ctx.beginPath();ctx.moveTo(W*x-6,H*y);ctx.lineTo(W*x+6,H*y+1);ctx.stroke();}
+    for(const [x,y,w,h,c] of [[x0,.352,.040,.020,'rgba(82,80,73,.72)'],[x1,.515,.052,.024,'rgba(112,91,64,.56)']] as const){ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(W*(x-w*.5)+4,H*(y-h*.5)+4,W*w,H*h);ctx.fillStyle=c;ctx.fillRect(W*(x-w*.5),H*(y-h*.5),W*w,H*h);ctx.fillStyle='rgba(214,189,125,.28)';ctx.fillRect(W*(x-w*.5),H*(y+h*.5)-2,W*w,2);}
+  }
   ctx.restore();
 };
 

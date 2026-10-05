@@ -40,6 +40,10 @@ export const createTerritoryCamera = (territoryId: number): Camera2D => territor
   centerX: WORLD_WIDTH / 2,
   centerY: WORLD_HEIGHT / 2 - 12,
   zoom: 1.04
+}) : territoryId === 2 ? ({
+  centerX: WORLD_WIDTH / 2,
+  centerY: WORLD_HEIGHT / 2 - 6,
+  zoom: .98
 }) : createDefaultCamera();
 
 export function clampZoom(zoom: number): number {
