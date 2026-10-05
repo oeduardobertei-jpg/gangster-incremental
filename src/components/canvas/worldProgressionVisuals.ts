@@ -125,7 +125,7 @@ export function drawCommandBaseProgression(
     }
   };
 
-  drawSupportPointProgression(ctx, x, y, faction, supportVisual, time, territoryId, renderZoom);
+  if (territoryId !== 1 || visual.supportPointOverride) drawSupportPointProgression(ctx, x, y, faction, supportVisual, time, territoryId, renderZoom);
 
   ctx.save();
   if(stageCelebration>0){

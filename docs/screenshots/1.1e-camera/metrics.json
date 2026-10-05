@@ -5,6 +5,11 @@
       "centerY": 350,
       "zoom": 0.94
     },
+    "t1": {
+      "centerX": 640,
+      "centerY": 342,
+      "zoom": 1.06
+    },
     "min": 0.78,
     "max": 2.35,
     "stepIn": 1.12,
@@ -20,30 +25,33 @@
   },
   "runtime": {
     "perf": {
-      "avgFrameMs": 16.683333333333334,
-      "p95FrameMs": 16.800000000000182,
-      "sampledAt": 7339.2,
+      "avgFrameMs": 16.66721311475408,
+      "p95FrameMs": 16.700000000000728,
+      "sampledAt": 8500.3,
       "speed": 0,
       "camera": {
         "centerX": 640,
         "centerY": 360,
-        "zoom": 0.8259331597222223
+        "zoom": 0.840625
       },
       "viewport": {
         "width": 1132,
-        "height": 650.671875,
+        "height": 674,
         "dpr": 1
       },
       "loot": 0,
-      "fps": 59.94005994005994,
-      "avgSimulationMs": 0.01666666679084301,
-      "avgRenderMs": 3.583333333209157,
+      "fps": 59.998032851381986,
+      "avgSimulationMs": 0.009836065598198624,
+      "avgRenderMs": 3.581967213481176,
       "avgSteps": 0,
       "avgTargetSearches": 0,
       "avgProjectileChecks": 0,
       "avgRivalAiMs": 0,
       "avgAllyAiMs": 0,
       "avgProjectileMs": 0,
+      "avgSceneRenderMs": 0.536065573819348,
+      "avgEntityRenderMs": 3.014754098214087,
+      "avgEffectsRenderMs": 0.00327868857344643,
       "allies": 0,
       "rivals": 10,
       "bullets": 0,
@@ -63,15 +71,15 @@
       "rivalCentroidX": 621.0599221711816,
       "rivalCentroidY": 306.75470598235495
     },
-    "label": "83%",
+    "label": "84%",
     "canvas": {
       "x": 13,
-      "y": 129.328125,
+      "y": 122,
       "width": 1130,
-      "height": 648.671875,
-      "top": 129.328125,
+      "height": 672,
+      "top": 122,
       "right": 1143,
-      "bottom": 778,
+      "bottom": 794,
       "left": 13
     }
   }

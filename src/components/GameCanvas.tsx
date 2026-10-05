@@ -27,6 +27,7 @@ import { drawCityVivaBuildingSkin } from './canvas/buildingSkins';
 import { drawCommandBaseProgression } from './canvas/worldProgressionVisuals';
 import { drawT5LandmarkFinish } from './canvas/t5LandmarkRenderer';
 import { drawT6LandmarkFinish } from './canvas/t6LandmarkRenderer';
+import { drawT1RebuildBuildingFinish } from './canvas/t1RebuildRenderer';
 import { getBaseCommandVisualProfile, type BaseCommandVisualProfile } from '../rules/baseCommandVisualProgression';
 import { CITY_VIVA_VISUAL_REVISION } from '../data/visualTokens';
 import { soundEngine } from '../audio/soundEngine';
@@ -73,6 +74,7 @@ import {
   WORLD_HEIGHT,
   clampCamera,
   createDefaultCamera,
+  createTerritoryCamera,
   fitCameraToWorld,
   panCameraByScreenDelta,
   screenToWorld,
@@ -1368,7 +1370,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
     floatingTextsRef.current = [];
     groundMarksRef.current = [];
     particlesRef.current = [];
-    cameraRef.current = clampCamera(createDefaultCamera(), viewportRef.current);
+    cameraRef.current = clampCamera(createTerritoryCamera(currentTerritory.id), viewportRef.current);
     setZoom(cameraRef.current.zoom);
 
     const w = WORLD_WIDTH;
@@ -3040,6 +3042,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
               ctx, building, currentTime, currentTerritory.id, captured,
               factionConfig.color, factionConfig.tag, visualLoadZoom
             );
+            if (currentTerritory.id === 1) drawT1RebuildBuildingFinish(ctx, building, currentTime, captured ? factionConfig.color : factionConfig.rivalColor, visualLoadZoom);
             if (currentTerritory.id === 5) drawT5LandmarkFinish(ctx, building, currentTime, captured ? factionConfig.color : factionConfig.rivalColor, visualLoadZoom);
             if (currentTerritory.id === 6) drawT6LandmarkFinish(ctx, building, currentTime, captured ? factionConfig.color : factionConfig.rivalColor, visualLoadZoom);
             break;
@@ -3572,7 +3575,9 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       if (canvas.width !== backingWidth) canvas.width = backingWidth;
       if (canvas.height !== backingHeight) canvas.height = backingHeight;
       if (!didInitialFitRef.current && cssWidth > 0 && cssHeight > 0) {
-        cameraRef.current = fitCameraToWorld(viewportRef.current, 28);
+        cameraRef.current = currentTerritory.id === 1
+          ? clampCamera(createTerritoryCamera(1), viewportRef.current)
+          : fitCameraToWorld(viewportRef.current, 28);
         didInitialFitRef.current = true;
         setZoom(cameraRef.current.zoom);
       } else {

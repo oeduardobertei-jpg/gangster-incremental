@@ -22,6 +22,7 @@ import { drawVegetationNeglect } from './vegetationNeglectRenderer';
 import { drawMaterialHarmonizationGround } from './materialHarmonizationRenderer';
 import { drawCariocaDistrictFoundation, drawCariocaGroundIntegration } from './cariocaIdentityRenderer';
 import { drawUnifiedTerritoryComposition } from './unifiedTerritoryComposer';
+import { drawT1RebuildFoundation } from './t1RebuildRenderer';
 
 type StaticSceneArgs = {
   ctx: CanvasRenderingContext2D;
@@ -61,6 +62,7 @@ export function drawStaticTerritoryScene({
     drawFavelaTileset(ctx, width, height, territoryId, factionConfig, 0, false, false);
   }
 
+  drawT1RebuildFoundation(ctx, width, height, territoryId, buildings, controlColor);
   if (![1,4].includes(territoryId)) drawCariocaDistrictFoundation(ctx, width, height, territoryId, controlColor);
   drawUnifiedTerritoryComposition({ ctx, width, height, territoryId, buildings, controlColor });
   if (![2,3,4].includes(territoryId)) drawTerritoryPolishFoundation(ctx, width, height, territoryId, controlColor);
