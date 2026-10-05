@@ -152,12 +152,28 @@ const finishT2=(a:Args)=>{const {ctx,b,roofY,facadeY,height,role,renderZoom}=a,n
   const px=right?b.x+b.w-7:b.x+7;line(ctx,px,facadeY+4,px,fb-4,'#766754',1.3);
   if(renderZoom>=1.05&&hash%2===0)meter(ctx,right?px-10:px+3,fb-15,'#d1a640');
 };
-const finishT3=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom}=a;
+const finishT3=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,role}=a,n=norm(role);
+  const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0),right=hash%2===0;
   rect(ctx,b.x+5,facadeY+height-5,b.w-10,3,'rgba(17,24,39,.54)');
-  line(ctx,b.x+b.w-7,roofY+4,b.x+b.w-7,facadeY+height-4,'#64748b',2);
-  rect(ctx,b.x+b.w-16,facadeY+7,8,9,'#252d35','#94a3b8');
-  if(renderZoom>=.95){for(let y=facadeY+9;y<facadeY+15;y+=3)line(ctx,b.x+b.w-14,y,b.x+b.w-10,y,'#111827');
-    rect(ctx,b.x+7,roofY+6,10,5,'#59636d','#94a3b8');line(ctx,b.x+12,roofY+6,b.x+12,roofY-7,'#8b949d',1.4);}
+  line(ctx,right?b.x+b.w-7:b.x+7,roofY+4,right?b.x+b.w-7:b.x+7,facadeY+height-4,'#64748b',2);
+  if(n.includes('oficina')){
+    rect(ctx,b.x+6,facadeY+6,b.w-12,Math.max(10,height-11),'#273139','#69757d');
+    for(let yy=facadeY+10;yy<facadeY+height-5;yy+=5)line(ctx,b.x+7,yy,b.x+b.w-7,yy,'rgba(203,213,225,.16)',.8);
+    rect(ctx,b.x+5,roofY+5,Math.max(20,b.w*.46),5,'#59636d','#8a949e');
+  }else if(n.includes('serralheria')){
+    rect(ctx,b.x+7,facadeY+6,b.w*.52,Math.max(10,height-11),'#30383e','#748087');
+    for(let i=0;i<4;i++)line(ctx,b.x+b.w*.58+i*5,facadeY+height-4,b.x+b.w*.70+i*4,facadeY+8,'#9ca7ad',1.6);
+    line(ctx,b.x+b.w-9,roofY+4,b.x+b.w-9,roofY-15,'#8d989e',2);
+  }else if(n.includes('galpao')){
+    rect(ctx,b.x+6,facadeY+7,b.w-12,Math.max(10,height-12),'#343e45','#6c7880');
+    rect(ctx,b.x+8,roofY+5,b.w-16,4,'#647079','#9aa4aa');
+    for(let x=b.x+10;x<b.x+b.w-9;x+=13)line(ctx,x,roofY+5,x,roofY-3,'rgba(203,213,225,.25)',1);
+  }else if(n.includes('deposito')){
+    rect(ctx,b.x+7,facadeY+6,b.w-14,Math.max(10,height-11),'#2a333a','#66727a');
+    rect(ctx,right?b.x+5:b.x+b.w-22,facadeY+height-13,17,8,'#62503f','#9a7650');
+    rect(ctx,b.x+7,roofY+6,Math.max(18,b.w*.38),5,'#414c54','#7c878e');
+  }
+  if(renderZoom>=.95) meter(ctx,right?b.x+b.w-18:b.x+9,facadeY+height-15,'#f97316');
 };
 const finishT4=(a:Args)=>{const {ctx,b,roofY,facadeY,height,renderZoom,controlColor}=a,n=norm(a.role);
   const hash=[...b.id].reduce((acc,c)=>acc+c.charCodeAt(0),0), right=hash%2===0;

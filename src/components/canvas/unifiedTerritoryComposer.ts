@@ -98,7 +98,11 @@ const districtPiecesFor=(territoryId:number,W:number,H:number):UnifiedSupportSol
     ] as const;
     for(const [id,x,y,w,h,material] of t2Fabric)n(id,x,y,w,h,'building',material);
   } else if(territoryId===3){
-    for(const [id,x,y] of [['s1',.18,.39],['s2',.24,.39],['s3',.64,.43],['s4',.69,.43]] as const)n(id,x,y,.050,.058,'building','metal');
+    const t3Units=[
+      ['s1',.19,.43,.055,.052,'metal'],['s2',.29,.51,.048,.050,'metal'],['s3',.16,.61,.060,.055,'concrete'],
+      ['s4',.64,.42,.050,.052,'metal'],['s5',.72,.50,.058,.054,'concrete'],['s6',.64,.64,.052,.050,'metal']
+    ] as const;
+    for(const [id,x,y,w,h,material] of t3Units)n(id,x,y,w,h,'building',material);
   } else if(territoryId===5){
     // 1.1N: asymmetrical residential fabric. Context masses stay on the gated edges,
     // preserving the central boulevard and the authored entrances as readable lanes.
@@ -303,6 +307,11 @@ const contextualRole=(territoryId:number,p:UnifiedSupportSolid,index:number)=>{
     return p.w>60?'Armazem do Trilho':'Deposito da Praca';
   }
   if(territoryId===3){
+    if(/:s1$/.test(p.id)||/:s6$/.test(p.id)) return 'Serralheria';
+    if(/:s2$/.test(p.id)) return 'Oficina 01';
+    if(/:s3$/.test(p.id)) return 'Galpao de Pecas';
+    if(/:s4$/.test(p.id)) return 'Oficina Leste';
+    if(/:s5$/.test(p.id)) return 'Deposito Industrial';
     if(compact) return index%2?'Oficina 01':'Serralheria';
     return p.w>62?'Galpao de Pecas':'Deposito Industrial';
   }

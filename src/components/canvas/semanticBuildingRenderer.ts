@@ -88,19 +88,28 @@ const drawT2=({ctx,b,roofY,facadeY,height,controlColor}:SemanticArgs,name:string
 };
 
 const drawT3=({ctx,b,roofY,facadeY,height,controlColor}:SemanticArgs,name:string)=>{
-  if(name.includes('oficina')){
-    shutter(ctx,b.x+9,facadeY+5,b.w*.58,height-7,'#f97316');tyre(ctx,b.x+b.w-17,facadeY+height-8);box(ctx,b.x+b.w-30,roofY+9,20,8,'#26313d','#64748b');
+  if(name.includes('oficina 01')){
+    const bay=(b.w-27)/2;shutter(ctx,b.x+8,facadeY+6,bay,height-8,'#e56f22');shutter(ctx,b.x+14+bay,facadeY+6,bay,height-8,'#c75c1c');
+    tyre(ctx,b.x+b.w-15,facadeY+height-8);box(ctx,b.x+b.w-29,roofY+9,19,8,'#26313d','#64748b');
+  } else if(name.includes('oficina leste')){
+    shutter(ctx,b.x+9,facadeY+5,b.w*.66,height-7,'#f97316');
+    box(ctx,b.x+b.w*.73,facadeY+7,b.w*.18,height-10,'#202a31','#69757d');tyre(ctx,b.x+b.w-18,facadeY+height-8);
   } else if(name.includes('galpao de pecas')){
-    shutter(ctx,b.x+10,facadeY+5,b.w-20,height-7,'#64748b');crate(ctx,b.x+8,facadeY+height-11);crate(ctx,b.x+23,facadeY+height-9,11,7);
+    shutter(ctx,b.x+10,facadeY+6,b.w-20,height-8,'#59656d');
+    for(const x of [b.x+8,b.x+23,b.x+b.w-22])crate(ctx,x,facadeY+height-(x===b.x+23?9:12),11,8);
   } else if(name.includes('serralheria')){
-    shutter(ctx,b.x+10,facadeY+5,b.w-20,height-7,'#94a3b8');for(let i=0;i<4;i++)line(ctx,b.x+b.w-27+i*5,facadeY+height-4,b.x+b.w-13+i*5,facadeY+8,'#9ca3af',2);
+    shutter(ctx,b.x+8,facadeY+5,b.w*.55,height-7,'#89959b');
+    for(let i=0;i<5;i++)line(ctx,b.x+b.w*.62+i*5,facadeY+height-4,b.x+b.w*.73+i*4,facadeY+8,'#aeb7bc',2);
   } else if(name.includes('deposito industrial')){
-    shutter(ctx,b.x+9,facadeY+5,b.w-18,height-7,'#f59e0b');box(ctx,b.x+b.w-20,roofY+8,12,10,'#111827','#64748b');
+    shutter(ctx,b.x+10,facadeY+6,b.w*.62,height-8,'#bd7a18');
+    box(ctx,b.x+b.w*.70,facadeY+7,b.w*.20,height-10,'#202931','#66727b');
   } else if(name.includes('portaria do patio')){
-    box(ctx,b.x+12,facadeY+5,b.w*.42,height-7,'#27313c','#94a3b8');barrier(ctx,b.x+b.w*.56,facadeY+height-5,Math.min(40,b.w*.45));
+    box(ctx,b.x+9,facadeY+5,b.w*.48,height-7,'#27313c','#a0aab0');
+    box(ctx,b.x+13,facadeY+8,b.w*.32,7,'#17303a','#7d8a91');barrier(ctx,b.x+b.w*.56,facadeY+height-5,Math.min(44,b.w*.48));
   } else if(name.includes('torre da fabrica')){
-    box(ctx,b.x+b.w*.40,roofY-24,b.w*.20,30,'#4b5563','#94a3b8');box(ctx,b.x+b.w*.44,roofY-34,b.w*.12,10,'#6b7280');
-    line(ctx,b.x+b.w*.5,roofY-34,b.x+b.w*.5,roofY-48,'#64748b',2);
+    box(ctx,b.x+b.w*.37,roofY-34,b.w*.26,40,'#46515a','#a6b0b6');
+    box(ctx,b.x+b.w*.41,roofY-46,b.w*.18,12,'#5f6b74','#b8c1c6');
+    line(ctx,b.x+b.w*.5,roofY-46,b.x+b.w*.5,roofY-63,'#8e999f',2);
   }
 };
 
@@ -192,10 +201,7 @@ export function drawSemanticBuildingContext(
     } else if(territoryId===2){
       // 1.2N: dedicated T2 surface owns rail/platform/passarela ground context.
     } else if(territoryId===3){
-      if(name.includes('oficina')||name.includes('serralheria')){groundRect(ctx,b.x-8,groundY,b.w+16,12,'rgba(15,23,42,.22)');for(let x=b.x;x<b.x+b.w;x+=24)accessMarks(ctx,x,groundY+5,16,'rgba(249,115,22,.18)');}
-      if(name.includes('galpao')||name.includes('deposito'))groundRect(ctx,b.x-10,groundY,b.w+20,10,'rgba(71,85,105,.18)','#64748b');
-      if(name.includes('portaria'))barrier(ctx,b.x+b.w*.55,groundY+3,Math.min(46,b.w*.48));
-      if(name.includes('torre'))groundRect(ctx,b.x+b.w*.30,groundY,b.w*.40,12,'rgba(55,65,81,.24)');
+      // 1.2S: industrial ground context is authored once by t3IndustrialGroundReauthorRenderer.
     } else if(territoryId===4){
       if(name.includes('beco')||name.includes('barraco'))groundRect(ctx,b.x-7,groundY,b.w+14,8,'rgba(92,67,45,.20)');
       if(name.includes('laje')||name.includes('reduto'))accessMarks(ctx,b.x+5,groundY+4,b.w-10,'rgba(168,162,158,.18)');

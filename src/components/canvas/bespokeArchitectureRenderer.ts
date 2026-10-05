@@ -56,12 +56,37 @@ const underT2=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height}=a;
   else if(n.includes('cabine ferroviaria')){stair(ctx,b.x-17,facadeY+height-16,18,16,1);rect(ctx,b.x-5,facadeY+height-4,b.w+10,5,'#4b5563');}
   else if(n.includes('passarela')){const cx=b.x+b.w/2,top=facadeY+height-2;rect(ctx,cx-15,top,30,10,'#414b56','#94a3b8');posts(ctx,cx-11,top+3,22,13,2,'#64748b');}
 };const underT3=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height}=a;
-  if(n.includes('oficina')){rect(ctx,b.x-9,facadeY+9,18,height-9,'#2a3139','#59636f');poly(ctx,[[b.x-10,roofY+13],[b.x+b.w*.55,roofY+13],[b.x+b.w*.48,roofY+24],[b.x-10,roofY+24]],'#3a434d','#64748b');}
-  else if(n.includes('galpao de pecas')){rect(ctx,b.x-12,facadeY+height-8,b.w+24,10,'#303943','#64748b');}
-  else if(n.includes('serralheria')){rect(ctx,b.x+b.w-2,facadeY+5,20,height-5,'#313841','#64748b');line(ctx,b.x+b.w+8,roofY+4,b.x+b.w+8,facadeY+height,'#a8b1bc',2);}
-  else if(n.includes('deposito industrial')){rect(ctx,b.x-10,facadeY+height-6,b.w+20,9,'#353d46','#64748b');}
-  else if(n.includes('portaria do patio')){rect(ctx,b.x-8,facadeY+5,b.w*.52,height-3,'#2b343e','#64748b');}
-  else if(n.includes('torre da fabrica')){rect(ctx,b.x+b.w*.43,roofY-42,b.w*.14,46,'#414b56','#94a3b8');}
+  if(n.includes('oficina 01')){
+    rect(ctx,b.x-10,facadeY+8,20,height-8,'#293238','#68737a');
+    poly(ctx,[[b.x-8,roofY+11],[b.x+b.w*.62,roofY+11],[b.x+b.w*.53,roofY+23],[b.x-8,roofY+23]],'#424a4e','#7a8388');
+    rect(ctx,b.x+b.w*.58,facadeY+height-17,b.w*.32,14,'#252d31','#59636a');
+  }
+  else if(n.includes('oficina leste')){
+    rect(ctx,b.x+b.w-12,facadeY+4,25,height-4,'#242d33','#647078');
+    poly(ctx,[[b.x+b.w*.28,roofY+8],[b.x+b.w+12,roofY+8],[b.x+b.w+4,roofY-5],[b.x+b.w*.36,roofY-5]],'#38434a','#7b8790');
+    line(ctx,b.x+b.w-2,roofY+1,b.x+b.w-2,roofY-30,'#8b969e',3);
+  }
+  else if(n.includes('galpao de pecas')){
+    rect(ctx,b.x-15,facadeY+height-10,b.w+30,12,'#303941','#6d7880');
+    rect(ctx,b.x-8,facadeY+7,18,height-15,'#353d43','#687279');
+  }
+  else if(n.includes('serralheria')){
+    rect(ctx,b.x+b.w-3,facadeY+3,24,height-3,'#30383d','#707b82');
+    rect(ctx,b.x-8,facadeY+height-13,20,13,'#272e32','#606970');
+    line(ctx,b.x+b.w+9,roofY+2,b.x+b.w+9,roofY-34,'#a4adb2',3);
+  }
+  else if(n.includes('deposito industrial')){
+    rect(ctx,b.x-12,facadeY+height-9,b.w+24,12,'#343d44','#6e7880');
+    rect(ctx,b.x+b.w-5,facadeY+8,22,height-8,'#293139','#5e6971');
+  }
+  else if(n.includes('portaria do patio')){
+    rect(ctx,b.x-10,facadeY+9,b.w+20,height-7,'#2b343c','#74808a');
+    rect(ctx,b.x-15,facadeY+height-7,b.w+42,8,'#353d43','#7d878d');
+  }
+  else if(n.includes('torre da fabrica')){
+    rect(ctx,b.x+b.w*.38,roofY-52,b.w*.24,57,'#3e4951','#9aa4aa');
+    posts(ctx,b.x+b.w*.28,roofY-5,b.w*.44,22,4,'#6f7a82');
+  }
 };
 
 const underT4=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height}=a;
@@ -128,12 +153,42 @@ const overT2=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height,controlColor}
   else if(n.includes('cabine ferroviaria')){gable(ctx,b.x+4,roofY-12,b.w-8,11,'#48525d','#cbd5e1');rect(ctx,b.x+11,roofY+8,b.w-22,10,'#23303d','#93c5fd');}
   else if(n.includes('passarela')){const landingY=roofY-14;rect(ctx,b.x+b.w*.28,landingY,b.w*.44,11,'#58636f','#cbd5e1');rail(ctx,b.x+b.w*.24,landingY-9,b.w*.52,9);rect(ctx,b.x+b.w*.44,landingY+3,b.w*.12,3,controlColor);}
 };const overT3=(a:Args,n:string)=>{const {ctx,b,roofY,controlColor}=a;
-  if(n.includes('oficina')){gable(ctx,b.x+4,roofY-9,b.w*.54,10,'#3b4651','#6b7280');roofUnit(ctx,b.x+b.w-30,roofY+9,20,11,'#26313d');}
-  else if(n.includes('galpao de pecas')){sawRoof(ctx,b.x-4,roofY-13,b.w+8,13,5);for(const x of [b.x+18,b.x+b.w-30])roofUnit(ctx,x,roofY+12,18,9,'#303944');}
-  else if(n.includes('serralheria')){poly(ctx,[[b.x-4,roofY+6],[b.x+b.w+6,roofY+6],[b.x+b.w,roofY-6],[b.x+2,roofY-6]],'#48515a','#94a3b8');line(ctx,b.x+b.w+8,roofY+2,b.x+b.w+8,roofY-23,controlColor,1.5);}
-  else if(n.includes('deposito industrial')){sawRoof(ctx,b.x-3,roofY-10,b.w+6,10,3);roofUnit(ctx,b.x+b.w*.42,roofY+11,24,10,'#252e38');}
-  else if(n.includes('portaria do patio')){gable(ctx,b.x-7,roofY-10,b.w*.62,10,'#46515c','#cbd5e1');rect(ctx,b.x+b.w*.58,roofY+18,b.w*.28,4,'#f59e0b');}
-  else if(n.includes('torre da fabrica')){rect(ctx,b.x+b.w*.42,roofY-46,b.w*.16,28,'#515c68','#94a3b8');rect(ctx,b.x+b.w*.45,roofY-54,b.w*.10,8,'#65717d');line(ctx,b.x+b.w*.5,roofY-54,b.x+b.w*.5,roofY-69,'#94a3b8',2);}
+  if(n.includes('oficina 01')){
+    gable(ctx,b.x+2,roofY-12,b.w*.62,12,'#465159','#7d878e');
+    roofUnit(ctx,b.x+b.w-31,roofY+8,21,11,'#252e34');
+    line(ctx,b.x+18,roofY-10,b.x+18,roofY-25,'#89949b',2);
+  }
+  else if(n.includes('oficina leste')){
+    poly(ctx,[[b.x-4,roofY+5],[b.x+b.w+6,roofY+5],[b.x+b.w-2,roofY-9],[b.x+8,roofY-9]],'#3e4950','#89949b');
+    roofUnit(ctx,b.x+12,roofY+9,18,10,'#253039');roofUnit(ctx,b.x+b.w-31,roofY+10,20,11,'#202a31');
+    line(ctx,b.x+b.w-8,roofY-6,b.x+b.w-8,roofY-27,controlColor,1.5);
+  }
+  else if(n.includes('galpao de pecas')){
+    sawRoof(ctx,b.x-6,roofY-17,b.w+12,17,6);
+    rect(ctx,b.x+10,roofY-10,b.w-20,4,'#59656d','#8e9aa1');
+    for(const x of [b.x+18,b.x+b.w-30])roofUnit(ctx,x,roofY+12,18,9,'#303944');
+  }
+  else if(n.includes('serralheria')){
+    poly(ctx,[[b.x-6,roofY+7],[b.x+b.w+9,roofY+7],[b.x+b.w+1,roofY-10],[b.x+5,roofY-4]],'#4a545a','#9aa4aa');
+    for(const x of [b.x+b.w*.56,b.x+b.w*.78]){line(ctx,x,roofY+2,x,roofY-24,'#8f9aa0',3);rect(ctx,x-3,roofY-28,6,5,'#4a555c','#8d979d');}
+  }
+  else if(n.includes('deposito industrial')){
+    sawRoof(ctx,b.x-5,roofY-13,b.w+10,13,3);
+    roofUnit(ctx,b.x+b.w*.25,roofY+8,32,13,'#263039');
+    rect(ctx,b.x+b.w*.65,roofY+11,20,8,'#39444c','#77838b');
+  }
+  else if(n.includes('portaria do patio')){
+    rect(ctx,b.x-14,roofY-13,b.w+28,7,'#59646c','#c2cbd0');
+    for(const x of [b.x-8,b.x+b.w+8])line(ctx,x,roofY-6,x,roofY+22,'#7c878e',2);
+    rect(ctx,b.x+b.w*.59,roofY+16,b.w*.27,4,'#f59e0b');
+  }
+  else if(n.includes('torre da fabrica')){
+    rect(ctx,b.x+b.w*.31,roofY-56,b.w*.38,9,'#59656e','#b7c0c5');
+    rail(ctx,b.x+b.w*.27,roofY-62,b.w*.46,9);
+    rect(ctx,b.x+b.w*.44,roofY-72,b.w*.12,11,'#65717a','#a5afb5');
+    line(ctx,b.x+b.w*.5,roofY-72,b.x+b.w*.5,roofY-91,'#a1abb1',2.2);
+    ctx.fillStyle=controlColor;ctx.globalAlpha=.62;ctx.fillRect(b.x+b.w*.47,roofY-60,b.w*.06,2);ctx.globalAlpha=1;
+  }
 };
 
 const overT4=(a:Args,n:string)=>{const {ctx,b,roofY,controlColor}=a;

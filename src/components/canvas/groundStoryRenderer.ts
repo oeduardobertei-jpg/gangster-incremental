@@ -67,12 +67,8 @@ export function drawGroundStoryUseZones(
       else if(n.includes('armazem')||n.includes('deposito')) parallelMarks(ctx,b,'rgba(15,23,42,.22)',38,7);
       else if(n.includes('estacao')||n.includes('passarela')) footWear(ctx,b,'rgba(30,41,59,.15)',36);
       else {footWear(ctx,b,'rgba(92,67,45,.14)',24);serviceSpecks(ctx,e.x+6,e.y+6,5,'rgba(154,52,18,.16)');}
-    }    else if(territoryId===3){
-      if(n.includes('oficina')){parallelMarks(ctx,b,'rgba(15,23,42,.24)',36,7);stain(ctx,e.x+e.dx*25,e.y+e.dy*25,10,4,'rgba(15,23,42,.18)',.12);}
-      else if(n.includes('serralheria')){footWear(ctx,b,'rgba(51,65,85,.18)',28);serviceSpecks(ctx,e.x+5,e.y+5,6,'rgba(180,83,9,.20)');}
-      else if(n.includes('galpao')||n.includes('deposito')) parallelMarks(ctx,b,'rgba(30,41,59,.20)',42,8);
-      else if(n.includes('portaria')) footWear(ctx,b,'rgba(71,85,105,.15)',30);
-      else footWear(ctx,b,'rgba(71,85,105,.12)',24);
+    } else if(territoryId===3){
+      // 1.2S: T3 wear/loading marks live in the dedicated industrial surface.
     } else if(territoryId===4){
       if(n.includes('beco')||n.includes('barraco')) footWear(ctx,b,'rgba(88,65,45,.20)',30);
       else if(n.includes('laje')||n.includes('reduto')) stain(ctx,e.x+e.dx*19,e.y+e.dy*19,12,5,'rgba(120,94,69,.15)',.1);

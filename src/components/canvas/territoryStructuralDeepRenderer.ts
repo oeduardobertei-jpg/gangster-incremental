@@ -49,39 +49,7 @@ const hazardStrip=(ctx:CanvasRenderingContext2D,x:number,y:number,w:number)=>{
 const oil=(ctx:CanvasRenderingContext2D,x:number,y:number,rx:number,ry:number)=>{
   ctx.fillStyle='rgba(2,6,12,.25)';ctx.beginPath();ctx.ellipse(x,y,rx,ry,.18,0,Math.PI*2);ctx.fill();
 };
-const drawT3=(ctx:CanvasRenderingContext2D,w:number,h:number,buildings:readonly TacticalBuilding[])=>{
-  // Functional service lanes replace the old editor-like grid with purpose-driven circulation.
-  for(const [x,y,ww,hh] of [[.08,.22,.27,.18],[.65,.22,.27,.18],[.08,.60,.27,.20],[.65,.59,.27,.20]] as const){
-    rounded(ctx,w*x,h*y,w*ww,h*hh,3,'rgba(51,65,85,.075)','rgba(100,116,139,.12)');
-    hazardStrip(ctx,w*x+8,h*(y+hh)-8,w*ww-16);
-  }
-  const oficina1=building(buildings,'oficina 01'),oficinaL=building(buildings,'oficina leste');
-  for(const b of [oficina1,oficinaL])if(b){
-    const gy=b.y+b.h+6;rect(ctx,b.x-12,gy,b.w+24,14,'rgba(15,23,42,.20)','rgba(249,115,22,.17)');
-    oil(ctx,b.x+b.w*.35,gy+7,15,4);oil(ctx,b.x+b.w*.68,gy+8,9,3);
-  }
-  const galpao=building(buildings,'galpao de pecas');if(galpao){
-    rect(ctx,galpao.x-14,galpao.y+galpao.h+5,galpao.w+28,16,'rgba(71,85,105,.18)','rgba(148,163,184,.18)');
-    for(let x=galpao.x;x<galpao.x+galpao.w;x+=24)rect(ctx,x,galpao.y+galpao.h+9,14,4,'rgba(166,110,62,.25)');
-  }
-  const serr=building(buildings,'serralheria');if(serr){for(let i=0;i<5;i++)line(ctx,serr.x+8+i*7,serr.y+serr.h+7,serr.x+30+i*7,serr.y+serr.h+7,'rgba(148,163,184,.28)',3);}
-  const deposito=building(buildings,'deposito industrial');if(deposito){
-    const gy=deposito.y+deposito.h+5;rect(ctx,deposito.x-16,gy,deposito.w+32,18,'rgba(51,65,85,.20)','rgba(148,163,184,.17)');
-    hazardStrip(ctx,deposito.x-10,gy+3,deposito.w+20);
-  }
-  const portaria=building(buildings,'portaria do patio');if(portaria){
-    const gy=portaria.y+portaria.h+5;rect(ctx,portaria.x-10,gy,portaria.w+38,12,'rgba(51,65,85,.15)');
-    line(ctx,portaria.x+portaria.w*.55,gy+6,portaria.x+portaria.w+28,gy+6,'rgba(248,250,252,.60)',3);
-    line(ctx,portaria.x+portaria.w*.62,gy+6,portaria.x+portaria.w+18,gy+6,'rgba(249,115,22,.42)',2);
-  }
-  const torre=building(buildings,'torre da fabrica');if(torre){
-    rounded(ctx,torre.x+torre.w*.25,torre.y+torre.h+5,torre.w*.50,13,2,'rgba(71,85,105,.20)','rgba(148,163,184,.16)');
-    line(ctx,torre.x+torre.w*.5,torre.y+torre.h+18,torre.x+torre.w*.5,torre.y+torre.h+35,'rgba(100,116,139,.22)',2);
-  }
-  // Utility spine gives the yard a readable industrial hierarchy at open zoom.
-  line(ctx,w*.17,h*.47,w*.83,h*.47,'rgba(15,23,42,.22)',5);
-  line(ctx,w*.17,h*.47-2,w*.83,h*.47-2,'rgba(148,163,184,.10)',1);
-};
+const drawT3=(_ctx:CanvasRenderingContext2D,_w:number,_h:number,_buildings:readonly TacticalBuilding[])=>{};
 
 const retainingWall=(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,flip=false)=>{
   rect(ctx,x,y,w,6,'rgba(99,79,63,.34)','rgba(168,144,119,.22)');

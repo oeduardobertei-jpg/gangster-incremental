@@ -51,10 +51,7 @@ const secureLane=(ctx:CanvasRenderingContext2D,b:TacticalBuilding,color:string)=
       if(n.includes('box')||n.includes('banca'))marketApron(ctx,b);
       else if(n.includes('deposito'))loadingBay(ctx,b,'rgba(214,179,92,.24)');
     } else if(territoryId===3){
-      if(n.includes('oficina')||n.includes('serralheria'))loadingBay(ctx,b,'rgba(249,115,22,.26)');
-      else if(n.includes('galpao')||n.includes('deposito'))loadingBay(ctx,b,'rgba(148,163,184,.24)');
-      else if(n.includes('portaria'))gateLane(ctx,b,'#f59e0b');
-      else driveway(ctx,b,'rgba(148,163,184,.15)',28);
+      // 1.2S: the dedicated industrial surface owns loading/service floor geometry.
     } else if(territoryId===4){steps(ctx,b,n.includes('mirante')||n.includes('posto')?32:26,15);
     } else if(territoryId===5){
       if(n.includes('portaria')||n.includes('guarita'))gateLane(ctx,b,'#e2e8f0');
