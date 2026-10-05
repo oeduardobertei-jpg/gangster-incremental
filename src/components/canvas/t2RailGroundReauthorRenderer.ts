@@ -17,9 +17,9 @@ const drawAccessRoad=(ctx:CanvasRenderingContext2D,path:ScenePath,W:number,H:num
 const drawMarketGround=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.save();
   // 1.1K: distinct market islands replace the old almost-map-wide slab.
-  blob(ctx,W,H,[[.045,.475],[.16,.445],[.31,.455],[.405,.505],[.435,.61],[.39,.735],[.27,.79],[.11,.775],[.035,.68]],'rgba(62,55,50,.48)','rgba(136,116,86,.16)');
-  blob(ctx,W,H,[[.565,.49],[.69,.45],[.86,.455],[.95,.505],[.965,.625],[.92,.745],[.80,.80],[.64,.775],[.555,.66]],'rgba(57,55,51,.46)','rgba(125,119,101,.15)');
-  blob(ctx,W,H,[[.34,.72],[.42,.675],[.50,.695],[.59,.675],[.665,.73],[.65,.86],[.56,.91],[.43,.91],[.345,.845]],'rgba(54,50,47,.35)','rgba(122,111,91,.12)');
+  blob(ctx,W,H,[[.045,.475],[.16,.445],[.31,.455],[.405,.505],[.435,.61],[.39,.735],[.27,.79],[.11,.775],[.035,.68]],'rgba(92,68,50,.52)','rgba(136,116,86,.16)');
+  blob(ctx,W,H,[[.565,.49],[.69,.45],[.86,.455],[.95,.505],[.965,.625],[.92,.745],[.80,.80],[.64,.775],[.555,.66]],'rgba(68,70,59,.50)','rgba(125,119,101,.15)');
+  blob(ctx,W,H,[[.34,.72],[.42,.675],[.50,.695],[.59,.675],[.665,.73],[.65,.86],[.56,.91],[.43,.91],[.345,.845]],'rgba(67,57,51,.42)','rgba(122,111,91,.12)');
   for(const [x,y,rx,ry,a] of [[.14,.57,58,18,.10],[.30,.69,72,20,.08],[.73,.56,62,18,.08],[.84,.69,70,19,.075],[.24,.78,45,13,.07],[.58,.82,48,14,.06]] as const){ctx.fillStyle=`rgba(137,111,76,${a})`;ctx.beginPath();ctx.ellipse(W*x,H*y,rx,ry,(x-y)*.24,0,Math.PI*2);ctx.fill();}
   ctx.strokeStyle='rgba(184,166,132,.07)';ctx.lineWidth=1;
   for(const [x0,x1,y] of [[.08,.39,.54],[.10,.40,.66],[.61,.93,.55],[.60,.90,.68],[.39,.63,.79]] as const){for(let x=x0;x<x1;x+=.042){ctx.beginPath();ctx.moveTo(W*x,H*(y-.035));ctx.lineTo(W*(x+.012),H*(y+.035));ctx.stroke();}}
@@ -170,50 +170,29 @@ const overlapsFootprint=(x:number,y:number,w:number,h:number,items:readonly Grou
 
 const drawMarketFixtures=(ctx:CanvasRenderingContext2D,W:number,H:number,items:readonly GroundFootprint[])=>{
   ctx.save();
+  const cloth=['#b8673c','#c59a3b','#4f7b73','#77647d','#c7ad82'];
   const stall=(nx:number,ny:number,variant:number)=>{
-    const w=42,h=24,x=W*nx-w/2,y=H*ny-h/2;
-    if(overlapsFootprint(x,y,w,h,items,12)) return;
-    ctx.fillStyle='rgba(0,0,0,.20)';ctx.beginPath();ctx.ellipse(x+w*.52,y+h+5,w*.55,5,.03,0,Math.PI*2);ctx.fill();
-    const cloth=variant%3===0?'#c58b33':variant%3===1?'#786f58':'#4f7773';
-    const alt=variant%2===0?'#ead9aa':'#c8b98f';
-    ctx.strokeStyle='#6c5945';ctx.lineWidth=2;
-    for(const px of [x+5,x+w-5]){ctx.beginPath();ctx.moveTo(px,y+3);ctx.lineTo(px,y+h+3);ctx.stroke();}
-    ctx.fillStyle='#4a3728';ctx.fillRect(x+4,y+h*.52,w-8,h*.40);
-    ctx.fillStyle='#79583a';ctx.fillRect(x+7,y+h*.56,w-14,3);
-    ctx.beginPath();ctx.moveTo(x-3,y+4);ctx.lineTo(x+w*.5,y-5);ctx.lineTo(x+w+3,y+4);ctx.lineTo(x+w,y+10);ctx.lineTo(x,y+10);ctx.closePath();ctx.fillStyle=cloth;ctx.fill();
-    for(let i=0;i<5;i++){ctx.fillStyle=i%2?alt:cloth;ctx.fillRect(x+i*(w/5),y+5,w/5+1,5);}
-    ctx.fillStyle=variant%2?'rgba(189,135,65,.68)':'rgba(96,135,78,.62)';
-    for(let i=0;i<3;i++)ctx.fillRect(x+8+i*9,y+h*.68,5,3);
+    const w=48,h=28,x=W*nx-w/2,y=H*ny-h/2;if(overlapsFootprint(x,y,w,h,items,11))return;
+    ctx.fillStyle='rgba(0,0,0,.24)';ctx.beginPath();ctx.ellipse(x+w*.52,y+h+5,w*.54,5,.03,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#6d5943';ctx.lineWidth=2.2;for(const px of [x+5,x+w-5]){ctx.beginPath();ctx.moveTo(px,y+4);ctx.lineTo(px,y+h+4);ctx.stroke();}
+    ctx.fillStyle='#4f3928';ctx.fillRect(x+4,y+h*.52,w-8,h*.42);ctx.fillStyle='#815d3d';ctx.fillRect(x+7,y+h*.57,w-14,3);
+    const c=cloth[variant%cloth.length],alt=variant%2?'#ead9b0':'#d9c99d';
+    ctx.beginPath();ctx.moveTo(x-4,y+5);ctx.lineTo(x+w*.5,y-6);ctx.lineTo(x+w+4,y+5);ctx.lineTo(x+w,y+12);ctx.lineTo(x,y+12);ctx.closePath();ctx.fillStyle=c;ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.10)';ctx.fillRect(x+3,y+5,w-6,2);
+    for(let i=0;i<6;i++){ctx.fillStyle=i%2?alt:c;ctx.globalAlpha=.88;ctx.fillRect(x+i*w/6,y+8,w/6+1,5);}ctx.globalAlpha=1;
+    const goods=variant%3===0?'#739555':variant%3===1?'#c88346':'#b85c52';
+    for(let i=0;i<4;i++){ctx.fillStyle=goods;ctx.fillRect(x+8+i*8,y+h*.68,5,3+(i%2));}
+    ctx.fillStyle='rgba(255,211,122,.72)';ctx.beginPath();ctx.arc(x+w*.5,y+15,1.7,0,Math.PI*2);ctx.fill();
   };
-  const cart=(nx:number,ny:number,rot:number)=>{
-    const x=W*nx,y=H*ny; if(overlapsFootprint(x-16,y-9,32,18,items,8)) return;
-    ctx.save();ctx.translate(x,y);ctx.rotate(rot);
-    ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(-15,6,31,5);
-    ctx.fillStyle='#6d5338';ctx.fillRect(-14,-5,28,12);ctx.strokeStyle='#a98352';ctx.strokeRect(-14,-5,28,12);
-    ctx.fillStyle='#2d3336';for(const wx of [-10,10]){ctx.beginPath();ctx.arc(wx,9,3,0,Math.PI*2);ctx.fill();}
-    ctx.strokeStyle='#838b8e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,-1);ctx.lineTo(23,-5);ctx.stroke();
-    ctx.restore();
-  };
-  const pallet=(nx:number,ny:number,variant:number)=>{
-    const x=W*nx,y=H*ny;if(overlapsFootprint(x-14,y-8,28,16,items,7)) return;
-    ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(x-13,y+5,28,5);
-    ctx.fillStyle='#725238';ctx.fillRect(x-14,y-5,28,10);ctx.strokeStyle='#a77b4d';ctx.strokeRect(x-14,y-5,28,10);
-    ctx.strokeStyle='rgba(47,35,26,.55)';for(let xx=x-9;xx<x+13;xx+=7){ctx.beginPath();ctx.moveTo(xx,y-5);ctx.lineTo(xx,y+5);ctx.stroke();}
-    if(variant%2===0){ctx.fillStyle='#8b6b45';ctx.fillRect(x-8,y-13,12,8);ctx.strokeStyle='#b28b5b';ctx.strokeRect(x-8,y-13,12,8);}
-  };
+  const tarp=(a:number,b:number,y:number,c:string)=>{const x1=W*a,x2=W*b,yy=H*y;if(overlapsFootprint(x1,yy-12,x2-x1,24,items,5))return;ctx.fillStyle=c;ctx.globalAlpha=.20;ctx.beginPath();ctx.moveTo(x1,yy-7);ctx.lineTo(x2,yy-4);ctx.lineTo(x2-5,yy+9);ctx.lineTo(x1+4,yy+7);ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='rgba(222,205,174,.28)';ctx.beginPath();ctx.moveTo(x1,yy-7);ctx.lineTo(x2,yy-4);ctx.stroke();for(let i=1;i<6;i++){const t=i/6,x=x1+(x2-x1)*t,y=yy-7+3*t;ctx.fillStyle='rgba(255,215,139,.62)';ctx.beginPath();ctx.arc(x,y+2,1.3,0,Math.PI*2);ctx.fill();}};
+  const cart=(nx:number,ny:number,rot:number)=>{const x=W*nx,y=H*ny;if(overlapsFootprint(x-16,y-9,32,18,items,8))return;ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(-15,6,31,5);ctx.fillStyle='#6d5338';ctx.fillRect(-14,-5,28,12);ctx.strokeStyle='#a98352';ctx.strokeRect(-14,-5,28,12);ctx.fillStyle='#2d3336';for(const wx of [-10,10]){ctx.beginPath();ctx.arc(wx,9,3,0,Math.PI*2);ctx.fill();}ctx.strokeStyle='#838b8e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,-1);ctx.lineTo(23,-5);ctx.stroke();ctx.restore();};
+  const pallet=(nx:number,ny:number,variant:number)=>{const x=W*nx,y=H*ny;if(overlapsFootprint(x-14,y-8,28,16,items,7))return;ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(x-13,y+5,28,5);ctx.fillStyle='#725238';ctx.fillRect(x-14,y-5,28,10);ctx.strokeStyle='#a77b4d';ctx.strokeRect(x-14,y-5,28,10);ctx.strokeStyle='rgba(47,35,26,.55)';for(let xx=x-9;xx<x+13;xx+=7){ctx.beginPath();ctx.moveTo(xx,y-5);ctx.lineTo(xx,y+5);ctx.stroke();}if(variant%2===0){ctx.fillStyle='#8b6b45';ctx.fillRect(x-8,y-13,12,8);ctx.strokeStyle='#b28b5b';ctx.strokeRect(x-8,y-13,12,8);}};
 
-  // Authored market rows: dense enough to read as commerce, spaced around tactical footprints.
-  [[.11,.57,0],[.18,.60,1],[.29,.57,2],[.36,.61,3],[.64,.57,1],[.72,.60,2],[.82,.57,0],[.89,.62,3],
-   [.14,.72,2],[.25,.71,0],[.34,.75,1],[.66,.74,3],[.76,.71,1],[.87,.73,2]].forEach(([x,y,v])=>stall(x as number,y as number,v as number));
+  tarp(.075,.385,.545,'#b8673c');tarp(.615,.925,.545,'#4f7b73');tarp(.11,.36,.695,'#c59a3b');tarp(.64,.91,.695,'#77647d');
+  [[.10,.57,0],[.18,.59,1],[.28,.57,2],[.36,.60,3],[.64,.57,2],[.72,.59,4],[.82,.57,1],[.90,.60,3],[.14,.72,4],[.24,.70,0],[.34,.73,2],[.66,.73,3],[.76,.70,1],[.87,.72,4]].forEach(([x,y,v])=>stall(x as number,y as number,v as number));
   [[.20,.79,-.10],[.38,.68,.06],[.62,.68,-.05],[.80,.79,.12]].forEach(([x,y,r])=>cart(x as number,y as number,r as number));
   [[.09,.50,0],[.31,.80,1],[.69,.80,0],[.91,.52,1]].forEach(([x,y,v])=>pallet(x as number,y as number,v as number));
-
-  // Edge bollards keep the central freight/pedestrian spine readable without filling it.
-  for(const side of [-1,1]) for(const ny of [.47,.57,.68,.78]){
-    const x=W*(.50+side*.045),y=H*ny;
-    ctx.fillStyle='rgba(0,0,0,.20)';ctx.beginPath();ctx.ellipse(x,y+4,4,2,0,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#6b6e6e';ctx.fillRect(x-2,y-7,4,10);ctx.fillStyle='#d1a63a';ctx.fillRect(x-2,y-5,4,2);
-  }
+  for(const side of [-1,1])for(const ny of [.47,.57,.68,.78]){const x=W*(.50+side*.045),y=H*ny;ctx.fillStyle='rgba(0,0,0,.20)';ctx.beginPath();ctx.ellipse(x,y+4,4,2,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6b6e6e';ctx.fillRect(x-2,y-7,4,10);ctx.fillStyle='#d1a63a';ctx.fillRect(x-2,y-5,4,2);}
   ctx.restore();
 };
 
