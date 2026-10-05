@@ -77,10 +77,10 @@ const drawOperationalFloorZones=(ctx:CanvasRenderingContext2D,W:number,H:number)
     const c=18;for(const [sx,sy,dx,dy] of [[x+5,y+5,1,1],[x+w-5,y+5,-1,1],[x+5,y+h-5,1,-1],[x+w-5,y+h-5,-1,-1]] as const){ctx.beginPath();ctx.moveTo(sx+dx*c,sy);ctx.lineTo(sx,sy);ctx.lineTo(sx,sy+dy*c);ctx.stroke();}
     ctx.font='700 9px "JetBrains Mono", monospace';ctx.textAlign='left';ctx.fillStyle='rgba(202,207,203,.13)';ctx.fillText(code,x+10,y+h-10);
   };
-  zone(.055,.205,.31,.245,'A · PEÇAS','rgba(75,78,78,.19)');
-  zone(.635,.205,.31,.245,'B · OFICINAS','rgba(70,76,77,.18)');
-  zone(.055,.565,.31,.255,'C · CARGA','rgba(72,70,68,.17)');
-  zone(.635,.565,.31,.255,'D · DEPÓSITO','rgba(67,74,75,.18)');
+  zone(.055,.205,.31,.245,'A · PEÇAS','rgba(108,72,51,.32)');
+  zone(.635,.205,.31,.245,'B · OFICINAS','rgba(53,78,89,.30)');
+  zone(.055,.565,.31,.255,'C · CARGA','rgba(43,45,47,.36)');
+  zone(.635,.565,.31,.255,'D · DEPÓSITO','rgba(45,76,70,.31)');
 
   // Embedded cable/service trenches add scale while remaining flat gameplay surfaces.
   ctx.strokeStyle='rgba(12,16,18,.34)';ctx.lineWidth=5;ctx.lineCap='round';
@@ -95,10 +95,10 @@ const drawFunctionalYards=(ctx:CanvasRenderingContext2D,W:number,H:number,items:
   const yard=(pts:readonly (readonly [number,number])[],fill:string,edge:string)=>{
     blob(ctx,W,H,pts,fill);ctx.strokeStyle=edge;ctx.lineWidth=1.2;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x*W,y*H):ctx.moveTo(x*W,y*H));ctx.closePath();ctx.stroke();
   };
-  yard([[.035,.19],[.34,.17],[.405,.24],[.39,.48],[.08,.50],[.03,.42]],'rgba(63,65,66,.30)','rgba(135,139,138,.10)');
-  yard([[.61,.18],[.93,.19],[.97,.29],[.93,.49],[.61,.48],[.585,.32]],'rgba(58,63,65,.29)','rgba(132,142,143,.10)');
-  yard([[.035,.55],[.37,.54],[.405,.64],[.37,.86],[.08,.86],[.03,.78]],'rgba(59,59,58,.25)','rgba(132,128,119,.09)');
-  yard([[.62,.55],[.94,.54],[.97,.66],[.92,.85],[.62,.86],[.59,.72]],'rgba(56,62,63,.26)','rgba(128,137,137,.09)');
+  yard([[.035,.19],[.34,.17],[.405,.24],[.39,.48],[.08,.50],[.03,.42]],'rgba(88,67,55,.38)','rgba(135,139,138,.10)');
+  yard([[.61,.18],[.93,.19],[.97,.29],[.93,.49],[.61,.48],[.585,.32]],'rgba(47,70,78,.37)','rgba(132,142,143,.10)');
+  yard([[.035,.55],[.37,.54],[.405,.64],[.37,.86],[.08,.86],[.03,.78]],'rgba(43,45,47,.39)','rgba(132,128,119,.09)');
+  yard([[.62,.55],[.94,.54],[.97,.66],[.92,.85],[.62,.86],[.59,.72]],'rgba(43,73,68,.37)','rgba(128,137,137,.09)');
 
   // Solid loading edge language: readable as industrial safety, never as the old dashed orange map marks.
   ctx.lineWidth=3;ctx.lineCap='butt';
@@ -143,7 +143,7 @@ const drawIndustrialMicro=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
   ctx.restore();
 };
 const drawRustRunoff=(ctx:CanvasRenderingContext2D,W:number,H:number)=>{
-  ctx.save();ctx.strokeStyle='rgba(151,70,36,.12)';ctx.lineWidth=3;ctx.lineCap='round';
+  ctx.save();ctx.strokeStyle='rgba(170,73,32,.23)';ctx.lineWidth=3;ctx.lineCap='round';
   for(const [x,y,len] of [[.12,.31,38],[.31,.51,26],[.70,.31,32],[.87,.54,29],[.18,.68,34],[.80,.72,31]] as const){ctx.beginPath();ctx.moveTo(W*x,H*y);ctx.lineTo(W*x+len,H*y+5);ctx.stroke();}
   ctx.restore();
 };

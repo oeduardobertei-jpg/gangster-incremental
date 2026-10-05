@@ -10,14 +10,14 @@ export function drawUrbanMoodFoundation(ctx:CanvasRenderingContext2D,w:number,h:
   for(const b of buildings){const n=norm(b.label);
     if(territoryId===1){if(n.includes('barraquinha'))lightAt(ctx,b,'#f59e0b',24,.035);else if(n.includes('boca'))lightAt(ctx,b,'#f59e0b',48,.11);else if(n.includes('laje')||n.includes('mirante'))lightAt(ctx,b,'#fde68a',34,.055);}
     else if(territoryId===2){if(n.includes('estacao')||n.includes('box')||n.includes('banca'))lightAt(ctx,b,'#fbbf24',46,.09);else if(n.includes('passarela')||n.includes('cabine'))lightAt(ctx,b,'#93c5fd',36,.065);}
-    else if(territoryId===3){if(n.includes('oficina')||n.includes('serralheria'))lightAt(ctx,b,'#fb923c',46,.09);else if(n.includes('portaria')||n.includes('deposito'))lightAt(ctx,b,'#cbd5e1',34,.05);}
+    else if(territoryId===3){if(n.includes('oficina'))lightAt(ctx,b,'#fb923c',56,.14);else if(n.includes('serralheria'))lightAt(ctx,b,'#f59e0b',48,.105);else if(n.includes('deposito')||n.includes('galpao'))lightAt(ctx,b,'#9cc4cf',42,.065);else if(n.includes('portaria'))lightAt(ctx,b,'#fde68a',34,.055);else if(n.includes('torre'))lightAt(ctx,b,'#93c5fd',30,.045);}
     else if(territoryId===4){if(n.includes('boca'))lightAt(ctx,b,'#f59e0b',38,.075);else if(n.includes('posto')||n.includes('mirante'))lightAt(ctx,b,'#e2e8f0',31,.045);}
     else if(territoryId===5){if(n.includes('casa')||n.includes('mansao'))lightAt(ctx,b,'#fde68a',42,.070);else if(n.includes('portaria')||n.includes('guarita'))lightAt(ctx,b,'#f5e6c8',36,.060);}
     else if(territoryId===6){if(n.includes('qg')||n.includes('comando')||n.includes('centro operacional'))lightAt(ctx,b,'#e5e7eb',44,.052);else if(n.includes('posto blindado')||n.includes('torre'))lightAt(ctx,b,'#f59e0b',32,.042);}
   }
   if(territoryId===1){glow(ctx,w*.28,h*.57,62,'#f59e0b',.035);glow(ctx,w*.69,h*.58,48,'#fde68a',.025);}
   else if(territoryId===2){glow(ctx,w*.50,h*.29,82,'#facc15',.022);glow(ctx,w*.27,h*.45,58,'#f0bd68',.025);glow(ctx,w*.73,h*.45,58,'#d9c27a',.022);glow(ctx,w*.25,h*.64,96,'#f59e0b',.040);glow(ctx,w*.76,h*.65,96,'#fde68a',.032);}
-  else if(territoryId===3)glow(ctx,w*.50,h*.47,105,'#94a3b8',.018);
+  else if(territoryId===3){glow(ctx,w*.27,h*.43,98,'#fb923c',.036);glow(ctx,w*.73,h*.43,94,'#f59e0b',.030);glow(ctx,w*.73,h*.70,92,'#9cc4cf',.025);}
   else if(territoryId===5)glow(ctx,w*.50,h*.82,74,'#fde68a',.022);
   else if(territoryId===6)glow(ctx,w*.50,h*.48,110,'#e5e7eb',.015);
   ctx.restore();
