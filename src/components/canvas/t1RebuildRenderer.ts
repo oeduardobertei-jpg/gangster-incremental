@@ -269,6 +269,48 @@ export function drawT1MaterialDepthFoundation(
   ctx.restore();
 }
 
+
+/** 1.2J: ground-level urban integration. Visual-only markings never imply new blockers. */
+export function drawT1UrbanIntegrationFoundation(
+  ctx:CanvasRenderingContext2D,width:number,height:number,territoryId:number,
+  buildings:readonly TacticalBuilding[]
+){
+  if(territoryId!==1)return;
+  ctx.save();
+  const tuft=(x:number,y:number,flip=1)=>{
+    line(ctx,x,y,x-3*flip,y-7,'rgba(73,111,62,.62)',1.2);line(ctx,x,y,x+4*flip,y-5,'rgba(89,129,67,.56)',1.1);
+    ctx.fillStyle='rgba(91,135,72,.46)';ctx.beginPath();ctx.ellipse(x-3*flip,y-7,3,1.7,-.35*flip,0,Math.PI*2);ctx.fill();
+  };
+  for(const b of buildings){
+    const hash=Math.abs([...b.id].reduce((a,c)=>((a*31)+c.charCodeAt(0))|0,11));
+    const dTop=Math.abs(b.doorY-b.y),dBottom=Math.abs(b.doorY-(b.y+b.h));
+    const dLeft=Math.abs(b.doorX-b.x),dRight=Math.abs(b.doorX-(b.x+b.w));
+    const m=Math.min(dTop,dBottom,dLeft,dRight);
+    const tone=b.type==='brick'?'rgba(133,92,65,.30)':b.type==='zinc'?'rgba(80,99,102,.28)':'rgba(111,105,91,.28)';
+    ctx.fillStyle=tone;
+    if(m===dTop||m===dBottom){ctx.beginPath();ctx.roundRect(b.doorX-13,b.doorY-5,26,10,2);ctx.fill();line(ctx,b.doorX-10,b.doorY+2,b.doorX+9,b.doorY-1,'rgba(208,184,147,.16)',1);}
+    else{ctx.beginPath();ctx.roundRect(b.doorX-5,b.doorY-13,10,26,2);ctx.fill();line(ctx,b.doorX+1,b.doorY-10,b.doorX-2,b.doorY+9,'rgba(208,184,147,.16)',1);}
+
+    // Thin drainage channel and damp base stain read as ground treatment, never wall geometry.
+    const drainY=b.y+b.h+5;
+    line(ctx,b.x+5,drainY,b.x+b.w-7,drainY,'rgba(22,34,34,.28)',1.5);
+    ctx.fillStyle='rgba(50,79,70,.08)';ctx.beginPath();ctx.ellipse(b.x+b.w*(.25+(hash%4)*.14),drainY-2,Math.max(8,b.w*.14),4,.05,0,Math.PI*2);ctx.fill();
+    const gx=hash%2===0?b.x+5:b.x+b.w-6;tuft(gx,b.y+b.h+3,hash%2===0?1:-1);
+
+    // Small service paint/wear at the facade edge adds human scale without occupying walkable space.
+    ctx.fillStyle=hash%3===0?'rgba(189,137,76,.10)':'rgba(103,137,126,.075)';
+    ctx.fillRect(b.x+4+(hash%3)*5,b.y+b.h-3,Math.max(10,b.w*.18),3);
+  }
+
+  const boca=find(buildings,'boca_leste');
+  if(boca){ctx.fillStyle='rgba(145,75,47,.13)';ctx.beginPath();ctx.roundRect(boca.x-10,boca.y+boca.h+7,boca.w+20,12,4);ctx.fill();line(ctx,boca.x+5,boca.y+boca.h+13,boca.x+boca.w-8,boca.y+boca.h+11,'rgba(227,169,111,.16)',1);}
+  const safe=find(buildings,'esconderijo');
+  if(safe){ctx.fillStyle='rgba(66,79,79,.14)';ctx.fillRect(safe.x+safe.w-9,safe.y+5,15,safe.h-8);line(ctx,safe.x+safe.w+3,safe.y+7,safe.x+safe.w+3,safe.y+safe.h-7,'rgba(145,165,162,.15)',1);}
+  const laje=find(buildings,'laje_ponto');
+  if(laje){ctx.fillStyle='rgba(58,83,75,.09)';ctx.beginPath();ctx.ellipse(laje.doorX,laje.doorY+7,26,8,-.12,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+}
+
 /** 1.2B: vertical architecture built above real physical footprints only. */
 export function drawT1RebuildBuildingFinish(
   ctx:CanvasRenderingContext2D,b:TacticalBuilding,time:number,controlColor:string,renderZoom=1
@@ -330,18 +372,27 @@ export function drawT1RebuildBuildingFinish(
     line(ctx,x-1*s,y+1*s,x+5*s,y+8*s,'#66757a',1.2);ctx.fillStyle='#9aa7aa';ctx.beginPath();ctx.arc(x+1*s,y,1.4*s,0,Math.PI*2);ctx.fill();
   };
 
+  const clothesline=(x:number,y:number,w:number,seed=0)=>{
+    line(ctx,x,y,x+w,y+2,'rgba(193,199,190,.38)',.8);
+    const cols=['#9f5e48','#557c83','#b39a61','#77738a'];
+    for(let i=0;i<3;i++){const xx=x+w*(.22+i*.26);ctx.fillStyle=cols[(seed+i)%cols.length];ctx.fillRect(xx,y+1+i%2,5,5+i%2);}
+  };
+  const planter=(x:number,y:number,w=14)=>{
+    ctx.fillStyle='#655544';ctx.fillRect(x,y,w,4);ctx.fillStyle='#43643d';for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(x+3+i*4,y-2-(i%2),3,2,-.2,0,Math.PI*2);ctx.fill();}
+  };
+
   if(b.id==='beco_01'){
     const x=b.x+8,y=rY-25,w=b.w*.48,h=25;
     floor(x,y,w,h,'#725342','#4a4037','#17222a','brick');slab(b.x-3,rY-5,b.w+6,6);
     tileCanopy(b.x-5,rY+6,b.w*.62,10);waterTank(b.x+b.w-19,y-8,.82);rebar(b.x+b.w*.56,rY-2,2);
-    if(detail){line(ctx,x+6,y+8,b.x+b.w-10,y+1,'rgba(218,208,190,.30)',1);}
+    if(detail){line(ctx,x+6,y+8,b.x+b.w-10,y+1,'rgba(218,208,190,.30)',1);clothesline(x+5,y-8,w*.72,1);}
   }else if(b.id==='laje_ponto'){
     const x=b.x+10,w=b.w*.68,h=29,y=rY-h+1;
     floor(x,y,w,h,'#514a40','#756b5d','#17222a','concrete');
     const x2=x+w*.32,w2=w*.58,h2=22,y2=y-h2+2;floor(x2,y2,w2,h2,'#4a514d','#727b72','#17222a','concrete');
     balcony(x-4,y+h-4,w*.72);rebar(x+w+6,y+5,3);waterTank(x2+w2-12,y2-9,.75);factionBand(x+8,y+h-8,w*.38);
     ctx.fillStyle='rgba(120,143,130,.42)';ctx.fillRect(x+4,y2-5,w2*.48,4);line(ctx,x+4,y2-5,x+4,y2-18,'#5e645c',1.5);line(ctx,x+4+w2*.48,y2-5,x+4+w2*.48,y2-18,'#5e645c',1.5);
-    if(detail){ctx.fillStyle='rgba(202,176,126,.18)';ctx.fillRect(x+5,y+6,w-10,3);}
+    if(detail){ctx.fillStyle='rgba(202,176,126,.18)';ctx.fillRect(x+5,y+6,w-10,3);clothesline(x+2,y2-14,w2*.80,2);planter(x+w*.08,y-5,16);}
   }else if(b.id==='barraquinha'){
     const aw=b.w+28,ax=b.x-14,ay=rY+13;
     ctx.fillStyle='rgba(0,0,0,.26)';poly(ctx,[[ax+5,ay+7],[ax+aw+5,ay+3],[ax+aw-2,ay+18],[ax+3,ay+22]],'rgba(0,0,0,.24)');
@@ -353,14 +404,14 @@ export function drawT1RebuildBuildingFinish(
     const x=b.x+7,w=b.w*.76,h=31,y=rY-h+2;floor(x,y,w,h,'#394246','#647079','#17222a','concrete');
     const x2=b.x+b.w*.42,w2=b.w*.48,h2=24,y2=y-h2+3;floor(x2,y2,w2,h2,'#303a3e','#66757a','#17222a','metal');
     balcony(x+w*.05,y+h-2,w*.46);waterTank(x2+w2-13,y2-10,.82);antenna(x2+w2*.58,y2,30);dish(x2+9,y2-5,.78);
-    zincCanopy(b.x+5,rY+9,b.w*.44,9);rect(ctx,b.x+9,rY+b.h-17,34,9,'#20282c','#4c585d');factionBand(x+7,y+h-7,w*.28);lamp(b.x+15,rY+b.h+2);
+    zincCanopy(b.x+5,rY+9,b.w*.44,9);rect(ctx,b.x+9,rY+b.h-17,34,9,'#20282c','#4c585d');factionBand(x+7,y+h-7,w*.28);lamp(b.x+15,rY+b.h+2);if(detail)planter(x+w-20,y-5,15);
   }else if(b.id==='boca_leste'){
     const x=b.x+4,w=b.w*.86,h=35,y=rY-h+3;floor(x,y,w,h,'#7a4433','#9d6249','#211d1b','brick');
     const x2=b.x+b.w*.31,w2=b.w*.57,h2=25,y2=y-h2+4;floor(x2,y2,w2,h2,'#694033','#925c49','#181c1d','brick');
     balcony(x+5,y+h-2,w*.64);waterTank(x2+w2-14,y2-9,.86);antenna(x2+11,y2,25);factionBand(x+8,y+h-8,w*.42);
     tileCanopy(b.x-8,rY+23,b.w*.54,11);ctx.fillStyle='rgba(40,46,43,.72)';ctx.fillRect(x2+w2*.18,y2-8,w2*.38,5);
     const signX=b.x+15,signY=rY+10,signW=b.w-30;ctx.fillStyle='#171c1e';ctx.fillRect(signX,signY,signW,13);ctx.strokeStyle=controlColor;ctx.strokeRect(signX,signY,signW,13);
-    if(detail){ctx.fillStyle='#f0dfc7';ctx.font='900 8px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('BOCA DA LESTE',b.x+b.w/2,signY+7.5);}
+    if(detail){ctx.fillStyle='#f0dfc7';ctx.font='900 8px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('BOCA DA LESTE',b.x+b.w/2,signY+7.5);planter(x+7,y-5,18);}
     poly(ctx,[[b.x-14,rY+b.h-12],[b.x+b.w+10,rY+b.h-15],[b.x+b.w+6,rY+b.h-3],[b.x-9,rY+b.h]],'#824d35','#a76d48');lamp(b.x+b.w-13,rY+26);
   }else if(b.id==='torre_guarda'){
     const cx=b.x+b.w/2;
@@ -417,6 +468,9 @@ const drawT1RebuildContextFinishRaw=(
     ctx.fillStyle='rgba(0,0,0,.20)';ctx.fillRect(x+2,y-5,w+3,6);ctx.fillStyle=cap;ctx.fillRect(x-2,y-5,w+4,5);
     if(detail&&spec.material!=='brick'&&hash%4!==0){const faded=['rgba(69,126,130,.12)','rgba(171,116,69,.11)','rgba(142,150,101,.10)','rgba(121,111,146,.09)'][hash%4];ctx.fillStyle=faded;ctx.fillRect(x+3,y+4,Math.max(10,w*(.24+(hash%3)*.08)),Math.max(8,h-8));}
     if(detail&&spec.material==='brick'&&hash%3===0){ctx.fillStyle='rgba(197,145,94,.10)';ctx.fillRect(x+w*.58,y+4,w*.26,Math.max(8,h-8));}
+    if(detail&&hash%2===0){line(ctx,x+w-3,y+4,x+w-3,y+h-2,'rgba(61,75,76,.34)',1.2);ctx.fillStyle='rgba(75,93,91,.28)';ctx.fillRect(x+w-5,y+h-4,5,2);}
+    if(detail&&hash%5===0){ctx.fillStyle='#615244';ctx.fillRect(x+6,y-8,14,4);ctx.fillStyle='#46623e';ctx.beginPath();ctx.ellipse(x+10,y-10,4,2.5,-.2,0,Math.PI*2);ctx.ellipse(x+16,y-10,4,2.5,.2,0,Math.PI*2);ctx.fill();}
+    if(detail&&hash%7===0){line(ctx,x+7,y-10,x+w-8,y-8,'rgba(195,199,190,.30)',.7);ctx.fillStyle='#9b6a54';ctx.fillRect(x+w*.42,y-9,4,5);ctx.fillStyle='#5d7f83';ctx.fillRect(x+w*.58,y-8,5,4);}
     if(detail&&spec.material==='brick'){for(let xx=x;xx<x+w;xx+=9)line(ctx,xx,y-5,xx+4,y,'rgba(244,190,137,.14)',.7);}
     if(detail&&spec.material==='metal'){for(let xx=x+6;xx<x+w-4;xx+=11)line(ctx,xx,y-5,xx,y,'rgba(198,226,230,.16)',.7);}
   };
