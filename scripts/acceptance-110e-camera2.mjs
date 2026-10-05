@@ -10,7 +10,7 @@ const camera=()=>s.evaluate(`(()=>({perf:window.__GAME_PERF__??null,label:[...do
 try{
   const pure=await s.evaluate(`(async()=>{const c=await import('/src/components/canvas/camera2D.ts');const vp={width:1130,height:649};const d=c.createDefaultCamera();const t1=c.createTerritoryCamera(1);const min=c.clampZoom(-10),max=c.clampZoom(99);const a={x:273,y:188};const w0=c.screenToWorld(a,{centerX:640,centerY:350,zoom:1.08},vp);const z=c.zoomCameraAtScreenPoint({centerX:640,centerY:350,zoom:1.08},1.44,a,vp);const w1=c.screenToWorld(a,z,vp);const small=c.zoomFromWheelDelta(1,-10),large=c.zoomFromWheelDelta(1,-120);return{d,t1,min,max,stepIn:c.stepCameraZoom(1,1),stepOut:c.stepCameraZoom(1,-1),small,large,anchorDrift:Math.hypot(w1.x-w0.x,w1.y-w0.y),fit:c.fitCameraToWorld(vp,28)}})()`);
   check('default camera is intentionally tactical',Math.abs(pure.d.zoom-.94)<.001&&pure.d.centerY===350,JSON.stringify(pure.d));
-  check('T1-R authored camera opens at 106%',Math.abs(pure.t1.zoom-1.06)<.001&&pure.t1.centerY===342,JSON.stringify(pure.t1));
+  check('T1-R Golden camera opens at 104%',Math.abs(pure.t1.zoom-1.04)<.001&&pure.t1.centerY===348,JSON.stringify(pure.t1));
   check('camera zoom range is 78% to 235%',pure.min===.78&&pure.max===2.35,`min=${pure.min} max=${pure.max}`);
   check('button zoom uses perceptual steps',pure.stepIn>1.11&&pure.stepIn<1.13&&pure.stepOut>.88&&pure.stepOut<.90,`in=${pure.stepIn} out=${pure.stepOut}`);
   check('wheel curve distinguishes small from large deltas',pure.small>1&&pure.small<1.03&&pure.large>pure.small,`small=${pure.small} large=${pure.large}`);
@@ -21,8 +21,8 @@ try{
   await sleep(2100);
   await s.evaluate(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>x.textContent?.trim()==='Foco');b?.click();return true})()`);await sleep(400);
   let c=await camera();
-  check('runtime opens at authored T1-R 106% framing',c.perf?.camera?.zoom>=1.055&&c.perf?.camera?.zoom<=1.065,`zoom=${c.perf?.camera?.zoom} label=${c.label}`);
-  await shot('t1-camera-default-106');
+  check('runtime opens at authored T1-R Golden 104% framing',c.perf?.camera?.zoom>=1.035&&c.perf?.camera?.zoom<=1.045,`zoom=${c.perf?.camera?.zoom} label=${c.label}`);
+  await shot('t1-camera-default-104');
 
   await button('Redefinir Zoom para 100%');await sleep(180);
   c=await camera();check('100% reset remains exact',c.label==='100%',`perfZoom=${c.perf?.camera?.zoom} label=${c.label}`);

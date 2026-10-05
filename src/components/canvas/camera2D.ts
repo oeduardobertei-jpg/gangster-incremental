@@ -38,8 +38,8 @@ export const createDefaultCamera = (): Camera2D => ({
 // 1.2 T1-R: authored first impression. Other districts keep the GOLD framing.
 export const createTerritoryCamera = (territoryId: number): Camera2D => territoryId === 1 ? ({
   centerX: WORLD_WIDTH / 2,
-  centerY: WORLD_HEIGHT / 2 - 18,
-  zoom: 1.06
+  centerY: WORLD_HEIGHT / 2 - 12,
+  zoom: 1.04
 }) : createDefaultCamera();
 
 export function clampZoom(zoom: number): number {

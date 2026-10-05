@@ -249,12 +249,13 @@ export function drawPeripheryBuildingSkin(
       const signH = Math.max(8, WORLD_SCALE.signHeight * labelScale);
       const signX = b.x + (b.w - signW) / 2;
       const signY = roofY + 5;
-      ctx.fillStyle = 'rgba(9,14,22,.80)';
+      const plaque=b.type==='brick'?'rgba(74,49,39,.90)':b.type==='zinc'?'rgba(44,58,62,.90)':'rgba(55,54,49,.90)';
+      ctx.fillStyle = plaque;
       ctx.beginPath(); ctx.roundRect(signX, signY, signW, signH, Math.max(1.5, 2 * labelScale)); ctx.fill();
-      ctx.strokeStyle = controlColor; ctx.globalAlpha = .52;
-      ctx.stroke();
-      ctx.globalAlpha = 1; ctx.fillStyle = '#f4f7fa';
-      ctx.font = `700 ${Math.max(5.1, 6.5 * labelScale)}px "Plus Jakarta Sans", sans-serif`;
+      ctx.strokeStyle = 'rgba(218,204,180,.24)'; ctx.globalAlpha = 1; ctx.stroke();
+      ctx.fillStyle = controlColor; ctx.globalAlpha = .72; ctx.fillRect(signX+3,signY+signH-1.6,signW-6,1.2); ctx.globalAlpha = 1;
+      ctx.fillStyle = '#f1eadf';
+      ctx.font = `700 ${Math.max(5.1, 6.3 * labelScale)}px "Plus Jakarta Sans", sans-serif`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(b.label, b.x + b.w / 2, signY + signH / 2 + .3, signW - 6);
     }

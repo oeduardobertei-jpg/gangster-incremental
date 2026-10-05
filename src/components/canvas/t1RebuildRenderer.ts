@@ -153,8 +153,8 @@ export function drawT1RebuildFoundation(
 
   const road=(points:Array<[number,number]>,outer:number,inner:number)=>{
     const path=()=>{ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++){const [px,py]=points[i-1],[x,y]=points[i];const mx=(px+x)/2,my=(py+y)/2;ctx.quadraticCurveTo(px,py,mx,my);}const last=points[points.length-1];ctx.lineTo(last[0],last[1]);};
-    ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='rgba(46,47,43,.48)';ctx.lineWidth=outer;path();ctx.stroke();
-    ctx.strokeStyle='rgba(105,96,82,.34)';ctx.lineWidth=inner;path();ctx.stroke();ctx.strokeStyle='rgba(204,178,137,.11)';ctx.lineWidth=1.5;path();ctx.stroke();
+    ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='rgba(46,47,43,.39)';ctx.lineWidth=outer;path();ctx.stroke();
+    ctx.strokeStyle='rgba(121,108,88,.28)';ctx.lineWidth=inner;path();ctx.stroke();ctx.strokeStyle='rgba(204,178,137,.10)';ctx.lineWidth=1.5;path();ctx.stroke();
   };
   // 1.2D: the central circulation reads as a lived-in hillside spine, not a radial boulevard.
   road([[width*.515,height*1.03],[width*.505,height*.86],[width*.478,height*.73],[width*.505,height*.61],[width*.475,height*.49],[width*.512,height*.36],[width*.486,height*.23],[width*.525,height*.11],[width*.50,-20]],68,47);
@@ -176,7 +176,8 @@ export function drawT1RebuildFoundation(
 
   // Irregular contact patches, drains and worn thresholds give intersections scale without geometric rings.
   const pockets:Array<[number,number,number,number,number]>=[
-    [.494,.735,38,11,-.10],[.507,.605,34,9,.08],[.481,.488,32,8,-.12],[.510,.355,29,8,.10],[.495,.238,27,7,-.08]
+    [.494,.735,38,11,-.10],[.507,.605,34,9,.08],[.481,.488,32,8,-.12],[.510,.355,29,8,.10],[.495,.238,27,7,-.08],
+    [.292,.525,42,12,.05],[.712,.505,40,11,-.06],[.318,.765,34,10,-.04],[.696,.772,36,10,.05]
   ];
   for(const [nx,ny,rx,ry,rot] of pockets){ctx.fillStyle='rgba(116,91,62,.14)';ctx.beginPath();ctx.ellipse(width*nx,height*ny,rx,ry,rot,0,Math.PI*2);ctx.fill();line(ctx,width*nx-rx*.35,height*ny+ry*.25,width*nx+rx*.38,height*ny-ry*.15,'rgba(24,31,29,.25)',2);}
   for(const sx of [-1,1]){const x=width*.50+sx*34;line(ctx,x,height*.94,x+sx*7,height*.79,'rgba(28,34,32,.38)',2);line(ctx,x+sx*4,height*.72,x-sx*9,height*.56,'rgba(28,34,32,.28)',2);}
