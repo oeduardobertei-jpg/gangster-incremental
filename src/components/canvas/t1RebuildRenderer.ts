@@ -211,6 +211,64 @@ export function drawT1RebuildFoundation(
   ctx.restore();
 }
 
+
+/** 1.2H: cached material/light separation for the rebuilt T1. */
+export function drawT1MaterialDepthFoundation(
+  ctx:CanvasRenderingContext2D,width:number,height:number,territoryId:number,
+  buildings:readonly TacticalBuilding[]
+){
+  if(territoryId!==1)return;
+  ctx.save();
+
+  // One authored daylight direction: warm upper-left, cooler/deeper lower-right.
+  const daylight=ctx.createLinearGradient(0,0,width,height);
+  daylight.addColorStop(0,'rgba(255,221,170,.115)');
+  daylight.addColorStop(.42,'rgba(239,205,158,.018)');
+  daylight.addColorStop(1,'rgba(20,35,43,.155)');
+  ctx.fillStyle=daylight;ctx.fillRect(0,0,width,height);
+
+  // Atmospheric depth keeps the distant ridge flatter while the playable middle stays readable.
+  const upper=ctx.createLinearGradient(0,0,0,height*.34);
+  upper.addColorStop(0,'rgba(44,61,66,.22)');upper.addColorStop(1,'rgba(44,61,66,0)');
+  ctx.fillStyle=upper;ctx.fillRect(0,0,width,height*.36);
+  const lower=ctx.createLinearGradient(0,height*.64,0,height);
+  lower.addColorStop(0,'rgba(33,40,36,0)');lower.addColorStop(1,'rgba(15,25,25,.105)');
+  ctx.fillStyle=lower;ctx.fillRect(0,height*.60,width,height*.40);
+
+  // Broad sun/shadow planes give the hillside a readable direction instead of flat global tint.
+  const sunPlanes:Array<Array<[number,number]>>=[
+    [[width*.04,height*.20],[width*.31,height*.13],[width*.43,height*.47],[width*.20,height*.55]],
+    [[width*.58,height*.08],[width*.81,height*.04],[width*.73,height*.38],[width*.53,height*.43]]
+  ];
+  for(const pts of sunPlanes)poly(ctx,pts,'rgba(255,219,165,.035)');
+  const shadePlanes:Array<Array<[number,number]>>=[
+    [[width*.29,height*.16],[width*.40,height*.13],[width*.58,height*.59],[width*.48,height*.63]],
+    [[width*.72,height*.43],[width*.84,height*.39],[width*.76,height*.83],[width*.65,height*.80]]
+  ];
+  for(const pts of shadePlanes)poly(ctx,pts,'rgba(10,22,29,.075)');
+
+  // Footprint contact and material-colour bounce: static, so this costs nothing per frame.
+  for(const b of buildings){
+    const cx=b.x+b.w/2,fy=b.y+b.h+5;
+    ctx.fillStyle='rgba(7,12,13,.16)';ctx.beginPath();ctx.ellipse(cx+5,fy+3,b.w*.48+10,7,-.06,0,Math.PI*2);ctx.fill();
+    const mat=b.type==='brick'?'rgba(176,93,56,.055)':b.type==='zinc'?'rgba(101,157,172,.05)':'rgba(201,182,148,.045)';
+    const g=ctx.createRadialGradient(cx,b.y+b.h,2,cx,b.y+b.h,Math.max(42,b.w*.72));
+    g.addColorStop(0,mat);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,b.y+b.h,Math.max(42,b.w*.72),0,Math.PI*2);ctx.fill();
+  }
+
+  // Damp/cool pockets and warm exposed terraces stop the terrain reading as one brown material.
+  const coolPockets:[[number,number,number,number],...Array<[number,number,number,number]>]=[
+    [.50,.47,96,34],[.42,.69,74,25],[.63,.61,66,24]
+  ];
+  for(const [nx,ny,rx,ry] of coolPockets){ctx.fillStyle='rgba(62,92,94,.055)';ctx.beginPath();ctx.ellipse(width*nx,height*ny,rx,ry,-.10,0,Math.PI*2);ctx.fill();}
+  const warmPockets:[[number,number,number,number],...Array<[number,number,number,number]>]=[
+    [.24,.41,70,23],[.77,.36,82,26],[.23,.75,64,20]
+  ];
+  for(const [nx,ny,rx,ry] of warmPockets){ctx.fillStyle='rgba(197,133,75,.055)';ctx.beginPath();ctx.ellipse(width*nx,height*ny,rx,ry,.08,0,Math.PI*2);ctx.fill();}
+
+  ctx.restore();
+}
+
 /** 1.2B: vertical architecture built above real physical footprints only. */
 export function drawT1RebuildBuildingFinish(
   ctx:CanvasRenderingContext2D,b:TacticalBuilding,time:number,controlColor:string,renderZoom=1
@@ -218,14 +276,27 @@ export function drawT1RebuildBuildingFinish(
   const rY=roofY(b), detail=renderZoom>=.82, close=renderZoom>=1.18;
   ctx.save();
 
+  // Directional facade cue shared by every authored landmark. It changes perceived depth without changing footprint.
+  const facadeBottom=b.y+b.h,facadeH=Math.max(18,facadeBottom-rY);
+  ctx.fillStyle='rgba(255,224,177,.075)';ctx.fillRect(b.x+1,rY+3,2.5,Math.max(8,facadeH-6));
+  ctx.fillStyle='rgba(8,20,27,.14)';ctx.fillRect(b.x+b.w-6,rY+4,6,Math.max(8,facadeH-5));
+  ctx.fillStyle='rgba(5,12,16,.16)';ctx.beginPath();
+  ctx.moveTo(b.x+8,facadeBottom+2);ctx.lineTo(b.x+b.w+4,facadeBottom+2);ctx.lineTo(b.x+b.w+18,facadeBottom+11);ctx.lineTo(b.x+20,facadeBottom+11);ctx.closePath();ctx.fill();
+
   const slab=(x:number,y:number,w:number,depth=5,color='#665d52')=>{
     ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(x+5,y+5,w,depth+2);
-    ctx.fillStyle=color;ctx.fillRect(x,y,w,depth);ctx.fillStyle='rgba(232,220,198,.16)';ctx.fillRect(x+2,y+1,w-4,1);
+    ctx.fillStyle=color;ctx.fillRect(x,y,w,depth);
+    const sg=ctx.createLinearGradient(x,y,x+w,y+depth);sg.addColorStop(0,'rgba(255,224,180,.18)');sg.addColorStop(1,'rgba(14,25,29,.12)');ctx.fillStyle=sg;ctx.fillRect(x,y,w,depth);
+    ctx.fillStyle='rgba(240,220,188,.20)';ctx.fillRect(x+2,y+1,w-4,1);
   };
-  const floor=(x:number,y:number,w:number,h:number,wall:string,edge:string,windowColor='#17222a')=>{
+  const floor=(x:number,y:number,w:number,h:number,wall:string,edge:string,windowColor='#17222a',material:'brick'|'metal'|'concrete'='concrete')=>{
     ctx.fillStyle='rgba(0,0,0,.30)';ctx.fillRect(x+6,y+7,w,h);
-    ctx.fillStyle=wall;ctx.fillRect(x,y,w,h);ctx.fillStyle='rgba(255,255,255,.055)';ctx.fillRect(x+2,y+2,w-4,2);
-    ctx.fillStyle='rgba(0,0,0,.14)';ctx.fillRect(x+w-6,y+3,6,h-3);ctx.strokeStyle=edge;ctx.strokeRect(x,y,w,h);
+    ctx.fillStyle=wall;ctx.fillRect(x,y,w,h);
+    const fg=ctx.createLinearGradient(x,y,x+w,y+h);fg.addColorStop(0,'rgba(255,225,184,.115)');fg.addColorStop(.46,'rgba(255,255,255,.015)');fg.addColorStop(1,'rgba(10,24,30,.22)');ctx.fillStyle=fg;ctx.fillRect(x,y,w,h);
+    if(detail&&material==='brick'){ctx.strokeStyle='rgba(231,180,139,.145)';ctx.lineWidth=.7;for(let yy=y+7;yy<y+h-4;yy+=8){ctx.beginPath();ctx.moveTo(x+3,yy);ctx.lineTo(x+w-4,yy);ctx.stroke();}}
+    if(detail&&material==='metal'){ctx.strokeStyle='rgba(174,210,218,.17)';ctx.lineWidth=.7;for(let xx=x+10;xx<x+w-5;xx+=13){ctx.beginPath();ctx.moveTo(xx,y+3);ctx.lineTo(xx,y+h-4);ctx.stroke();}}
+    if(detail&&material==='concrete'){ctx.fillStyle='rgba(229,215,188,.075)';ctx.fillRect(x+5,y+6,Math.max(8,w*.28),3);ctx.fillStyle='rgba(37,55,53,.07)';ctx.fillRect(x+w*.58,y+h*.68,Math.max(7,w*.22),4);}
+    ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(x+w-6,y+3,6,h-3);ctx.strokeStyle=edge;ctx.strokeRect(x,y,w,h);
     const count=w>64?3:2;for(let i=0;i<count;i++){const wx=x+9+i*(w-18)/Math.max(1,count-1)-5;ctx.fillStyle=windowColor;ctx.fillRect(wx,y+h*.42,10,8);ctx.strokeStyle='rgba(169,184,184,.28)';ctx.strokeRect(wx,y+h*.42,10,8);}
     slab(x-2,y-4,w+4,5,edge);
   };
@@ -242,13 +313,13 @@ export function drawT1RebuildBuildingFinish(
 
   if(b.id==='beco_01'){
     const x=b.x+8,y=rY-25,w=b.w*.48,h=25;
-    floor(x,y,w,h,'#725342','#4a4037');slab(b.x-3,rY-5,b.w+6,6);
+    floor(x,y,w,h,'#725342','#4a4037','#17222a','brick');slab(b.x-3,rY-5,b.w+6,6);
     waterTank(b.x+b.w-19,y-8,.82);rebar(b.x+b.w*.56,rY-2,2);
     if(detail){line(ctx,x+6,y+8,b.x+b.w-10,y+1,'rgba(218,208,190,.30)',1);}
   }else if(b.id==='laje_ponto'){
     const x=b.x+10,w=b.w*.68,h=29,y=rY-h+1;
-    floor(x,y,w,h,'#514a40','#756b5d');
-    const x2=x+w*.32,w2=w*.58,h2=22,y2=y-h2+2;floor(x2,y2,w2,h2,'#4a514d','#727b72');
+    floor(x,y,w,h,'#514a40','#756b5d','#17222a','concrete');
+    const x2=x+w*.32,w2=w*.58,h2=22,y2=y-h2+2;floor(x2,y2,w2,h2,'#4a514d','#727b72','#17222a','concrete');
     balcony(x-4,y+h-4,w*.72);rebar(x+w+6,y+5,3);waterTank(x2+w2-12,y2-9,.75);factionBand(x+8,y+h-8,w*.38);
     if(detail){ctx.fillStyle='rgba(202,176,126,.18)';ctx.fillRect(x+5,y+6,w-10,3);}
   }else if(b.id==='barraquinha'){
@@ -259,13 +330,13 @@ export function drawT1RebuildBuildingFinish(
     if(detail){ctx.fillStyle='#ead9bb';ctx.font='900 7px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('BAR DO BECO',b.x+b.w/2,ay+9);}
     rect(ctx,b.x+b.w-23,rY-7,17,13,'#5c5b50','#838379');
   }else if(b.id==='esconderijo'){
-    const x=b.x+7,w=b.w*.76,h=31,y=rY-h+2;floor(x,y,w,h,'#394246','#647079');
-    const x2=b.x+b.w*.42,w2=b.w*.48,h2=24,y2=y-h2+3;floor(x2,y2,w2,h2,'#303a3e','#66757a');
+    const x=b.x+7,w=b.w*.76,h=31,y=rY-h+2;floor(x,y,w,h,'#394246','#647079','#17222a','concrete');
+    const x2=b.x+b.w*.42,w2=b.w*.48,h2=24,y2=y-h2+3;floor(x2,y2,w2,h2,'#303a3e','#66757a','#17222a','metal');
     balcony(x+w*.05,y+h-2,w*.46);waterTank(x2+w2-13,y2-10,.82);antenna(x2+w2*.58,y2,30);
     rect(ctx,b.x+9,rY+b.h-17,34,9,'#20282c','#4c585d');factionBand(x+7,y+h-7,w*.28);lamp(b.x+15,rY+b.h+2);
   }else if(b.id==='boca_leste'){
-    const x=b.x+4,w=b.w*.86,h=35,y=rY-h+3;floor(x,y,w,h,'#7a4433','#9d6249','#211d1b');
-    const x2=b.x+b.w*.31,w2=b.w*.57,h2=25,y2=y-h2+4;floor(x2,y2,w2,h2,'#694033','#925c49','#181c1d');
+    const x=b.x+4,w=b.w*.86,h=35,y=rY-h+3;floor(x,y,w,h,'#7a4433','#9d6249','#211d1b','brick');
+    const x2=b.x+b.w*.31,w2=b.w*.57,h2=25,y2=y-h2+4;floor(x2,y2,w2,h2,'#694033','#925c49','#181c1d','brick');
     balcony(x+5,y+h-2,w*.64);waterTank(x2+w2-14,y2-9,.86);antenna(x2+11,y2,25);factionBand(x+8,y+h-8,w*.42);
     const signX=b.x+15,signY=rY+10,signW=b.w-30;ctx.fillStyle='#171c1e';ctx.fillRect(signX,signY,signW,13);ctx.strokeStyle=controlColor;ctx.strokeRect(signX,signY,signW,13);
     if(detail){ctx.fillStyle='#f0dfc7';ctx.font='900 8px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('BOCA DA LESTE',b.x+b.w/2,signY+7.5);}
@@ -274,10 +345,10 @@ export function drawT1RebuildBuildingFinish(
     const cx=b.x+b.w/2;
     ctx.fillStyle='rgba(0,0,0,.26)';ctx.fillRect(cx-24,rY-51,52,58);
     for(const sx of [-18,18]){line(ctx,cx+sx,rY+7,cx+sx*.72,rY-44,'#4d5557',4);line(ctx,cx+sx,rY-7,cx-sx*.4,rY-28,'rgba(125,139,141,.46)',2);}
-    floor(cx-24,rY-57,48,22,'#3d484c','#879398','#11191d');
+    floor(cx-24,rY-57,48,22,'#3d484c','#879398','#11191d','metal');
     balcony(cx-28,rY-35,56);antenna(cx,rY-57,34);factionBand(cx-18,rY-39,36);
   }else if(b.id==='mirante'){
-    const x=b.x+7,w=b.w*.78,h=25,y=rY-h+3;floor(x,y,w,h,'#52615a','#7f8e86','#17211f');
+    const x=b.x+7,w=b.w*.78,h=25,y=rY-h+3;floor(x,y,w,h,'#52615a','#7f8e86','#17211f','metal');
     const deckY=y-8;ctx.fillStyle='#5a5145';ctx.fillRect(b.x-8,deckY,b.w+16,6);ctx.strokeStyle='rgba(190,205,195,.48)';for(let xx=b.x-6;xx<b.x+b.w+6;xx+=10)line(ctx,xx,deckY-11,xx,deckY,'rgba(190,205,195,.48)',1);line(ctx,b.x-7,deckY-11,b.x+b.w+8,deckY-11,'rgba(190,205,195,.48)',2);
     rect(ctx,b.x+b.w*.57,y+5,b.w*.25,13,'#46534e','#7c8b84');antenna(b.x+b.w*.30,deckY,36);waterTank(b.x+b.w-14,y-8,.72);factionBand(x+5,y+h-7,w*.34);
     if(detail){ctx.fillStyle='rgba(235,224,202,.68)';ctx.font='800 6px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('MIRANTE',b.x+b.w/2,y+h-5);}
@@ -311,8 +382,12 @@ const drawT1RebuildContextFinishRaw=(
   const wall=wallPalette[hash%wallPalette.length],edge='rgba(193,184,165,.28)';
   const floor=(x:number,y:number,w:number,h:number)=>{
     ctx.fillStyle='rgba(0,0,0,.26)';ctx.fillRect(x+5,y+6,w,h);
-    ctx.fillStyle=wall;ctx.fillRect(x,y,w,h);ctx.fillStyle='rgba(255,255,255,.055)';ctx.fillRect(x+2,y+2,w-4,2);
-    ctx.fillStyle='rgba(0,0,0,.12)';ctx.fillRect(x+w-5,y+3,5,h-3);ctx.strokeStyle=edge;ctx.strokeRect(x,y,w,h);
+    ctx.fillStyle=wall;ctx.fillRect(x,y,w,h);
+    const lg=ctx.createLinearGradient(x,y,x+w,y+h);lg.addColorStop(0,'rgba(255,224,181,.105)');lg.addColorStop(.5,'rgba(255,255,255,.012)');lg.addColorStop(1,'rgba(9,24,29,.20)');ctx.fillStyle=lg;ctx.fillRect(x,y,w,h);
+    if(detail&&spec.material==='brick'){for(let yy=y+7;yy<y+h-3;yy+=8)line(ctx,x+3,yy,x+w-4,yy,'rgba(225,174,132,.135)',.7);}
+    if(detail&&spec.material==='metal'){for(let xx=x+10;xx<x+w-4;xx+=13)line(ctx,xx,y+3,xx,y+h-4,'rgba(176,211,219,.16)',.7);}
+    if(detail&&spec.material==='concrete'){ctx.fillStyle='rgba(223,210,185,.07)';ctx.fillRect(x+5,y+6,Math.max(8,w*.24),3);}
+    ctx.fillStyle='rgba(0,0,0,.14)';ctx.fillRect(x+w-5,y+3,5,h-3);ctx.strokeStyle=edge;ctx.strokeRect(x,y,w,h);
     const n=w>=54?3:2;for(let i=0;i<n;i++){const wx=x+8+i*(w-16)/Math.max(1,n-1)-4;ctx.fillStyle=(hash+i)%4===0?'#d4ad65':'#1a2930';ctx.fillRect(wx,y+h*.45,8,7);}
     ctx.fillStyle='#62594f';ctx.fillRect(x-2,y-4,w+4,5);
   };

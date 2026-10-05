@@ -22,7 +22,7 @@ import { drawVegetationNeglect } from './vegetationNeglectRenderer';
 import { drawMaterialHarmonizationGround } from './materialHarmonizationRenderer';
 import { drawCariocaDistrictFoundation, drawCariocaGroundIntegration } from './cariocaIdentityRenderer';
 import { drawUnifiedTerritoryComposition } from './unifiedTerritoryComposer';
-import { drawT1RebuildFoundation } from './t1RebuildRenderer';
+import { drawT1MaterialDepthFoundation, drawT1RebuildFoundation } from './t1RebuildRenderer';
 
 type StaticSceneArgs = {
   ctx: CanvasRenderingContext2D;
@@ -83,6 +83,7 @@ export function drawStaticTerritoryScene({
   drawAuthoredStoryClusters(ctx, buildings, territoryId, controlColor);
   if (territoryId !== 1) drawStreetLifeClusters(ctx, buildings, territoryId, controlColor);
   drawT1StaticComposition(ctx, width, height, territoryId, buildings, controlColor);
+  drawT1MaterialDepthFoundation(ctx, width, height, territoryId, buildings);
   drawPurposefulPropsFoundation(
     ctx, width, height, territoryId, controlColor,
     territoryDominated ? factionConfig.tag : factionConfig.rivalTag
