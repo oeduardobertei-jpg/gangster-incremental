@@ -68,8 +68,9 @@ export function drawT1UnitGrounding(
   radius: number,
   isRival: boolean,
   time: number,
-  renderZoom: number
+  renderZoom: number,
+  factionColor?: string
 ) {
   if (territoryId !== 1) return;
-  drawT1CharacterGrounding(ctx, territoryId, x, y, radius, isRival, time, renderZoom);
+  drawT1CharacterGrounding(ctx, territoryId, x, y, radius, isRival, time, renderZoom, factionColor);
 }

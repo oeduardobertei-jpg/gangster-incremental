@@ -35,7 +35,7 @@ export function drawT1ForegroundFraming(
 
 export function drawT1CharacterGrounding(
   ctx:CanvasRenderingContext2D,territoryId:number,x:number,y:number,
-  radius:number,isRival:boolean,time:number,zoom:number
+  radius:number,isRival:boolean,time:number,zoom:number,factionColor?:string
 ){
   if(territoryId!==1) return;
   ctx.save();
@@ -44,10 +44,12 @@ export function drawT1CharacterGrounding(
   // 0.9.5Q: directional cast shadow + local bounce ties sprites to the same light field as buildings.
   ctx.fillStyle='rgba(0,0,0,.10)';ctx.beginPath();
   ctx.ellipse(x+5*scale,y+7*scale,Math.max(8,radius*.92+3)*scale,3.4*scale,-.16,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle=isRival?`rgba(255,116,73,${.018+.010*pulse})`:`rgba(91,200,255,${.014+.008*pulse})`;
+  const baseAlpha=isRival?.050+.018*pulse:.040+.014*pulse;
+  const alphaHex=Math.max(0,Math.min(255,Math.round(baseAlpha*255))).toString(16).padStart(2,'0');
+  ctx.fillStyle=factionColor?.startsWith('#')?`${factionColor}${alphaHex}`:(isRival?`rgba(255,116,73,${baseAlpha})`:`rgba(91,200,255,${baseAlpha})`);
   ctx.beginPath();ctx.ellipse(x,y+4*scale,Math.max(7,radius*.78)*scale,2.5*scale,0,0,Math.PI*2);ctx.fill();
   if(zoom>1.35){
-    ctx.strokeStyle=isRival?'rgba(255,151,112,.075)':'rgba(148,216,255,.060)';ctx.lineWidth=.7;
+    ctx.strokeStyle=factionColor?.startsWith('#')?`${factionColor}24`:(isRival?'rgba(255,151,112,.11)':'rgba(148,216,255,.09)');ctx.lineWidth=.7;
     ctx.beginPath();ctx.arc(x,y+1,Math.max(8,radius*.74),0,Math.PI*2);ctx.stroke();
   }
   ctx.restore();

@@ -3060,12 +3060,12 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           case 'fallen': drawFallenSprite(ctx, item.entity as FallenEntity, currentTime); break;
           case 'ally': {
             const ally = item.entity as AllyEntity;
-            drawT1UnitGrounding(ctx,currentTerritory.id,ally.x,ally.y,10,false,currentTime,visualLoadZoom);
+            drawT1UnitGrounding(ctx,currentTerritory.id,ally.x,ally.y,10,false,currentTime,visualLoadZoom,factionConfig.color);
             drawAllySprite(ctx, ally, currentTime, unitVisualDetail); break;
           }
           case 'rival': {
             const rival = item.entity as RivalEntity;
-            drawT1UnitGrounding(ctx,currentTerritory.id,rival.x,rival.y,rival.radius,true,currentTime,visualLoadZoom);
+            drawT1UnitGrounding(ctx,currentTerritory.id,rival.x,rival.y,rival.radius,true,currentTime,visualLoadZoom,factionConfig.rivalColor);
             if (rival.type === 'gerente_boca') {
               const pulse = .5 + .5 * Math.sin(currentTime * .004 + rival.x * .01);
               ctx.save(); ctx.strokeStyle = `${factionConfig.rivalColor}${pulse > .5 ? '55' : '33'}`;

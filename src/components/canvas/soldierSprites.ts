@@ -644,7 +644,8 @@ export function drawAllySprite(
   }
 
   const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
-  if (drawSoldier34(ctx, {
+  const useVectorInfantry12F = detail === 'full' && type !== 'batedor_moto';
+  if (!useVectorInfantry12F && drawSoldier34(ctx, {
     wx: x,
     wy: y,
     tx: 0,
@@ -782,6 +783,8 @@ export function drawAllySprite(
   ctx.save();
   ctx.translate(x, y + walkBob);
   ctx.rotate(angle + torsoTwist);
+  const vectorScale12F = type === 'seguranca_pesado' ? 1.46 : 1.36;
+  ctx.scale(vectorScale12F, vectorScale12F);
 
   if (type === 'soldado_fuzil') {
     const skinTone = variant === 1 ? '#d9986b' : (variant === 2 ? '#824424' : '#a15e34');
@@ -1006,6 +1009,8 @@ export function drawAllySprite(
     }
   }
 
+  // 1.2F: slim faction textile/armband survives zoom without turning the whole body into team color.
+  ctx.fillStyle=color;ctx.globalAlpha=.92;ctx.fillRect(-3.9,-5.2,1.5,10.4);ctx.globalAlpha=1;
   ctx.restore();
 }
 
@@ -1045,7 +1050,8 @@ export function drawRivalSprite(
   }
 
   const faction = color.toLowerCase() === '#ef4444' ? 'CV' : 'PCC';
-  if (drawSoldier34(ctx, {
+  const useVectorInfantry12F = detail === 'full';
+  if (!useVectorInfantry12F && drawSoldier34(ctx, {
     wx: x,
     wy: y,
     tx: 0,
@@ -1074,6 +1080,8 @@ export function drawRivalSprite(
   ctx.save();
   ctx.translate(x, y + walkBob);
   ctx.rotate(angle + torsoTwist);
+  const vectorScale12F = type === 'chefe_morro' ? 1.54 : type === 'blindado_choque' ? 1.46 : 1.36;
+  ctx.scale(vectorScale12F, vectorScale12F);
 
   if (type === 'olheiro') {
     const skinTone = variant === 1 ? '#824424' : '#a15e34';
@@ -1459,6 +1467,8 @@ export function drawRivalSprite(
     }
   }
 
+  // 1.2F: the same narrow faction cue keeps enemies readable at tactical zoom.
+  ctx.fillStyle=color;ctx.globalAlpha=.92;ctx.fillRect(-3.9,-5.2,1.5,10.4);ctx.globalAlpha=1;
   ctx.restore();
 
   // Boss menacing aura
