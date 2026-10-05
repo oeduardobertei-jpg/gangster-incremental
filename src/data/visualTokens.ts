@@ -73,5 +73,5 @@ export function getNextVisualTierLevel(level: number, maxLevel: number): number 
   return getVisualTierMinLevel((current + 1) as VisualTier, maxLevel);
 }
 
-export const CITY_VIVA_VISUAL_REVISION = '1.2j-t1-urban-integration-v1';
+export const CITY_VIVA_VISUAL_REVISION = '1.2k-t1-slope-nature-v1';
 

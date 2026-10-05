@@ -33,6 +33,24 @@ const vinePatch=(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,flip=fa
   ctx.strokeStyle='rgba(50,89,52,.60)';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+(flip?-w*.2:w*.2),y+8,x+(flip?-w*.55:w*.55),y+16,x+(flip?-w:w),y+26);ctx.stroke();
   for(let i=1;i<=5;i++){const t=i/6,px=x+(flip?-w:w)*t,py=y+26*t+Math.sin(i*1.7)*2;ctx.fillStyle=i%2?'#55784a':'#698751';ctx.beginPath();ctx.ellipse(px,py,4,2.1,flip?-.5:.5,0,Math.PI*2);ctx.fill();}
 };
+const treeCanopy=(ctx:CanvasRenderingContext2D,x:number,y:number,s:number,variant=0)=>{
+  ctx.fillStyle='rgba(6,16,10,.28)';ctx.beginPath();ctx.ellipse(x+5,y+s*.46,s*.92,s*.30,-.12,0,Math.PI*2);ctx.fill();
+  line(ctx,x,y+s*.34,x-1,y-s*.22,'#544630',Math.max(2,s*.11));
+  line(ctx,x-1,y-s*.04,x-s*.28,y-s*.28,'rgba(85,72,48,.72)',Math.max(1.2,s*.055));
+  line(ctx,x,y-s*.08,x+s*.30,y-s*.30,'rgba(85,72,48,.68)',Math.max(1.2,s*.05));
+  const dark=variant%2?'#31583b':'#2f5d3b',mid=variant%3?'#497848':'#427446',light=variant%2?'#6f9658':'#638d52';
+  const blobs=[[-.44,.05,.34,.25],[-.17,.12,.38,.29],[.17,.10,.39,.28],[.42,.01,.31,.23],[-.31,-.22,.36,.29],[-.03,-.32,.39,.30],[.31,-.24,.34,.26],[.03,-.08,.47,.34],[-.16,-.08,.36,.29]] as const;
+  for(let i=0;i<blobs.length;i++){const [dx,dy,rx,ry]=blobs[i];ctx.fillStyle=dy<-.20?light:(i%3===0?dark:mid);ctx.beginPath();ctx.ellipse(x+dx*s,y+dy*s,rx*s,ry*s,(dx+(i%2?-.15:.11))*.34,0,Math.PI*2);ctx.fill();}
+  ctx.fillStyle='rgba(212,225,151,.16)';for(const [dx,dy,rx] of [[-.36,-.28,.12],[-.04,-.43,.14],[.29,-.31,.11],[.11,-.18,.08]] as const){ctx.beginPath();ctx.ellipse(x+dx*s,y+dy*s,s*rx,s*rx*.45,-.22,0,Math.PI*2);ctx.fill();}
+  ctx.strokeStyle='rgba(31,68,39,.26)';ctx.lineWidth=.8;for(const [dx,dy] of [[-.28,-.05],[.24,-.10],[.02,.08]] as const){ctx.beginPath();ctx.moveTo(x+dx*s,y+dy*s);ctx.lineTo(x+(dx+.10)*s,y+(dy-.05)*s);ctx.stroke();}
+};
+const grassClump=(ctx:CanvasRenderingContext2D,x:number,y:number,s=1)=>{
+  for(let i=0;i<5;i++){const dx=(i-2)*2.1*s;line(ctx,x+dx,y,x+dx+(i%2?3:-2)*s,y-(6+(i%3)*2)*s,i%2?'rgba(83,125,67,.62)':'rgba(105,143,74,.52)',1.1*s);}
+};
+const flowerVine=(ctx:CanvasRenderingContext2D,x:number,y:number,h:number,flip=false)=>{
+  ctx.strokeStyle='rgba(55,100,55,.62)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+(flip?-8:8),y-h*.28,x+(flip?6:-6),y-h*.62,x+(flip?-4:4),y-h);ctx.stroke();
+  const cols=['#b45c72','#c86f77','#d08c72'];for(let i=0;i<7;i++){const t=(i+1)/8,px=x+(flip?-1:1)*Math.sin(i*1.6)*5,py=y-h*t;ctx.fillStyle=cols[i%cols.length];ctx.beginPath();ctx.arc(px,py,1.8+(i%2)*.4,0,Math.PI*2);ctx.fill();}
+};
 const roofY=(b:TacticalBuilding)=>b.y-(b.type==='laje'?34:28);
 const find=(buildings:readonly TacticalBuilding[],id:string)=>buildings.find(b=>b.id===id);
 
@@ -182,6 +200,31 @@ export function drawT1RebuildFoundation(
   for(const [nx,ny,bs] of bananas)banana(ctx,width*nx,height*ny,bs);
   vinePatch(ctx,width*.245,height*.294,38,false);vinePatch(ctx,width*.755,height*.303,40,true);
   vinePatch(ctx,width*.233,height*.555,34,false);vinePatch(ctx,width*.770,height*.565,36,true);
+
+  // 1.2K: vegetation reads as hillside ecology, not isolated decorative dots.
+  const edgeTrees:Array<[number,number,number,number]>=[
+    [.012,.20,24,0],[.055,.31,28,1],[.018,.48,30,2],[.070,.64,25,0],[.020,.80,31,1],[.105,.91,23,2],
+    [.988,.19,25,1],[.945,.30,29,0],[.985,.47,31,2],[.932,.63,25,1],[.982,.79,30,0],[.895,.91,22,2]
+  ];
+  for(const [nx,ny,ts,v] of edgeTrees)treeCanopy(ctx,width*nx,height*ny,ts,v);
+
+  const bananaClusters:Array<[number,number,number]>=[
+    [.105,.23,15],[.135,.26,13],[.095,.29,12],[.875,.22,15],[.905,.26,13],[.852,.30,12],
+    [.125,.70,14],[.155,.73,12],[.855,.70,14],[.885,.74,12]
+  ];
+  for(const [nx,ny,bs] of bananaClusters)banana(ctx,width*nx,height*ny,bs);
+
+  const grass:Array<[number,number,number]>=[
+    [.18,.34,1.1],[.205,.36,.9],[.25,.31,1],[.29,.59,.9],[.22,.61,1.1],[.16,.55,.9],
+    [.82,.34,1.1],[.795,.36,.9],[.75,.31,1],[.71,.59,.9],[.78,.61,1.1],[.84,.55,.9],
+    [.12,.84,1.0],[.88,.84,1.0],[.31,.12,.8],[.69,.12,.8]
+  ];
+  for(const [nx,ny,gs] of grass)grassClump(ctx,width*nx,height*ny,gs);
+
+  const fb=find(buildings,'beco_01');if(fb)flowerVine(ctx,fb.x+fb.w-5,fb.y+fb.h-2,30,true);
+  const fl=find(buildings,'laje_ponto');if(fl)flowerVine(ctx,fl.x+6,fl.y+fl.h-2,34,false);
+  const fbo=find(buildings,'boca_leste');if(fbo)flowerVine(ctx,fbo.x+fbo.w-8,fbo.y+fbo.h-4,38,true);
+  const fs=find(buildings,'esconderijo');if(fs)flowerVine(ctx,fs.x+7,fs.y+fs.h-3,30,false);
 
   // Utility infrastructure follows the alleys and creates vertical rhythm between the houses.
   const poles:Array<[number,number,number]>=[[.31,.29,.9],[.70,.29,.95],[.34,.57,.9],[.69,.58,.9],[.24,.80,.8],[.78,.79,.8]];
