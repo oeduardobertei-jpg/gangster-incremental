@@ -1,5 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { openTestSession, sleep } from './cdp-session.mjs';
+const name=process.argv[2]??'rebuild-current';
 const outDir='docs/screenshots/1.2-t1-rebuild';mkdirSync(outDir,{recursive:true});
 const session=await openTestSession({url:'http://127.0.0.1:3000',width:1440,height:900});
 const {send,evaluate}=session;
@@ -10,6 +11,6 @@ try{
   await sleep(300);
   const rect=await evaluate(`(()=>{const c=document.querySelector('canvas');const r=c.getBoundingClientRect();return{x:r.left,y:r.top,width:r.width,height:r.height}})()`);
   const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,clip:{x:rect.x,y:rect.y,width:rect.width,height:rect.height,scale:1}});
-  writeFileSync(`${outDir}/rebuild-d.png`,Buffer.from(shot.data,'base64'));
-  console.log(`rebuild-d captured ${rect.width}x${rect.height} errors=${session.errors.length}`);
+  writeFileSync(`${outDir}/${name}.png`,Buffer.from(shot.data,'base64'));
+  console.log(`${name} captured ${rect.width}x${rect.height} errors=${session.errors.length}`);
 }finally{await session.close();}

@@ -1,6 +1,7 @@
 import type { TacticalBuilding } from './favelaRenderer';
 import { drawCityVivaContextBuilding } from './buildingSkins';
 import { getTerritoryPurposeProps } from '../../data/territoryPurposeProps';
+import { drawT1RebuildContextFinish } from './t1RebuildRenderer';
 
 type Rect = { x:number; y:number; w:number; h:number };
 export type UnifiedSupportSolid = Rect & {
@@ -331,8 +332,10 @@ const pieceIndex=(id:string)=>Math.abs([...id].reduce((a,c)=>((a*31)+c.charCodeA
 export const drawUnifiedContextArchitecture=(ctx:CanvasRenderingContext2D,p:UnifiedSupportSolid,territoryId:number,time:number,controlColor:string,renderZoom=1)=>{
   if(p.kind==='wall') return;
   const index=pieceIndex(p.id);
+  const material=p.material==='metal'?'metal':p.material==='brick'?'brick':'concrete';
   drawCityVivaContextBuilding(ctx,{id:p.id,x:p.x,y:p.y,w:p.w,h:p.h,role:contextualRole(territoryId,p,index),
-    material:p.material==='metal'?'metal':p.material==='brick'?'brick':'concrete',door:index%2?'left':'right'},time,territoryId,renderZoom,controlColor);
+    material,door:index%2?'left':'right'},time,territoryId,renderZoom,controlColor);
+  if(territoryId===1) drawT1RebuildContextFinish(ctx,{id:p.id,x:p.x,y:p.y,w:p.w,h:p.h,material},time,renderZoom);
 };
 const drawPieceForTerritory=(ctx:CanvasRenderingContext2D,p:UnifiedSupportSolid,territoryId:number,index:number,controlColor:string)=>{
   if(p.kind!=='wall') return;
