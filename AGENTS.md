@@ -6,8 +6,10 @@ Este repositório foi preparado para sessões longas de desenvolvimento com agen
 1. `AGENTS.md`
 2. `GOAL.md`
 3. `HANDOFF.md`
-4. `IMPLEMENTATION_STATUS_0.5.2.md`
-5. `.claude/skills/game-dev/SKILL.md` quando a tarefa envolver gameplay, UI, arte, performance ou testes.
+4. O status/relatório da versão ativa, quando existir.
+5. Os testes e regras diretamente ligados ao sistema que será alterado.
+
+> Não dependa de arquivos de skill externos ao repositório para descobrir o estado do projeto. Se uma instrução referenciada não existir no checkout atual, use `GOAL.md`, `HANDOFF.md`, código e gates versionados como fonte de verdade.
 
 ## Papéis
 - **Sessão principal**: direção, arquitetura, síntese, julgamento visual/gameplay, integração e decisão final.
@@ -20,6 +22,7 @@ Este repositório foi preparado para sessões longas de desenvolvimento com agen
 ## Contrato de delegação
 Todo subagente recebe: objetivo, caminhos permitidos, caminhos proibidos, critérios de pronto numerados, gates obrigatórios e caminho do relatório.
 Um alvo por subagente. Um escritor por área de código. Respostas de subagente devem ser curtas; detalhes ficam em `output/agents/`.
+
 ## Autonomia sem perder qualidade
 - Não interrompa o trabalho por dúvida pequena. Escolha a opção reversível de menor risco, registre a decisão no handoff e prossiga.
 - Pergunte ao usuário apenas quando a decisão muda escopo, direção de arte, economia, compatibilidade de save ou remove comportamento existente.
@@ -42,12 +45,11 @@ Um alvo por subagente. Um escritor por área de código. Respostas de subagente 
 11. Atualizar `HANDOFF.md` e o status da versão antes de encerrar.
 
 ## Gates mínimos
-- Código: `npm run check`.
-- Movimento/spawn: `node scripts/acceptance-041.mjs`.
-- Física/navegação: `node scripts/acceptance-051b-t5.mjs` e/ou `node scripts/acceptance-051-world.mjs`.
-- Visual 0.5: `node scripts/acceptance-052-purpose.mjs`.
-- Campo pesado/performance: `node scripts/stress-04g.mjs`.
-- Gate automatizado consolidado: `npm run agent:gates`.
+- Código/release bundle: `npm run check`.
+- Release Candidate: `npm run qa:rc`.
+- Gold completo com smoke UI: `npm run qa:gold`.
+- Movimento/spawn, física/navegação, visual focal e stress: executar os scripts de aceitação existentes que cubram diretamente o sistema tocado; não inventar um gate agregado que não exista no `package.json` atual.
+
 ## Regras de qualidade do jogo
 - Preservar o save atual e migrações. Nunca usar o save pessoal do usuário como fixture de teste.
 - Manter testes em sessão isolada quando possível.
@@ -68,6 +70,7 @@ Um alvo por subagente. Um escritor por área de código. Respostas de subagente 
 Registre apenas estado útil: objetivo atual, decisões, arquivos tocados, testes já rodados, métricas, problemas abertos e próximo passo exato. Não copie conversa inteira.
 
 Relatórios de subagentes vão para `output/agents/<data-ou-alvo>-<papel>.md`. A sessão principal deve ler o relatório, conferir os pontos críticos na fonte e então sintetizar.
+
 ## Limites de responsabilidade
 - Subagentes não fazem commit, push, deploy, release ou mudança de versão por conta própria.
 - Construtor não escolhe direção de arte, não reescreve GDD e não amplia escopo sem autorização da sessão principal.
