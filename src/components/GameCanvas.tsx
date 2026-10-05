@@ -3604,30 +3604,29 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       {PerformanceOverlay && <React.Suspense fallback={null}><PerformanceOverlay /></React.Suspense>}
       {/* 0.4D/0.5 Compact combat + district objective */}
       <div
-        className="battle-hud absolute top-3 left-4 z-10 min-w-[390px] max-w-[56%] rounded-lg border border-slate-800 bg-slate-950/94 px-3 py-2 text-xs shadow-lg backdrop-blur-md pointer-events-none"
+        className="battle-hud absolute top-3 left-4 z-10 w-[374px] max-w-[56%] sm:max-w-[calc(100%_-_9rem)] rounded-xl border border-white/[0.08] px-2.5 py-2 text-xs backdrop-blur-xl pointer-events-none"
         style={{
           borderLeftColor: territoryScene.accent, borderLeftWidth: 3,
-          borderTopColor: `${territoryScene.accent}40`,
-          background: 'linear-gradient(108deg, rgba(7,10,15,.97) 0%, rgba(9,13,20,.95) 76%, rgba(18,20,26,.93) 100%)',
-          boxShadow: `0 14px 38px rgba(0,0,0,.48), inset 0 1px 0 ${territoryScene.accent}22`
+          borderTopColor: `${territoryScene.accent}55`,
+          background: 'linear-gradient(112deg, rgba(24,20,16,.92) 0%, rgba(10,13,15,.86) 54%, rgba(8,11,14,.74) 100%)',
+          boxShadow: `0 10px 28px rgba(0,0,0,.38), inset 0 1px 0 ${territoryScene.accent}22, inset 0 -1px 0 rgba(255,255,255,.025)`
         }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <span
-            className="rounded px-1.5 py-0.5 font-mono text-[9px] font-bold text-slate-950"
+            className="rounded-sm px-1.5 py-0.5 font-mono text-[8px] font-black tracking-[0.10em] text-[#11100d]"
             style={{ backgroundColor: territoryScene.accent }}
           >
             T{currentTerritory.id}
           </span>
-          <span className="font-semibold text-slate-100 truncate">{currentTerritory.name}</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-emerald-400 font-mono-numbers">Aliados {alliesRef.current.length}/{gameState.maxAllies}</span>
-          <span className="text-rose-400 font-mono-numbers">Rivais {rivalsRef.current.length}</span>
+          <span className="min-w-0 flex-1 truncate text-[11px] font-bold tracking-[-0.01em] text-[#f3eadc]">{currentTerritory.name}</span>
+          <span className="rounded-md border border-emerald-400/15 bg-emerald-950/35 px-1.5 py-0.5 font-mono text-[9px] font-bold text-emerald-300">A {alliesRef.current.length}/{gameState.maxAllies}</span>
+          <span className="rounded-md border border-rose-400/15 bg-rose-950/30 px-1.5 py-0.5 font-mono text-[9px] font-bold text-rose-300">R {rivalsRef.current.length}</span>
         </div>
-        <div className="mt-1 text-[8px] font-black uppercase tracking-[0.18em] text-slate-400">
+        <div className="mt-1 border-t border-white/[0.055] pt-1 text-[7px] font-black uppercase tracking-[0.20em] text-[#a89d8d]">
           {TERRITORY_HUD_DESCRIPTORS[currentTerritory.id] ?? territoryScene.subtitle}
         </div>
-        <div className="mt-1.5 flex items-center gap-2">
+        <div className="mt-1 flex items-center gap-1.5">
           {territoryDominated ? (
             <span className="text-[9px] font-black uppercase tracking-[0.12em] text-emerald-300">
               DOMINADO <span className="text-slate-600">•</span> REDE LOCAL SOB CONTROLE {factionConfig.tag}
@@ -3644,10 +3643,10 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
                     ? 'CONSOLIDAR PRESSÃO'
                     : campaignProfile.objectiveLabel + ' · PRESSÃO'}
               </span>
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-800">
+              <div className="h-1 flex-1 overflow-hidden rounded-full bg-black/40 ring-1 ring-white/[0.04]">
                 <div
-                  className="h-full bg-gradient-to-r from-rose-500 to-amber-400 transition-[width] duration-200"
-                  style={{ width: `${Math.min(100, (gameState.territoryTakes / Math.max(1, dominationRequirement)) * 100)}%` }}
+                  className="h-full transition-[width] duration-200"
+                  style={{ width: `${Math.min(100, (gameState.territoryTakes / Math.max(1, dominationRequirement)) * 100)}%`, background: `linear-gradient(90deg, ${factionConfig.rivalColor}, ${territoryScene.accent})` }}
                 />
               </div>
               <span className="font-mono text-[10px] text-amber-300">{Math.min(gameState.territoryTakes, dominationRequirement)}/{dominationRequirement}</span>
@@ -3689,11 +3688,11 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       {/* Top Right Controls: Advance button & Zoom Controls Widget */}
       <div className="battle-controls absolute top-3 right-4 z-20 flex items-center gap-2">
         {/* Tactical Zoom & Pan Control Widget */}
-        <div className="flex items-center gap-1 bg-slate-950/90 backdrop-blur-md px-2 py-1 rounded-lg border border-slate-800 shadow-lg text-xs">
+        <div className="flex items-center gap-1 rounded-xl border border-white/[0.08] bg-[#0b0d0e]/80 px-1.5 py-1 text-xs shadow-[0_8px_24px_rgba(0,0,0,.32)] backdrop-blur-xl">
           <button
             onClick={handleResetCamera}
             title="Centralizar em visão tática ampla"
-            className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition-colors cursor-pointer text-xs mr-0.5 border border-slate-700/60"
+            className="mr-0.5 flex items-center gap-1 rounded-md border border-[#b79a70]/20 bg-[#6f5938]/25 px-2 py-0.5 text-xs font-semibold text-[#e8dcc9] transition-colors hover:bg-[#806744]/35 cursor-pointer"
           >
             <span>▣</span>
             <span className="text-[10px]">Visão ampla</span>
@@ -3701,21 +3700,21 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           <button
             onClick={handleZoomOut}
             title="Diminuir Zoom (ou role a roda do mouse para baixo)"
-            className="w-5 h-5 flex items-center justify-center rounded bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-bold transition-colors cursor-pointer text-xs"
+            className="flex h-5 w-5 items-center justify-center rounded-md bg-white/[0.055] text-xs font-bold text-slate-300 transition-colors hover:bg-white/[0.10] hover:text-white cursor-pointer"
           >
             −
           </button>
           <button
             onClick={handleZoomReset}
             title="Redefinir Zoom para 100%"
-            className="px-1.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 font-mono text-[11px] font-semibold transition-colors cursor-pointer"
+            className="rounded-md border border-white/[0.05] bg-black/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#c7baa6] transition-colors hover:bg-white/[0.07] hover:text-white cursor-pointer"
           >
             {Math.round(zoom * 100)}%
           </button>
           <button
             onClick={handleZoomIn}
             title="Aumentar Zoom (ou role a roda do mouse para cima)"
-            className="w-5 h-5 flex items-center justify-center rounded bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-bold transition-colors cursor-pointer text-xs"
+            className="flex h-5 w-5 items-center justify-center rounded-md bg-white/[0.055] text-xs font-bold text-slate-300 transition-colors hover:bg-white/[0.10] hover:text-white cursor-pointer"
           >
             +
           </button>
@@ -3733,8 +3732,8 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
       />
 
       {/* Interactive tactical minimap */}
-      <div className="absolute bottom-12 right-3 z-30 w-[172px] rounded-lg border border-slate-700/90 bg-slate-950/92 p-1.5 shadow-xl backdrop-blur-md">
-        <div className="mb-1 flex w-full items-center justify-between px-0.5 text-[8px] uppercase tracking-[0.10em] text-slate-500 pointer-events-none">
+      <div className="absolute bottom-12 right-3 z-30 w-[172px] rounded-xl border border-[#ae9167]/20 bg-[#0b0d0d]/82 p-1.5 shadow-[0_10px_28px_rgba(0,0,0,.42)] backdrop-blur-xl">
+        <div className="mb-1 flex w-full items-center justify-between border-b border-white/[0.05] px-0.5 pb-1 text-[7px] font-black uppercase tracking-[0.16em] text-[#9f907c] pointer-events-none">
           <span>Mapa tático</span>
           <span className="text-slate-600">arraste</span>
         </div>
@@ -3747,13 +3746,13 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
           onPointerMove={handleMinimapPointerMove}
           onPointerUp={handleMinimapPointerUp}
           onPointerCancel={handleMinimapPointerUp}
-          className="block h-[90px] w-[160px] cursor-crosshair rounded border border-slate-800 bg-[#07101d] touch-none"
+          className="block h-[90px] w-[160px] cursor-crosshair rounded-md border border-[#9c805b]/18 bg-[#080d0e] touch-none opacity-95"
         />
       </div>
 
       {/* Contextual controls: disappear after the first interaction and can be recalled. */}
       {showControlGuide && (
-        <div className="battle-help absolute bottom-3 left-4 z-20 flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-950/92 px-3 py-2 text-[10px] text-slate-300 shadow-xl backdrop-blur-md pointer-events-none">
+        <div className="battle-help absolute bottom-3 left-4 z-20 flex items-center gap-2 rounded-lg border border-white/[0.07] bg-[#0b0d0d]/78 px-2.5 py-1.5 text-[9px] text-[#c9c0b4] shadow-[0_8px_20px_rgba(0,0,0,.34)] backdrop-blur-xl pointer-events-none">
           <span><strong className="text-amber-400">Arraste</strong> para navegar</span>
           <span className="text-slate-600">|</span>
           <span><strong className="text-sky-400">Scroll</strong> para zoom</span>
@@ -3765,7 +3764,7 @@ export const GameCanvas = React.forwardRef<GameCanvasHandle, GameCanvasProps>(({
         type="button"
         onClick={(e) => { e.stopPropagation(); setShowControlGuide(value => !value); }}
         title="Mostrar ou ocultar ajuda de controles"
-        className="absolute bottom-3 right-3 z-30 h-7 w-7 rounded-full border border-slate-700 bg-slate-950/90 text-xs font-bold text-slate-400 hover:border-sky-500 hover:text-sky-300 transition-colors"
+        className="absolute bottom-3 right-3 z-30 h-7 w-7 rounded-full border border-[#a88a62]/20 bg-[#0b0d0d]/82 text-xs font-bold text-[#9f907c] transition-colors hover:border-[#c7a16b]/50 hover:text-[#e6d4b7]"
       >
         ?
       </button>
