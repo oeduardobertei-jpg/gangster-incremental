@@ -18,9 +18,22 @@ export function drawT1ForegroundFraming(
   const left=ctx.createLinearGradient(0,0,w*.12,0);
   left.addColorStop(0,'rgba(5,9,12,.16)');left.addColorStop(1,'rgba(5,9,12,0)');
   ctx.fillStyle=left;ctx.fillRect(0,0,w*.14,h);
+  const right=ctx.createLinearGradient(w,0,w*.88,0);
+  right.addColorStop(0,'rgba(5,9,12,.12)');right.addColorStop(1,'rgba(5,9,12,0)');
+  ctx.fillStyle=right;ctx.fillRect(w*.86,0,w*.14,h);
   const bottom=ctx.createLinearGradient(0,h,0,h*.86);
   bottom.addColorStop(0,'rgba(4,7,10,.13)');bottom.addColorStop(1,'rgba(4,7,10,0)');
   ctx.fillStyle=bottom;ctx.fillRect(0,h*.84,w,h*.16);
+  const haze=ctx.createLinearGradient(0,0,0,h*.36);
+  haze.addColorStop(0,'rgba(94,126,132,.075)');haze.addColorStop(.58,'rgba(72,104,108,.025)');haze.addColorStop(1,'rgba(72,104,108,0)');
+  ctx.fillStyle=haze;ctx.fillRect(0,0,w,h*.38);
+
+  // Warm inhabited pockets sit behind the landmarks, separating lived-in space from the cool distant ridge.
+  for(const [id,r,a] of [['beco_01',74,.040],['boca_leste',92,.052],['laje_ponto',78,.035],['esconderijo',72,.032]] as const){
+    const b=find(buildings,id);if(!b)continue;const x=b.x+b.w/2,y=b.y+b.h*.72;
+    const g=ctx.createRadialGradient(x,y,2,x,y,r);g.addColorStop(0,`rgba(244,184,103,${a})`);g.addColorStop(1,'rgba(244,184,103,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+  }
   // Cleanup final: detached lower-left foreground bar/posts retired.
 
   // Service cluster near safehouse: a quiet frame, not another landmark.
