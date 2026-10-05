@@ -91,7 +91,12 @@ const districtPiecesFor=(territoryId:number,W:number,H:number):UnifiedSupportSol
   } else if(territoryId===4){
     [['lu1',.17,.145,.055,.070],['lu2',.235,.137,.050,.080],['lu3',.295,.155,.050,.064],['ru1',.65,.145,.052,.070],['ru2',.712,.137,.046,.080],['ru3',.770,.155,.045,.064],['lm1',.27,.40,.055,.068],['lm2',.335,.395,.052,.072],['rm1',.62,.40,.055,.068],['rm2',.685,.395,.052,.072]].forEach((a,i)=>n(a[0] as string,a[1] as number,a[2] as number,a[3] as number,a[4] as number,'building',i%3===1?'concrete':'brick'));
   } else if(territoryId===2){
-    for(const [id,x,y] of [['m1',.15,.56],['m2',.20,.56],['m3',.25,.56],['m4',.70,.56],['m5',.75,.56],['m6',.80,.56]] as const)n(id,x,y,.046,.055,'building','concrete');
+    // 1.2P: two real, asymmetrical market-neighborhood clusters replace the six identical boxes.
+    const t2Fabric=[
+      ['m1',.105,.535,.052,.060,'brick'],['m2',.180,.585,.043,.050,'concrete'],['m3',.252,.520,.038,.047,'metal'],
+      ['m4',.675,.545,.045,.052,'concrete'],['m5',.748,.585,.052,.060,'brick'],['m6',.825,.520,.038,.047,'metal']
+    ] as const;
+    for(const [id,x,y,w,h,material] of t2Fabric)n(id,x,y,w,h,'building',material);
   } else if(territoryId===3){
     for(const [id,x,y] of [['s1',.18,.39],['s2',.24,.39],['s3',.64,.43],['s4',.69,.43]] as const)n(id,x,y,.050,.058,'building','metal');
   } else if(territoryId===5){
