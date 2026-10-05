@@ -28,42 +28,7 @@ const drawT1=(ctx:CanvasRenderingContext2D,w:number,h:number,buildings:readonly 
   // Building-to-ground contact now belongs to the dedicated 0.9.6 surface renderer.
   const laje=building(buildings,'laje do ponto');if(laje)stairRun(ctx,laje.x+laje.w+5,laje.y+laje.h-8,24,34,7);
 };
-const fence=(ctx:CanvasRenderingContext2D,x1:number,y1:number,x2:number,y2:number)=>{
-  line(ctx,x1,y1,x2,y2,'rgba(148,163,184,.35)',1.4);const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),nx=dx/len,ny=dy/len;
-  for(let d=0;d<=len;d+=18){const x=x1+nx*d,y=y1+ny*d;line(ctx,x,y-5,x,y+5,'rgba(100,116,139,.38)',1);}
-};
-const platform=(ctx:CanvasRenderingContext2D,x:number,y:number,w:number)=>{
-  rect(ctx,x,y,w,14,'rgba(82,91,101,.30)','rgba(214,179,92,.25)');rect(ctx,x,y,w,3,'rgba(250,204,21,.34)');
-  for(let xx=x+8;xx<x+w-8;xx+=18)line(ctx,xx,y+5,xx,y+12,'rgba(203,213,225,.14)',1);
-};
-const drawT2=(ctx:CanvasRenderingContext2D,w:number,h:number,buildings:readonly TacticalBuilding[])=>{
-  const railY=h*.37;
-  // Ballast/service strip visually ties every railway structure to the same system.
-  rect(ctx,w*.055,railY-22,w*.89,44,'rgba(71,63,54,.16)');
-  for(let x=w*.06;x<w*.94;x+=26){ctx.fillStyle='rgba(148,128,96,.16)';ctx.beginPath();ctx.ellipse(x,railY+17,5,2,0,0,Math.PI*2);ctx.fill();}
-  fence(ctx,w*.06,railY-29,w*.43,railY-29);fence(ctx,w*.57,railY-29,w*.94,railY-29);
-  const armazem=building(buildings,'armazem do trilho');if(armazem){
-    const dockY=armazem.y+armazem.h+6;rect(ctx,armazem.x-12,dockY,armazem.w+24,16,'rgba(87,67,46,.25)','rgba(214,179,92,.25)');
-    for(let x=armazem.x;x<armazem.x+armazem.w;x+=22)rect(ctx,x,dockY+4,13,4,'rgba(146,100,54,.26)');
-    line(ctx,armazem.x+armazem.w*.5,dockY+16,armazem.x+armazem.w*.5,railY-20,'rgba(214,179,92,.28)',8);
-  }
-  const estacao=building(buildings,'estacao leste');if(estacao)platform(ctx,estacao.x-24,railY-16,estacao.w+48);
-  const cabine=building(buildings,'cabine ferroviaria');if(cabine){
-    rect(ctx,cabine.x-9,cabine.y+cabine.h+5,cabine.w+18,9,'rgba(51,65,85,.20)');
-    line(ctx,cabine.x+cabine.w*.5,cabine.y+cabine.h+14,cabine.x+cabine.w*.5,railY-20,'rgba(100,116,139,.24)',2);
-  }
-  const passarela=building(buildings,'passarela');if(passarela){
-    const cx=passarela.x+passarela.w*.5,top=passarela.y+passarela.h-2,bottom=railY+34,deckW=22;
-    rect(ctx,cx-deckW/2,top,deckW,bottom-top,'rgba(71,85,105,.24)','rgba(203,213,225,.26)');
-    line(ctx,cx-deckW/2+4,top,cx-deckW/2+4,bottom,'rgba(203,213,225,.35)',1.2);
-    line(ctx,cx+deckW/2-4,top,cx+deckW/2-4,bottom,'rgba(203,213,225,.35)',1.2);
-    for(let y=top+8;y<bottom;y+=11)line(ctx,cx-deckW/2+4,y,cx+deckW/2-4,y,'rgba(203,213,225,.14)',1);
-    stairRun(ctx,cx-deckW/2-16,bottom-28,16,28,7);
-  }
-  // Freight staging remains asymmetric so the district reads as a used rail yard, not a grid editor.
-  rounded(ctx,w*.18,h*.61,w*.17,h*.13,4,'rgba(92,67,45,.09)','rgba(214,179,92,.10)');
-  rounded(ctx,w*.61,h*.62,w*.20,h*.11,4,'rgba(71,85,105,.08)','rgba(214,179,92,.08)');
-};
+const drawT2=(_ctx:CanvasRenderingContext2D,_w:number,_h:number,_buildings:readonly TacticalBuilding[])=>{};
 
 export function drawTerritoryStructuralDeepFoundation(
   ctx:CanvasRenderingContext2D,width:number,height:number,territoryId:number,

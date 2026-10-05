@@ -47,11 +47,9 @@ const secureLane=(ctx:CanvasRenderingContext2D,b:TacticalBuilding,color:string)=
       else if(n.includes('boca'))marketApron(ctx,b);
       else if(!n.includes('barraquinha'))driveway(ctx,b,'rgba(203,213,225,.12)',24);
     } else if(territoryId===2){
-      if(n.includes('armazem')||n.includes('deposito'))loadingBay(ctx,b,'rgba(214,179,92,.35)');
-      else if(n.includes('box')||n.includes('banca'))marketApron(ctx,b);
-      else if(n.includes('estacao')){const y=worldHeight*.37;rect(ctx,b.x-22,y-8,b.w+44,16,'rgba(107,114,128,.18)','rgba(250,204,21,.26)');}
-      else if(n.includes('cabine'))driveway(ctx,b,'rgba(248,113,113,.20)',28);
-      else if(n.includes('passarela')){steps(ctx,b,34,18);const cx=b.x+b.w/2;rect(ctx,cx-14,worldHeight*.37-9,28,18,'rgba(71,85,105,.30)','#cbd5e1');}
+      // 1.2N: railway landmarks are grounded once by t2RailGroundReauthorRenderer.
+      if(n.includes('box')||n.includes('banca'))marketApron(ctx,b);
+      else if(n.includes('deposito'))loadingBay(ctx,b,'rgba(214,179,92,.24)');
     } else if(territoryId===3){
       if(n.includes('oficina')||n.includes('serralheria'))loadingBay(ctx,b,'rgba(249,115,22,.26)');
       else if(n.includes('galpao')||n.includes('deposito'))loadingBay(ctx,b,'rgba(148,163,184,.24)');

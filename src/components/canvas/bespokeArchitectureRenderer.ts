@@ -54,7 +54,7 @@ const underT2=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height}=a;
   else if(n.includes('deposito da praca')){rect(ctx,b.x+b.w-2,facadeY+10,18,height-10,'#51402f','#7c6849');}
   else if(n.includes('estacao leste')){rect(ctx,b.x-22,facadeY+height-6,b.w+44,9,'#5b6470','#d6b35c');posts(ctx,b.x-16,roofY-4,b.w+32,facadeY-roofY+height-2,5,'#737f8b');}
   else if(n.includes('cabine ferroviaria')){stair(ctx,b.x-17,facadeY+height-16,18,16,1);rect(ctx,b.x-5,facadeY+height-4,b.w+10,5,'#4b5563');}
-  else if(n.includes('passarela')){const cx=b.x+b.w/2,top=facadeY+height-2;rect(ctx,cx-12,top,24,62,'#414b56','#94a3b8');posts(ctx,cx-8,top+4,16,54,2,'#64748b');stair(ctx,cx-30,top+34,18,28,1);stair(ctx,cx+12,top+34,18,28,-1);}
+  else if(n.includes('passarela')){const cx=b.x+b.w/2,top=facadeY+height-2;rect(ctx,cx-15,top,30,10,'#414b56','#94a3b8');posts(ctx,cx-11,top+3,22,13,2,'#64748b');}
 };const underT3=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height}=a;
   if(n.includes('oficina')){rect(ctx,b.x-9,facadeY+9,18,height-9,'#2a3139','#59636f');poly(ctx,[[b.x-10,roofY+13],[b.x+b.w*.55,roofY+13],[b.x+b.w*.48,roofY+24],[b.x-10,roofY+24]],'#3a434d','#64748b');}
   else if(n.includes('galpao de pecas')){rect(ctx,b.x-12,facadeY+height-8,b.w+24,10,'#303943','#64748b');}
@@ -126,7 +126,7 @@ const overT2=(a:Args,n:string)=>{const {ctx,b,roofY,facadeY,height,controlColor}
   else if(n.includes('deposito da praca')){gable(ctx,b.x-3,roofY-10,b.w+6,10,'#5b4937','#b89762');roofUnit(ctx,b.x+12,roofY+12,16,8,'#40372f');}
   else if(n.includes('estacao leste')){const y=roofY-12;rect(ctx,b.x-18,y,b.w+36,5,'#d6b35c','#fef3c7');posts(ctx,b.x-14,y+5,b.w+28,facadeY+height-y-5,5,'#7c8793');}
   else if(n.includes('cabine ferroviaria')){gable(ctx,b.x+4,roofY-12,b.w-8,11,'#48525d','#cbd5e1');rect(ctx,b.x+11,roofY+8,b.w-22,10,'#23303d','#93c5fd');}
-  else if(n.includes('passarela')){const cx=b.x+b.w/2,landingY=roofY-14;rect(ctx,b.x+b.w*.28,landingY,b.w*.44,11,'#58636f','#cbd5e1');rail(ctx,b.x+b.w*.24,landingY-9,b.w*.52,9);line(ctx,cx-9,facadeY+height,cx-9,facadeY+height+60,'#cbd5e1',1.4);line(ctx,cx+9,facadeY+height,cx+9,facadeY+height+60,'#cbd5e1',1.4);for(let y=facadeY+height+7;y<facadeY+height+58;y+=10)line(ctx,cx-9,y,cx+9,y,'rgba(203,213,225,.55)',1);rect(ctx,cx-5,landingY+3,10,3,controlColor);}
+  else if(n.includes('passarela')){const landingY=roofY-14;rect(ctx,b.x+b.w*.28,landingY,b.w*.44,11,'#58636f','#cbd5e1');rail(ctx,b.x+b.w*.24,landingY-9,b.w*.52,9);rect(ctx,b.x+b.w*.44,landingY+3,b.w*.12,3,controlColor);}
 };const overT3=(a:Args,n:string)=>{const {ctx,b,roofY,controlColor}=a;
   if(n.includes('oficina')){gable(ctx,b.x+4,roofY-9,b.w*.54,10,'#3b4651','#6b7280');roofUnit(ctx,b.x+b.w-30,roofY+9,20,11,'#26313d');}
   else if(n.includes('galpao de pecas')){sawRoof(ctx,b.x-4,roofY-13,b.w+8,13,5);for(const x of [b.x+18,b.x+b.w-30])roofUnit(ctx,x,roofY+12,18,9,'#303944');}

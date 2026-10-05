@@ -104,25 +104,29 @@ const drawRailAccessStory=(ctx:CanvasRenderingContext2D,W:number,H:number,items:
   const railY=H*.29;ctx.save();
   const armazem=findBuilding(items,'armazem');
   if(armazem){
-    const x1=armazem.x+armazem.w*.46,x2=Math.min(W*.36,armazem.x+armazem.w+105),y=railY-38;
-    ctx.fillStyle='rgba(89,69,48,.30)';ctx.beginPath();ctx.moveTo(armazem.x-9,armazem.y+armazem.h-8);ctx.lineTo(armazem.x+armazem.w+12,armazem.y+armazem.h-7);ctx.lineTo(x2,y+17);ctx.lineTo(x1,y+18);ctx.closePath();ctx.fill();
-    ctx.strokeStyle='rgba(201,163,91,.26)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x1,y+15);ctx.lineTo(x2,y+15);ctx.stroke();
-    ctx.strokeStyle='rgba(91,72,52,.42)';ctx.lineWidth=3;for(let x=x1+7;x<x2-3;x+=18){ctx.beginPath();ctx.moveTo(x,y+6);ctx.lineTo(x,y+18);ctx.stroke();}
+    const x=armazem.x-10,w=armazem.w+42,y=railY-38;
+    ctx.fillStyle='rgba(0,0,0,.24)';ctx.fillRect(x+6,y+7,w,20);
+    ctx.fillStyle='#554b3f';ctx.fillRect(x,y,w,20);ctx.fillStyle='#716555';ctx.fillRect(x,y,w,4);
+    ctx.fillStyle='rgba(222,187,83,.62)';ctx.fillRect(x,y+17,w,3);
+    ctx.strokeStyle='rgba(195,177,151,.14)';for(let xx=x+12;xx<x+w-6;xx+=22){ctx.beginPath();ctx.moveTo(xx,y+4);ctx.lineTo(xx,y+17);ctx.stroke();}
   }
   const station=findBuilding(items,'estacao');
   if(station){
-    const sx=Math.max(W*.755,station.x-28), sw=Math.min(W-sx-8,station.w+56);
-    ctx.fillStyle='rgba(83,80,72,.42)';ctx.fillRect(sx,railY-62,sw,29);
-    ctx.fillStyle='rgba(205,171,83,.46)';ctx.fillRect(sx,railY-36,sw,3);
-    ctx.strokeStyle='rgba(213,205,184,.10)';ctx.lineWidth=1;for(let x=sx+13;x<sx+sw-7;x+=24){ctx.beginPath();ctx.moveTo(x,railY-60);ctx.lineTo(x,railY-36);ctx.stroke();}
+    const x=Math.max(W*.70,station.x-46),w=Math.min(W-x-9,station.w+74),y=railY-38;
+    ctx.fillStyle='rgba(0,0,0,.23)';ctx.fillRect(x+5,y+6,w,21);
+    ctx.fillStyle='#55565a';ctx.fillRect(x,y,w,20);ctx.fillStyle='#6a6862';ctx.fillRect(x,y+4,w,13);
+    ctx.fillStyle='rgba(236,199,89,.70)';ctx.fillRect(x,y+17,w,3);
+    ctx.strokeStyle='rgba(219,226,230,.14)';for(let xx=x+14;xx<x+w-7;xx+=27){ctx.beginPath();ctx.moveTo(xx,y+5);ctx.lineTo(xx,y+17);ctx.stroke();}
   }
   const passarela=findBuilding(items,'passarela');
   if(passarela){
-    const cx=passarela.x+passarela.w*.5, landingY=railY-66;
-    ctx.fillStyle='rgba(70,75,78,.52)';ctx.fillRect(cx-13,passarela.y+passarela.h-3,26,Math.max(8,landingY-(passarela.y+passarela.h)+4));
-    ctx.strokeStyle='rgba(184,193,198,.38)';ctx.lineWidth=1;for(let y=passarela.y+passarela.h+4;y<landingY;y+=8){ctx.beginPath();ctx.moveTo(cx-11,y);ctx.lineTo(cx+11,y);ctx.stroke();}
-    ctx.fillStyle='rgba(76,80,82,.72)';ctx.fillRect(cx-25,landingY-3,50,9);
-    ctx.fillStyle='rgba(222,187,83,.38)';ctx.fillRect(cx-25,landingY+4,50,2);
+    const cx=passarela.x+passarela.w*.5,top=passarela.y+passarela.h+7,bottom=railY+51,dw=20;
+    ctx.fillStyle='rgba(0,0,0,.24)';ctx.fillRect(cx-dw*.5+6,top+6,dw,bottom-top);
+    ctx.fillStyle='rgba(71,81,89,.92)';ctx.fillRect(cx-dw*.5,top,dw,bottom-top);
+    ctx.strokeStyle='rgba(207,216,221,.68)';ctx.lineWidth=1.2;for(const dx of [-dw*.5+2,dw*.5-2]){ctx.beginPath();ctx.moveTo(cx+dx,top);ctx.lineTo(cx+dx,bottom);ctx.stroke();}
+    ctx.strokeStyle='rgba(196,205,210,.30)';ctx.lineWidth=1;for(let y=top+7;y<bottom-3;y+=9){ctx.beginPath();ctx.moveTo(cx-dw*.5+3,y);ctx.lineTo(cx+dw*.5-3,y);ctx.stroke();}
+    for(const y of [railY-36,railY+36]){ctx.fillStyle='#4e5961';ctx.fillRect(cx-dw*.5-4,y-3,dw+8,6);}
+    ctx.fillStyle='#c9a53e';ctx.globalAlpha=.65;ctx.fillRect(cx-dw*.5,bottom-3,dw,3);ctx.globalAlpha=1;
   }
   ctx.restore();
 };
@@ -257,8 +261,7 @@ const drawBuildingRailLinks=(ctx:CanvasRenderingContext2D,W:number,H:number,item
   if(station){const cx=station.x+station.w*.5,sy=station.y+station.h+4;ctx.fillStyle='rgba(84,82,74,.28)';ctx.fillRect(station.x-16,sy,station.w+32,12);ctx.strokeStyle='rgba(213,181,92,.24)';ctx.strokeRect(station.x-16,sy,station.w+32,12);ctx.strokeStyle='rgba(116,112,99,.24)';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(cx,sy+12);ctx.lineTo(cx,railY-30);ctx.stroke();}
   const cabine=findBuilding(items,'cabine');
   if(cabine){const cx=cabine.x+cabine.w*.5,y=cabine.y+cabine.h+4;ctx.fillStyle='rgba(59,68,75,.24)';ctx.fillRect(cabine.x-7,y,cabine.w+14,8);ctx.strokeStyle='rgba(99,111,119,.24)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,y+8);ctx.lineTo(cx,railY-30);ctx.stroke();}
-  for(const term of ['box','banca','deposito'] as const){const b=findBuilding(items,term);if(!b)continue;const pad=term==='deposito'?11:8,x=b.x-pad,y=b.y+b.h-2,w=b.w+pad*2,h=12;ctx.beginPath();ctx.moveTo(x+4,y);ctx.lineTo(x+w-5,y+1);ctx.lineTo(x+w,y+h-3);ctx.lineTo(x+w-7,y+h);ctx.lineTo(x+3,y+h-1);ctx.closePath();ctx.fillStyle=term==='deposito'?'rgba(84,79,69,.17)':'rgba(112,86,58,.16)';ctx.fill();ctx.strokeStyle='rgba(186,151,91,.15)';ctx.stroke();}
-  const passarela=findBuilding(items,'passarela');if(passarela){const cx=passarela.x+passarela.w*.5;ctx.fillStyle='rgba(74,80,84,.20)';ctx.fillRect(cx-14,railY-35,28,70);ctx.strokeStyle='rgba(186,194,198,.18)';ctx.strokeRect(cx-14,railY-35,28,70);}  ctx.restore();
+  for(const term of ['box','banca','deposito'] as const){const b=findBuilding(items,term);if(!b)continue;const pad=term==='deposito'?11:8,x=b.x-pad,y=b.y+b.h-2,w=b.w+pad*2,h=12;ctx.beginPath();ctx.moveTo(x+4,y);ctx.lineTo(x+w-5,y+1);ctx.lineTo(x+w,y+h-3);ctx.lineTo(x+w-7,y+h);ctx.lineTo(x+3,y+h-1);ctx.closePath();ctx.fillStyle=term==='deposito'?'rgba(84,79,69,.17)':'rgba(112,86,58,.16)';ctx.fill();ctx.strokeStyle='rgba(186,151,91,.15)';ctx.stroke();}  ctx.restore();
 };
 export function drawT2ReauthoredSurface(ctx:CanvasRenderingContext2D,W:number,H:number,paths:readonly ScenePath[],footprints:readonly GroundFootprint[]=[]){
   ctx.save();
@@ -271,7 +274,6 @@ export function drawT2ReauthoredSurface(ctx:CanvasRenderingContext2D,W:number,H:
   drawMarketAisles(ctx,W,H);
   drawBuildingRailLinks(ctx,W,H,footprints);
   drawRailAccessStory(ctx,W,H,footprints);
-  drawPlatforms(ctx,W,H);
   drawCrossing(ctx,W,H);
   drawRailFence(ctx,W,H);
   drawRailSignals(ctx,W,H);

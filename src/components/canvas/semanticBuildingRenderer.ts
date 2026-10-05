@@ -190,11 +190,7 @@ export function drawSemanticBuildingContext(
       if(name.includes('beco')){groundRect(ctx,b.x-5,groundY,b.w+10,5,'rgba(82,65,52,.16)');}
       if(name.includes('laje')||name.includes('mirante'))groundRect(ctx,b.x+8,groundY,b.w-16,4,'rgba(148,163,184,.12)');
     } else if(territoryId===2){
-      const railY=worldHeight*.37;
-      if(name.includes('armazem')){groundRect(ctx,b.x-10,groundY,b.w+20,11,'rgba(91,70,49,.28)','#7c6849');groundRect(ctx,b.x+b.w*.36,groundY+10,b.w*.28,Math.max(8,railY-groundY-10),'rgba(100,83,58,.18)');}
-      if(name.includes('estacao')){groundRect(ctx,b.x-18,railY-9,b.w+36,18,'rgba(107,114,128,.24)','#d6b35c');accessMarks(ctx,b.x-12,railY,b.w+24,'rgba(250,204,21,.42)');}
-      if(name.includes('cabine ferroviaria'))accessMarks(ctx,b.x-6,groundY+4,b.w+12,'rgba(248,113,113,.28)');
-      if(name.includes('passarela')){const cx=b.x+b.w*.5,w=28,y1=b.y+b.h-2,y2=worldHeight*.43;groundRect(ctx,cx-w*.5,y1,w,y2-y1,'rgba(71,85,105,.34)','#cbd5e1');line(ctx,cx-w*.5+4,y1,cx-w*.5+4,y2,'#cbd5e1',1.2);line(ctx,cx+w*.5-4,y1,cx+w*.5-4,y2,'#cbd5e1',1.2);for(let y=y1+8;y<y2;y+=12)line(ctx,cx-w*.5+4,y,cx+w*.5-4,y,'rgba(203,213,225,.22)',1);}
+      // 1.2N: dedicated T2 surface owns rail/platform/passarela ground context.
     } else if(territoryId===3){
       if(name.includes('oficina')||name.includes('serralheria')){groundRect(ctx,b.x-8,groundY,b.w+16,12,'rgba(15,23,42,.22)');for(let x=b.x;x<b.x+b.w;x+=24)accessMarks(ctx,x,groundY+5,16,'rgba(249,115,22,.18)');}
       if(name.includes('galpao')||name.includes('deposito'))groundRect(ctx,b.x-10,groundY,b.w+20,10,'rgba(71,85,105,.18)','#64748b');
