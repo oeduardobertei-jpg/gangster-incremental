@@ -10,7 +10,7 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "check": "npm run lint && npm run test:foundation && npm run build && npm run check:bundle",
-    "test:foundation": "tsx scripts/verify-foundation.ts",
+    "test:foundation": "tsx scripts/verify-foundation.ts && tsx scripts/verify-support-point-progression.ts",
     "check:bundle": "node scripts/verify-release-bundle.mjs",
     "qa:rc": "node scripts/qa-release-candidate.mjs",
     "qa:gold": "npm run check && npm run qa:rc && node scripts/smoke-ui.mjs"
